@@ -1,24 +1,24 @@
 # 网站标题
-title: 喬 JoeBlog
+title: Note
 # 网站标题后缀
-suffix: 乔越博客
+suffix: Junixcn
 # 作者名称(会显示在首页文章下面)
-author: CHANGEQ
+author: Junixcn
 # 首页简介（显示在首页顶部Logo的那句话）
-home_describe: A COLLEGE STUDENT WITH IDEALS AND BELIEFS.
+home_describe: 智慧夯实基础 坚持成就未来
 # 网站关键字
-keyword: 乔越博客,个人博客,hexo
-is_article_img: false  #false是否开启文章背景图显示(随机图片)
+keyword: Notes
+is_article_img: true  #false是否开启文章背景图显示(随机图片)
 # 网站描述
 web_description: 描述
 # 导航名称
 menus_title:
-  home: HOME
-  archive: ARCHIVE
-  categories: CATEGORIES
-  tags: TAGS
-  links: LINKS
-  about: ABOUT
+  home: 主页
+  archive: 列表
+  categories: 分类
+  tags: 标签
+  links: 链接
+  about: 关于
 # 导航 （不建议修改）
 menus:
   home: /
@@ -35,16 +35,16 @@ icon: /image/favicon.ico
 # 每个页面上面的图表
 topIcon:
   homeIcon: "/image/logo.png"
-  archivesIcon: "https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imgicon-remixicon.svg"
-  tagIcon: "https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imgtags.svg"
-  linksIcon: "https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imga20r7-cftji.svg"
-  categoriesIcon: "https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imgblogmyCategory.svg"
+  archivesIcon: "/image/logo.png"
+  tagIcon: "/image/logo.png"
+  linksIcon: "/image/logo.png"
+  categoriesIcon: "/image/logo.png"
   
 # 标签页显示多少个标签
-tagsNum: 1000
+tagsNum: 20
 # 网页访问统计
 web_analytics:  
-  enable: false #需要改为true
+  enable: true #需要改为true
   baidu: 4b5fe1472f22fa  # （替换）百度统计的 Key，参见 https://tongji.baidu.com/sc-web/10000033910/home/site/getjs?siteId=13751376 代码获取中 hm.js? 后边的字符串
 # 底部显示的图标（github 或者其他）
 bottomIcon: 
@@ -53,23 +53,23 @@ bottomIcon:
     #描述名称
     name: 'Github',
     #图标    
-    iconLink: 'https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imggithub.png',
-    #跳转链接    
-    toUrl: 'https://github.com/qiaobug'
+    iconLink: '/image/github-logo.png',
+    #跳转链接   
+    toUrl: 'https://github.com/junixcn'
   }
 # 友情链接
 linksList:
   - {
-    title: '乔越博客',
-    intro: '收藏回忆与分享技术的地方',
-    link: 'https://www.79bk.cn/',
-    image: 'https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imgIMG_7327.jpeg'
+    title: 'google',
+    intro: 'google',
+    link: 'https://www.google.com',
+    image: ''
   }
   - {
-    title: '乔越博客',
-    intro: '互联网资源整合共享交流与发布',
-    link: 'https://www.79bk.cn/',
-    image: 'https://cdn.jsdelivr.net/gh/duogongneng/MyBlogImg/imgIMG_7327.jpeg'
+    title: 'baidu',
+    intro: 'baidu',
+    link: 'https://www.baidu.com',
+    image: ''
   }
 # 文字内点击图片放大相关配置
 picture:
