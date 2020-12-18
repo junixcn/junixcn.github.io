@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		
+<title>perf的基本用法-Junixcn</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<meta name="keywords" content="Notes">
+<meta name="description" content="描述">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<!-- Baidu Analytics -->
+<script defer>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?4b5fe1472f22fa";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+	<meta name="generator" content="Hexo 5.2.0"></head>
+
+	<body>
+		
+<link rel="stylesheet" href="/css/page.css">
+
+
+<link rel="stylesheet" href="/css/page_cente.css">
+
+
+<link rel="stylesheet" href="/css/atom-one-dark.css">
+
+
+<link rel="stylesheet" href="/css/header.css">
+
+<div class="header">
+	<div class="header-top">
+		<div class="h-left">
+			<a href="/">
+				<img src="/image/logo.png" alt="">
+			</a>
+		</div>
+		<div class="h-right">
+			<ul>
+				
+				
+				<li>
+					<a href="/">主页</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+				
+				<li>
+					<a href="/archives">列表</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+				
+				<li>
+					<a href="/categories">分类</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+				
+				<li>
+					<a href="/tags">标签</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+				
+				<li>
+					<a href="/links">链接</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+				
+				<li>
+					<a href="/about">关于</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+			</ul>
+		</div>
+		<div class="h-right-close">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+				<path fill="none" d="M0 0h24v24H0z" />
+				<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+			</svg>
+		</div>
+	</div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Junixcn</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">主页</a>
+        </li>
+        
+        <li>
+            <a href="/archives">列表</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">标签</a>
+        </li>
+        
+        <li>
+            <a href="/links">链接</a>
+        </li>
+        
+        <li>
+            <a href="/about">关于</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/junixcn">
+            <img src="/image/github-logo.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'
+    style='cursor: pointer;display: none; position: fixed;left: 0;top: 0; right: 0;bottom: 0;background-color: #333;opacity:0.5;z-index: 108;'>
+</div>
+<style>
+    .sidebar {
+        width: 0;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        z-index: 999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815)
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $(function () { $('.h-right-close>svg').click(function () { $('.sidebar').animate({ width: "66%" }, 500); $('.shelter').fadeIn("slow") }); $('.shelter').click(function (e) { $('.sidebar').animate({ width: "0" }, 500); $('.shelter').fadeOut("slow") }) })
+</script>
+<script>
+	$(function () { $(window).scroll(function () { if ($(document).scrollTop() > 100) { $(".header-top").removeClass("header-move2"); $('.header-top').addClass('header-move1') } else { $(".header-top").removeClass("header-move1"); $('.header-top').addClass('header-move2') } }) });
+</script>
+<div class="header-bg bg-content-img">
+    <div class="bg-content">
+        <ul class="tag">
+            
+        </ul>
+        <h1>perf的基本用法</h1>
+        <div class="article-info">
+            <div class="article-author">
+                
+                <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                    <path
+                        d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                        p-id="2902" fill="#ffffff"></path>
+                </svg>
+                
+                <span> <a href="">Junixcn</a></span>
+                <p>2020-12-18 16:01:01</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="article-content">
+    <div id="article" class="content">
+        <h1 id="perf"><a href="#perf" class="headerlink" title="perf"></a>perf</h1><h2 id="架构图总览"><a href="#架构图总览" class="headerlink" title="架构图总览"></a>架构图总览</h2><p><img src="https://raw.githubusercontent.com/junixcn/images/master/perf_events_map.png" alt="img"></p>
+<h2 id="Events"><a href="#Events" class="headerlink" title="Events"></a>Events</h2><p>事件主要有哪些</p>
+<p><strong>hardware events</strong>：CPU performance monitoring counters</p>
+<p><strong>software events</strong>: 基于kernel counters的低水平事件，比如cpu迁移、minor faults、major faults等等</p>
+<p><strong>kernel tracepoint events</strong>：编码嵌入在内核中的内核级别静态测试点</p>
+<p><strong>User statically-defined tracing(USDT)</strong>: 用户级别的静态测试点</p>
+<p><strong>Dynamic Traceing</strong>：动态软件测试点，可以在任何地方创建。内核态使用kprobes框架，用户态使用uprobes工具</p>
+<p><strong>Timed Profiling</strong>：perf-record -F <em>Hz</em>可以按照指定的频率进行监测，这个常被用于监测CPU使用率以及创建定时的中断事件</p>
+<p>PMU：</p>
+<p>Most processors nowadays have special, on‐chip hardware that monitors micro architectural events like elapsed cycles, cache hits, cache miss etc.It is a subsystem which helps in analyzing how an application or operating systems are performing on the processor.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">The Performance Monitoring Events can be broadly categorized in two types</span><br><span class="line">• Hardware</span><br><span class="line">Ex: CPU‐Cycles, Instructions, Cache References</span><br><span class="line">• Software</span><br><span class="line">Ex: Page Fault, Context Switch, etc</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="page-fault"><a href="#page-fault" class="headerlink" title="page fault"></a>page fault</h2><p>Linux 内核给每个进程都提供了一个独立的虚拟地址空间，并且这个地址空间是连续的。这样，进程就可以很方便地访问内存，更确切地说是访问虚拟内存。虚拟地址空间的内部又被分为内核空间和用户空间两部分。并不是所有的虚拟内存都会分配物理内存，只有那些实际使用的虚拟内存才分配物理内存，并且分配后的物理内存，是通过内存映射来管理的。</p>
+<p>内存映射，其实就是将虚拟内存地址映射到物理内存地址。为了完成内存映射，内核为每个进程都维护了一张页表，记录虚拟地址与物理地址的映射关系。页表实际上存储在 CPU 的内存管理单元 MMU 中。而当进程访问的虚拟地址在页表中查不到时，系统会产生一个缺页异常，进入内核空间分配物理内存、更新进程页表，最后再返回用户空间，恢复进程的运行，这是一个次缺页异常(minor page fault)。minor page fault 也称为 soft page fault, 指需要访问的内存不在虚拟地址空间，但是在物理内存中，只需要MMU建立物理内存和虚拟地址空间的映射关系即可。</p>
+<p>major page fault指需要访问的内存不在虚拟地址空间，也不在物理内存中，进入内核空间分配物理内存，更新进程页表，还需要swap从磁盘中读取数据换入物理内存中。</p>
+<p>​    当进程访问它的虚拟地址空间中的PAGE时，如果这个PAGE目前还不在物理内存中，此时CPU是不能干活的，Linux会产生一个hard page fault中断。系统需要从慢速设备（如磁盘）将对应的数据PAGE读入物理内存，并建立物理内存地址与虚拟地址空间PAGE的映射关系。然后进程才能访问这部分虚拟地址空间的内存。</p>
+<p>page fault 又分为几种，major page fault、 minor page fault、 invalid(segment fault)。</p>
+<p><strong>major page fault</strong> 也称为 hard page fault, 指需要访问的内存不在虚拟地址空间，也不在物理内存中，需要从慢速设备载入。从swap 回到物理内存也是 hard page fault。</p>
+<p><strong>minor page fault</strong> 也称为 soft page fault, 指需要访问的内存不在虚拟地址空间，但是在物理内存中，只需要MMU建立物理内存和虚拟地址空间的映射关系即可。</p>
+<ol>
+<li>当一个进程在调用 malloc 获取虚拟空间地址后，首次访问该地址会发生一次soft page fault。</li>
+<li>通常是多个进程访问同一个共享内存中的数据，可能某些进程还没有建立起映射关系，所以访问时会出现soft page fault</li>
+</ol>
+<p>invalid fault 也称为 <strong>segment fault</strong>，指进程需要访问的内存地址不在它的虚拟地址空间范围内，属于越界访问，内核会报 segment fault错误。</p>
+<h2 id="linux内核映像文件分类"><a href="#linux内核映像文件分类" class="headerlink" title="linux内核映像文件分类"></a>linux内核映像文件分类</h2><h3 id="zImage"><a href="#zImage" class="headerlink" title="zImage"></a>zImage</h3><p>zImage是ARM Linux常用的一种压缩映像文件，不超过512KB。</p>
+<h3 id="bzImage"><a href="#bzImage" class="headerlink" title="bzImage"></a>bzImage</h3><p>big zImage，和zImage一样都是gzip压缩的。</p>
+<h3 id="uImage"><a href="#uImage" class="headerlink" title="uImage"></a>uImage</h3><p>u-boot专用的映像文件，它是在zImage上加上一个长度为0x40的“头部”，包含了这个映像文件的类型、加载位置、生成时间、大小等信息。如果直接从zImage的0x40位置开始加载，其和zImage就没有区别。</p>
+<h3 id="vmlinuz"><a href="#vmlinuz" class="headerlink" title="vmlinuz"></a>vmlinuz</h3><p>可引导、压缩的内核。“vm”代表“virtual memory”。Linux支持虚拟内存。vmlinuz是可执行的linux内核。</p>
+<h3 id="vmlinux"><a href="#vmlinux" class="headerlink" title="vmlinux"></a>vmlinux</h3><p>未压缩的linux内核，vmlinuz是vmlinux的压缩文件。</p>
+<h3 id="initrd-xxx-img"><a href="#initrd-xxx-img" class="headerlink" title="initrd-xxx.img"></a>initrd-xxx.img</h3><p>initrd是initial ramdisk的缩写，initrd一般被用来临时的引导硬件到实际内核vmlinuz能够接管并继续引导的状态</p>
+<h2 id="perf详解"><a href="#perf详解" class="headerlink" title="perf详解"></a>perf详解</h2><h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h3><p>perf工具是基于linux内核提供的<strong>perf_event</strong>接口工作的。</p>
+<h3 id="2-命令行"><a href="#2-命令行" class="headerlink" title="2. 命令行"></a>2. 命令行</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# perf -h</span><br><span class="line"></span><br><span class="line"> usage: perf [--version] [--help] [OPTIONS] COMMAND [ARGS]</span><br><span class="line"></span><br><span class="line"> The most commonly used perf commands are:</span><br><span class="line">   annotate        Read perf.data (created by perf record) and display annotated code</span><br><span class="line">   archive         Create archive with object files with build-ids found in perf.data file</span><br><span class="line">   bench           General framework for benchmark suites</span><br><span class="line">   buildid-cache   Manage build-id cache.</span><br><span class="line">   buildid-list    List the buildids in a perf.data file</span><br><span class="line">   c2c             Shared Data C2C/HITM Analyzer.</span><br><span class="line">   config          Get and set variables in a configuration file.</span><br><span class="line">   data            Data file related processing</span><br><span class="line">   diff            Read perf.data files and display the differential profile</span><br><span class="line">   evlist          List the event names in a perf.data file</span><br><span class="line">   ftrace          simple wrapper for kernel&#x27;s ftrace functionality</span><br><span class="line">   inject          Filter to augment the events stream with additional information</span><br><span class="line">   kallsyms        Searches running kernel for symbols</span><br><span class="line">   kmem            Tool to trace/measure kernel memory properties</span><br><span class="line">   kvm             Tool to trace/measure kvm guest os</span><br><span class="line">   list            List all symbolic event types</span><br><span class="line">   lock            Analyze lock events</span><br><span class="line">   mem             Profile memory accesses</span><br><span class="line">   record          Run a command and record its profile into perf.data</span><br><span class="line">   report          Read perf.data (created by perf record) and display the profile</span><br><span class="line">   sched           Tool to trace/measure scheduler properties (latencies)</span><br><span class="line">   script          Read perf.data (created by perf record) and display trace output</span><br><span class="line">   stat            Run a command and gather performance counter statistics</span><br><span class="line">   test            Runs sanity tests.</span><br><span class="line">   timechart       Tool to visualize total system behavior during a workload</span><br><span class="line">   top             System profiling tool.</span><br><span class="line">   version         display the version of perf binary</span><br><span class="line">   probe           Define new dynamic tracepoints</span><br><span class="line">   trace           strace inspired tool</span><br><span class="line"></span><br><span class="line"> See &#x27;perf help COMMAND&#x27; for more information on a specific command.</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="子功能表"><a href="#子功能表" class="headerlink" title="子功能表"></a>子功能表</h4><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>annotate</td>
+<td>perf annotate用于解析由perf record记录的数据文件perf.data并将代码注解显示。如果源代码开启了debug符号，则源码和汇编一起解析。如果源码未开启debug，则解析汇编代码</td>
+</tr>
+<tr>
+<td>archive</td>
+<td>根据数据文件记录的build-id，将所有被采样到的elf文件打包。利用此压缩包，可以再任何机器上分析数据文件中记录的采样数据。</td>
+</tr>
+<tr>
+<td>bench</td>
+<td>perf中内置的benchmark。子系统：调度器和IPC机制、内存管理、NUMA调度、futex压力基准、epoll压力基准等</td>
+</tr>
+<tr>
+<td>buildid-cache</td>
+<td>管理perf的buildid缓存，每个elf文件都有一个独一无二的buildid。buildid被perf用来关联性能数据与elf文件。</td>
+</tr>
+<tr>
+<td>buildid-list</td>
+<td>列出perf.data文件中的buildid</td>
+</tr>
+<tr>
+<td>c2c</td>
+<td>用于调试cache to cache的false sharing问题，用于Shared Data C2C/HITM分析，可以追踪cacheline竞争问题</td>
+</tr>
+<tr>
+<td>config</td>
+<td>perf config用于读取和配置 .perfconfig配置文件</td>
+</tr>
+<tr>
+<td>diff</td>
+<td>对比两个数据文件的差异。能够给出每个符号（函数）在热点分析上的具体差异。</td>
+</tr>
+<tr>
+<td>evlist</td>
+<td>列出数据文件perf.data中所有性能事件</td>
+</tr>
+<tr>
+<td>ftrace</td>
+<td>是内核ftrace功能的简化封装，可以跟踪指定进程的内核函数调用栈</td>
+</tr>
+<tr>
+<td>inject</td>
+<td>该工具读取perf record工具记录的事件流，并将其定向到标准输出</td>
+</tr>
+<tr>
+<td>kallsyms</td>
+<td>查找运行中的内核符号</td>
+</tr>
+<tr>
+<td>kmem</td>
+<td>针对内核内存（slab）子系统进行追踪测量的工具</td>
+</tr>
+<tr>
+<td>kvm</td>
+<td>用于测试kvm客户机的性能参数</td>
+</tr>
+<tr>
+<td>list</td>
+<td>列出event事件</td>
+</tr>
+<tr>
+<td>lock</td>
+<td>分析内核锁统计信息</td>
+</tr>
+<tr>
+<td>mem</td>
+<td>测试内存存取性能数据</td>
+</tr>
+<tr>
+<td>record</td>
+<td>运行一个命令，并将其数据保存到perf.data中。随后，可以使用perf report进行分析</td>
+</tr>
+<tr>
+<td>report</td>
+<td>显示perf数据</td>
+</tr>
+<tr>
+<td>sched</td>
+<td>分析调度器性能</td>
+</tr>
+<tr>
+<td>script</td>
+<td>执行测试脚本</td>
+</tr>
+<tr>
+<td>stat</td>
+<td>perf stat能完整统计应用整个生命周期的信息</td>
+</tr>
+<tr>
+<td>test</td>
+<td>用于sanity test</td>
+</tr>
+<tr>
+<td>timechart</td>
+<td>生成图标</td>
+</tr>
+<tr>
+<td>top</td>
+<td>类似linux的top命令，查看整体性能</td>
+</tr>
+<tr>
+<td>version</td>
+<td>查看版本信息</td>
+</tr>
+<tr>
+<td>probe</td>
+<td>动态监测点</td>
+</tr>
+<tr>
+<td>trace</td>
+<td>跟踪系统调用</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h4 id="2-1-annotate"><a href="#2-1-annotate" class="headerlink" title="2.1 annotate"></a>2.1 annotate</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">annotate中文意思：</span><br><span class="line">vi. 注释；给…作注释或评注</span><br><span class="line">vt. 注释；作注解</span><br></pre></td></tr></table></figure>
+
+<p>perf annotate用于解析由perf record记录的数据文件perf.data并将代码注解显示。如果源代码开启了debug符号，则源码和汇编一起解析。如果源码未开启debug，则解析汇编代码。</p>
+<h5 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf annotate [&lt;options&gt;]</span><br><span class="line"></span><br><span class="line">   -C, --cpu &lt;cpu&gt;       list of cpus to profile</span><br><span class="line">   -d, --dsos &lt;dso[,dso...]&gt;</span><br><span class="line">                         only consider symbols in these dsos</span><br><span class="line">   -D, --dump-raw-trace  dump raw trace in ASCII</span><br><span class="line">   -f, --force           don&#x27;t complain, do it</span><br><span class="line">   -i, --input &lt;file&gt;    input file name</span><br><span class="line">   -k, --vmlinux &lt;file&gt;  vmlinux pathname</span><br><span class="line">   -l, --print-line      print matching source lines (may be slow)</span><br><span class="line">   -M, --disassembler-style &lt;disassembler style&gt;</span><br><span class="line">                         Specify disassembler style (e.g. -M intel for intel syntax)</span><br><span class="line">   -m, --modules         load module symbols - WARNING: use only with -k and LIVE kernel</span><br><span class="line">   -n, --show-nr-samples</span><br><span class="line">                         Show a column with the number of samples</span><br><span class="line">   -P, --full-paths      Don&#x27;t shorten the displayed pathnames</span><br><span class="line">   -q, --quiet           do now show any message</span><br><span class="line">   -s, --symbol &lt;symbol&gt;</span><br><span class="line">                         symbol to annotate</span><br><span class="line">   -v, --verbose         be more verbose (show symbol address, etc)</span><br><span class="line">       --asm-raw         Display raw encoding of assembly instructions (default)</span><br><span class="line">       --group           Show event group information together</span><br><span class="line">       --group           Show event group information together</span><br><span class="line">       --gtk             Use the GTK interface</span><br><span class="line">       --ignore-vmlinux  don&#x27;t load vmlinux even if found</span><br><span class="line">       --objdump &lt;path&gt;  objdump binary to use for disassembly and annotations</span><br><span class="line">       --percent-type &lt;local-period&gt;</span><br><span class="line">                         Set percent type local/global-period/hits</span><br><span class="line">       --show-total-period</span><br><span class="line">                         Show a column with the sum of periods</span><br><span class="line">       --skip-missing    Skip symbols that cannot be annotated</span><br><span class="line">       --source          Interleave source code with assembly code (default)</span><br><span class="line">       --stdio           Use the stdio interface</span><br><span class="line">       --stdio-color &lt;mode&gt;</span><br><span class="line">                         &#x27;always&#x27; (default), &#x27;never&#x27; or &#x27;auto&#x27; only applicable to --stdio mode</span><br><span class="line">       --stdio2          Use the stdio interface</span><br><span class="line">       --symfs &lt;directory&gt;</span><br><span class="line">                         Look for files with symbols relative to this directory</span><br><span class="line">       --tui             Use the TUI interface</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="举例"><a href="#举例" class="headerlink" title="举例"></a><strong>举例</strong></h5><p>实验<code>perf annotate -i perf.data -C0</code>，其结果：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201209142209833.png" alt="image-20201209142209833"></p>
+<h4 id="2-2-archive"><a href="#2-2-archive" class="headerlink" title="2.2 archive"></a>2.2 archive</h4><p>根据数据文件记录的build-id，将所有被采样到的elf文件打包。利用此压缩包，可以再任何机器上分析数据文件中记录的采样数据。</p>
+<p>该命令需要perf buildid-list –with-hits配合使用。</p>
+<h5 id="用法-1"><a href="#用法-1" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perf archive [file]</span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-1"><a href="#举例-1" class="headerlink" title="举例"></a>举例</h5><p><strong>没搞清楚是怎么用的，总是报错</strong></p>
+<p><a target="_blank" rel="noopener" href="https://linux-perf-users.vger.kernel.narkive.com/gjAAds7D/perf-archive-is-not-a-perf-command">https://linux-perf-users.vger.kernel.narkive.com/gjAAds7D/perf-archive-is-not-a-perf-command</a></p>
+<p>照网上上面这个例子，给cflags加上buildid和fno-xxx参数，还是不行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:test# make</span><br><span class="line">gcc -g -Wl,--build-id -fno-omit-frame-pointer -o t1 test.c</span><br><span class="line">root@ubuntu:test# perf record -e cpu-clock ./t1 </span><br><span class="line">[ perf record: Woken up 1 times to write data ]</span><br><span class="line">[ perf record: Captured and wrote 0.017 MB perf.data (207 samples) ]</span><br><span class="line">root@ubuntu:test# perf buildid-list -i perf.data </span><br><span class="line">8b5069415e14c65b746661feb0b23246a1d44ea7 [kernel.kallsyms]</span><br><span class="line">e22e5fae1bd7e9508834fdfce490ba5b12f6bcf6 /root/test/t1</span><br><span class="line">cbbbd6f042b731b98a8df7ecc2de408198cf3506 [vdso]</span><br><span class="line">root@ubuntu:test# perf archive perf.data </span><br><span class="line">perf: &#x27;archive&#x27; is not a perf-command. See &#x27;perf --help&#x27;.</span><br><span class="line">root@ubuntu:test# perf archive </span><br><span class="line">perf: &#x27;archive&#x27; is not a perf-command. See &#x27;perf --help&#x27;.</span><br><span class="line">root@ubuntu:test# perf buildid-list -i perf.data -H</span><br><span class="line">8b5069415e14c65b746661feb0b23246a1d44ea7 /proc/kcore</span><br><span class="line">e22e5fae1bd7e9508834fdfce490ba5b12f6bcf6 /root/test/t1</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-3-bench"><a href="#2-3-bench" class="headerlink" title="2.3 bench"></a>2.3 bench</h4><p>除了调度器之外，很多时候人们都需要衡量自己的工作对系统性能的影响。benchmark 是衡量性能的标准方法，对于同一个目标，如果能够有一个大家都承认的 benchmark，将非常有助于”提高内核性能”这项工作</p>
+<p>benchmark：基准测试</p>
+<h5 id="用法-2"><a href="#用法-2" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# perf bench -h</span><br><span class="line"><span class="meta">#</span><span class="bash"> benchmark：基准</span></span><br><span class="line"> Usage: perf bench [&lt;common options&gt;] &lt;collection&gt; &lt;benchmark&gt; [&lt;options&gt;]</span><br><span class="line"></span><br><span class="line">    -f, --format &lt;default|simple&gt;</span><br><span class="line">                          Specify the output formatting style</span><br><span class="line">    -r, --repeat &lt;n&gt;      Specify amount of times to repeat the run</span><br><span class="line"></span><br><span class="line"><span class="meta"> #</span><span class="bash">使用方法</span></span><br><span class="line"><span class="meta"> #</span><span class="bash"> perf bench [&lt;common options&gt;] &lt;subsystem&gt; &lt;suite&gt; [&lt;options&gt;]</span></span><br><span class="line"><span class="meta"> #</span><span class="bash"> subsystem子系统包括有<span class="built_in">sched</span>、mem、numa、futex、epoll以及all选项；</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>子系统</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>sched</td>
+<td>测试调度器和IPC机制</td>
+</tr>
+<tr>
+<td>mem</td>
+<td>测试内存性能</td>
+</tr>
+<tr>
+<td>numa</td>
+<td>NUMA内存和调度</td>
+</tr>
+<tr>
+<td>futex</td>
+<td>futex压力测试</td>
+</tr>
+<tr>
+<td>epoll</td>
+<td>epoll压力测试</td>
+</tr>
+<tr>
+<td>all</td>
+<td>所有benchmark子系统</td>
+</tr>
+</tbody></table>
+<h5 id="举例："><a href="#举例：" class="headerlink" title="举例："></a>举例：</h5><h5 id="2-3-1-sched"><a href="#2-3-1-sched" class="headerlink" title="2.3.1 sched"></a><strong>2.3.1 sched</strong></h5><ul>
+<li><strong>sched message</strong> 是从经典的测试程序 hackbench 移植而来，用来衡量调度器的性能，overhead 以及可扩展性。该 benchmark 启动 N 个 reader/sender 进程或线程对，通过 IPC(socket 或者 pipe) 进行并发的读写。一般人们将 N 不断加大来衡量调度器的可扩展性。Sched message 的用法及用途和 hackbench 一样</li>
+</ul>
+<ul>
+<li><strong>sched pipe</strong> 从 Ingo Molnar 的 pipe-test-1m.c 移植而来。当初 Ingo 的原始程序是为了测试不同的调度器的性能和公平性的。其工作原理很简单，两个进程互相通过 pipe 拼命地发 1000000 个整数，进程 A 发给 B，同时 B 发给 A。。。因为 A 和 B 互相依赖，因此假如调度器不公平，对 A 比 B 好，那么 A 和 B 整体所需要的时间就会更长。</li>
+</ul>
+<p>本地虚拟机和树莓派4B数据对比</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201211155615950.png" alt="虚拟机和树莓派4B进行对比"></p>
+<h5 id="2-3-2-mem"><a href="#2-3-2-mem" class="headerlink" title="2.3.2 mem"></a><strong>2.3.2 mem</strong></h5><p>这个是 perf bench 的作者 Hitoshi Mitake 自己写的一个执行 memcpy 的 benchmark。该测试衡量一个拷贝 1M 数据的 memcpy() 函数所花费的时间。我尚不明白该 benchmark 的使用场景。。。或许是一个例子，告诉人们如何利用 perf bench 框架开发更多的 benchmark 吧。</p>
+<ul>
+<li><p><strong>memcpy</strong></p>
+<p>用于评估简单的内存复制性能</p>
+</li>
+<li><p><strong>memset</strong></p>
+<p>用于简单评估内存写性能</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201211162923972.png" alt="image-20201211162923972"></p>
+<h5 id="2-3-3-numa"><a href="#2-3-3-numa" class="headerlink" title="2.3.3 numa"></a><strong>2.3.3 numa</strong></h5><p>NUMA(Non Uniform Memory Access)即非一致内存访问架构，市面上主要有X86_64(JASPER)和MIPS64(XLP)体系。</p>
+<p><strong>测试：</strong></p>
+<p><code>perf bench numa mem</code></p>
+<p><strong>NUMA架构介绍</strong></p>
+<p><strong>1. SMP vs AMP</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Symmetric_multiprocessing">SMP(Symmetric Multiprocessing)</a>， 即对称多处理器架构，是目前最常见的多处理器计算机架构。</li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Asymmetric_multiprocessing">AMP(Asymmetric Multiprocessing)</a>， 即非对称多处理器架构，则是与SMP相对的概念。</li>
+</ul>
+<p>那么两者之间的主要区别是什么呢？ 总结下来有这么几点，</p>
+<ol>
+<li>SMP的多个处理器都是同构的，使用相同架构的CPU；而AMP的多个处理器则可能是异构的。</li>
+<li>SMP的多个处理器共享同一内存地址空间；而AMP的每个处理器则拥有自己独立的地址空间。</li>
+<li>SMP的多个处理器操通常共享一个操作系统的实例；而AMP的每个处理器可以有或者没有运行操作系统， 运行操作系统的CPU也是在运行多个独立的实例。</li>
+<li>SMP的多处理器之间可以通过共享内存来协同通信；而AMP则需要提供一种处理器间的通信机制。</li>
+</ol>
+<p>现今主流的x86多处理器服务器都是SMP架构的， 而很多嵌入式系统则是AMP架构的</p>
+<p><strong>2. NUMA vs UMA</strong></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Non-uniform_memory_access">NUMA(Non-Uniform Memory Access)</a> 非均匀内存访问架构是指多处理器系统中，内存的访问时间是依赖于处理器和内存之间的相对位置的。 这种设计里存在和处理器相对近的内存，通常被称作本地内存；还有和处理器相对远的内存， 通常被称为非本地内存。</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Uniform_memory_access">UMA(Uniform Memory Access)</a> 均匀内存访问架构则是与NUMA相反，所以处理器对共享内存的访问距离和时间是相同的。</p>
+<p>由此可知，不论是NUMA还是UMA都是SMP架构的一种设计和实现上的选择。</p>
+<p>阅读文档时，也常常能看到**ccNUMA(Cache Coherent NUMA)**，即缓存一致性NUMA架构。 这种架构主要是在NUMA架构之上保证了多处理器之间的缓存一致性。降低了系统程序的编写难度。</p>
+<p>x86多处理器发展历史上，早期的多核和多处理器系统都是UMA架构的。这种架构下， 多个CPU通过同一个北桥(North Bridge)芯片与内存链接。北桥芯片里集成了内存控制器(Memory Controller)，</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://houmin.cc/posts/b893097a/">https://houmin.cc/posts/b893097a/</a></p>
+<h5 id="2-3-4-futex"><a href="#2-3-4-futex" class="headerlink" title="2.3.4 futex"></a><strong>2.3.4 futex</strong></h5><p>Futex 是Fast Userspace muTexes的缩写。</p>
+<p>Futex按英文翻译过来就是快速用户空间互斥体。其设计思想其实 不难理解，在传统的Unix系统中，System V IPC(inter process communication)，如 semaphores, msgqueues, sockets还有文件锁机制(flock())等进程间同步机制都是对一个内核对象操作来完成的，这个内核对象对要同步的进程都是可见的，其提供了共享 的状态信息和原子操作。当进程间要同步的时候必须要通过系统调用(如semop())在内核中完成。可是经研究发现，很多同步是无竞争的，即某个进程进入 互斥区，到再从某个互斥区出来这段时间，常常是没有进程也要进这个互斥区或者请求同一同步变量的。但是在这种情况下，这个进程也要陷入内核去看看有没有人 和它竞争，退出的时侯还要陷入内核去看看有没有进程等待在同一同步变量上。这些不必要的系统调用(或者说内核陷入)造成了大量的性能开销。为了解决这个问 题，Futex就应运而生，Futex是一种用户态和内核态混合的同步机制。首先，同步的进程间通过mmap共享一段内存，futex变量就位于这段共享 的内存中且操作是原子的，当进程尝试进入互斥区或者退出互斥区的时候，先去查看共享内存中的futex变量，如果没有竞争发生，则只修改futex,而不 用再执行系统调用了。当通过访问futex变量告诉进程有竞争发生，则还是得执行系统调用去完成相应的处理(wait 或者 wake up)。简单的说，futex就是通过在用户态的检查，（motivation）如果了解到没有竞争就不用陷入内核了，大大提高了low-contention时候的效率。 Linux从2.5.7开始支持Futex。</p>
+<p>Futex是一种用户态和内核态混合机制，所以需要两个部分合作完成，linux上提供了sys_futex系统调用，对进程竞争情况下的同步处理提供支持。</p>
+<p>所有的futex同步操作都应该从用户空间开始，首先创建一个futex同步变量，也就是位于共享内存的一个整型计数器。</p>
+<p>当进程尝试持有锁或者要进入互斥区的时候，对futex执行”down”操作，即原子性的给futex同步变量减1。如果同步变量变为0，则没有竞争发生， 进程照常执行。</p>
+<p>如果同步变量是个负数，则意味着有竞争发生，需要调用futex系统调用的futex_wait操作休眠当前进程。</p>
+<p>当进程释放锁或 者要离开互斥区的时候，对futex进行”up”操作，即原子性的给futex同步变量加1。如果同步变量由0变成1，则没有竞争发生，进程照常执行。</p>
+<p>如果加之前同步变量是负数，则意味着有竞争发生，需要调用futex系统调用的futex_wake操作唤醒一个或者多个等待进程。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>hash</td>
+<td>评估哈希表性能</td>
+</tr>
+<tr>
+<td>wake</td>
+<td>Suite for evaluating wake calls</td>
+</tr>
+<tr>
+<td>wake-parallel</td>
+<td>Suite for evaluating parallel wake calls</td>
+</tr>
+<tr>
+<td>requeue</td>
+<td>Suite for evaluating requeue calls</td>
+</tr>
+<tr>
+<td>lock-pi</td>
+<td>Suite for evaluating futex lock_pi calls</td>
+</tr>
+</tbody></table>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201211174849540.png" alt="futex对比"></p>
+<h5 id="2-3-5-epoll"><a href="#2-3-5-epoll" class="headerlink" title="2.3.5 epoll"></a><strong>2.3.5 epoll</strong></h5><p>select的改进者；</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>wait</td>
+<td>Suite for evaluating concurrent epoll_wait calls</td>
+</tr>
+<tr>
+<td>ctl</td>
+<td>Suite for evaluating multiple epoll_ctl calls</td>
+</tr>
+</tbody></table>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201211180637168.png" alt="image-20201211180637168"></p>
+<h4 id="2-4-buildid-cache"><a href="#2-4-buildid-cache" class="headerlink" title="2.4 buildid-cache"></a>2.4 buildid-cache</h4><p>管理perf的buildid缓存，每个elf文件都有一个独一无二的buildid。buildid被perf用来关联性能数据与elf文件。</p>
+<h5 id="用法-3"><a href="#用法-3" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf buildid-cache -h</span><br><span class="line"></span><br><span class="line"> Usage: perf buildid-cache [&lt;options&gt;]</span><br><span class="line"></span><br><span class="line">    -a, --add &lt;file list&gt;</span><br><span class="line">                          file(s) to add</span><br><span class="line">    -f, --force           don&#x27;t complain, do it</span><br><span class="line">    -k, --kcore &lt;file&gt;    kcore file to add</span><br><span class="line">    -l, --list            list all cached files</span><br><span class="line">    -M, --missing &lt;file&gt;  to find missing build ids in the cache</span><br><span class="line">    -p, --purge &lt;file list&gt;</span><br><span class="line">                          file(s) to remove (remove old caches too)</span><br><span class="line">    -P, --purge-all       purge all cached files</span><br><span class="line">    -r, --remove &lt;file list&gt;</span><br><span class="line">                          file(s) to remove</span><br><span class="line">    -u, --update &lt;file list&gt;</span><br><span class="line">                          file(s) to update</span><br><span class="line">    -v, --verbose         be more verbose</span><br><span class="line">        --target-ns &lt;n&gt;   target pid for namespace context</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="2-5-buildid-list"><a href="#2-5-buildid-list" class="headerlink" title="2.5 buildid-list"></a>2.5 buildid-list</h4><p>列出perf.data中的buildids。</p>
+<h5 id="用法-4"><a href="#用法-4" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf buildid-list -h</span><br><span class="line"></span><br><span class="line"> Usage: perf buildid-list [&lt;options&gt;]</span><br><span class="line"></span><br><span class="line">    -f, --force           don&#x27;t complain, do it</span><br><span class="line">    -H, --with-hits       Show only DSOs with hits</span><br><span class="line">    -i, --input &lt;file&gt;    input file name</span><br><span class="line">    -k, --kernel          Show current kernel build id</span><br><span class="line">    -v, --verbose         be more verbose</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="举例-2"><a href="#举例-2" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# perf buildid-list -i perf.data </span><br><span class="line">8b5069415e14c65b746661feb0b23246a1d44ea7 [kernel.kallsyms]</span><br><span class="line">cbbbd6f042b731b98a8df7ecc2de408198cf3506 [vdso]</span><br><span class="line">705933c4b146d0227e659a71b02f8fc187f20029 /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.6400.3</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>何为build id?</strong></p>
+<p>是二进制文件的头部位和section内容计算出来的160位SHA-1算法值。</p>
+<p>The build ID is a 160-bit SHA1 string computed over the elf header bits and section contents in the file. It is bundled in the elf file as an entry in the notes section.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+----------------+</span><br><span class="line">|     namesz     |   32-bit, size of &quot;name&quot; field</span><br><span class="line">+----------------+</span><br><span class="line">|     descsz     |   32-bit, size of &quot;desc&quot; field</span><br><span class="line">+----------------+</span><br><span class="line">|      type      |   32-bit, vendor specific &quot;type&quot;</span><br><span class="line">+----------------+</span><br><span class="line">|      name      |   &quot;namesz&quot; bytes, null-terminated string</span><br><span class="line">+----------------+</span><br><span class="line">|      desc      |   &quot;descsz&quot; bytes, binary data</span><br><span class="line">+----------------+</span><br></pre></td></tr></table></figure>
+
+<p>In GCC, you can enable build IDs with the <code>-Wl,--build-id</code> which passes the <code>--build-id</code> flag to the linker. You can then read it back by dumping the notes section of the resulting elf file with <code>readelf -n</code></p>
+<p><strong>build id有何用？</strong></p>
+<ul>
+<li>当调试设备时，给出了一堆debug符号信息时，可以用于定位指定build id的二进制文件符号信息</li>
+<li>用于区别二进制文件</li>
+</ul>
+<p><strong>build id举例：</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:test# make clean</span><br><span class="line">root@ubuntu:test# make</span><br><span class="line">gcc -g -Wl,--build-id -o t1 test.c</span><br><span class="line">root@ubuntu:test# ls</span><br><span class="line">Makefile  perf.data  t1  test.c</span><br><span class="line">root@ubuntu:test# readelf -n t1 </span><br><span class="line"></span><br><span class="line">Displaying notes found in: .note.gnu.property</span><br><span class="line">  Owner                Data size 	Description</span><br><span class="line">  GNU                  0x00000010	NT_GNU_PROPERTY_TYPE_0</span><br><span class="line">      Properties: x86 feature: IBT, SHSTK</span><br><span class="line"></span><br><span class="line">Displaying notes found in: .note.gnu.build-id</span><br><span class="line">  Owner                Data size 	Description</span><br><span class="line">  GNU                  0x00000014	NT_GNU_BUILD_ID (unique build ID bitstring)</span><br><span class="line">    Build ID: 104006ed448e657d6a4160f3718a72231df54b06</span><br><span class="line"></span><br><span class="line">Displaying notes found in: .note.ABI-tag</span><br><span class="line">  Owner                Data size 	Description</span><br><span class="line">  GNU                  0x00000010	NT_GNU_ABI_TAG (ABI version tag)</span><br><span class="line">    OS: Linux, ABI: 3.2.0</span><br><span class="line">root@ubuntu:test# rm perf.data </span><br><span class="line">root@ubuntu:test# perf record -e cpu-clock ./t1 </span><br><span class="line">now into main</span><br><span class="line">now foo1 over</span><br><span class="line">now foo2 over</span><br><span class="line">now main over</span><br><span class="line">[ perf record: Woken up 1 times to write data ]</span><br><span class="line">[ perf record: Captured and wrote 0.018 MB perf.data (222 samples) ]</span><br><span class="line">root@ubuntu:test# perf report</span><br><span class="line">root@ubuntu:test# perf archive</span><br><span class="line">perf: &#x27;archive&#x27; is not a perf-command. See &#x27;perf --help&#x27;.</span><br><span class="line">root@ubuntu:test# perf buildid-list -i perf.data </span><br><span class="line">8b5069415e14c65b746661feb0b23246a1d44ea7 [kernel.kallsyms]</span><br><span class="line">104006ed448e657d6a4160f3718a72231df54b06 /root/test/t1</span><br><span class="line">cbbbd6f042b731b98a8df7ecc2de408198cf3506 [vdso]</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-6-c2c"><a href="#2-6-c2c" class="headerlink" title="2.6 c2c"></a>2.6 c2c</h4><p>CPU缓存机制参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/jokerjason/p/10711022.html">https://www.cnblogs.com/jokerjason/p/10711022.html</a></p>
+<p>perf c2c的使用主要参考博客：<a target="_blank" rel="noopener" href="https://joemario.github.io/blog/2016/09/01/c2c-blog/">https://joemario.github.io/blog/2016/09/01/c2c-blog/</a></p>
+<p>shared data c2c/HITM分析。</p>
+<p>cache to cache：</p>
+<p>缓存的命中率，是 CPU 性能的一个关键性能指标。我们知道，CPU 里面有好几级缓存（Cache），每一级缓存都比后面一级缓存访问速度快。最后一级缓存叫 LLC（Last Level Cache）；LLC 的后面就是内存。</p>
+<p>当 CPU 需要访问一块数据或者指令时，它会首先查看最靠近的一级缓存（L1）；如果数据存在，那么就是缓存命中（Cache Hit），否则就是不命中（Cache Miss），需要继续查询下一级缓存。</p>
+<p>c2c用来检测cache共享命中失败，一个处理器修改了某个cache line中的数据，另一个处理器访问该cache line数据时需要refresh该cache line， perf c2c命令就用来调试这里问题。</p>
+<p>At a high level, “perf c2c” will show you:<br>* The cachelines where false sharing was detected.<br>* The readers and writers to those cachelines, and the offsets where those accesses occurred.<br>* The pid, tid, instruction addr, function name, binary object name for those readers and writers.<br>* The source file and line number for each reader and writer.<br>* The average load latency for the loads to those cachelines.<br>* Which numa nodes the samples a cacheline came from and which cpus were involved</p>
+<p><strong>HITM：</strong></p>
+<p>Notice the term “HITM”, which stands for a load that hit in a modified cacheline.这就是false sharing产生的地方。</p>
+<p><strong>Remote HITMs：</strong></p>
+<p>meaning across numa nodes, are the most expensive - especially when there are lots of readers and writers.</p>
+<p>perf c2c report输出含义：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"> 1  =================================================</span><br><span class="line"> 2              Trace Event Information</span><br><span class="line"> 3  =================================================</span><br><span class="line"> 4    Total records                     :     329219  &lt;&lt; Total loads and stores sampled.</span><br><span class="line"> 5    Locked Load/Store Operations      :      14654</span><br><span class="line"> 6    Load Operations                   :      69679  &lt;&lt; Total loads</span><br><span class="line"> 7    Loads - uncacheable               :          0</span><br><span class="line"> 8    Loads - IO                        :          0</span><br><span class="line"> 9    Loads - Miss                      :       3972</span><br><span class="line">10    Loads - no mapping                :          0</span><br><span class="line">11    Load Fill Buffer Hit              :      11958</span><br><span class="line">12    Load L1D hit                      :      17235  &lt;&lt; loads that hit in the L1 cache.</span><br><span class="line">13    Load L2D hit                      :         21</span><br><span class="line">14    Load LLC hit                      :      14219  &lt;&lt; loads that hit in the last level cache (LLC).</span><br><span class="line">15    Load Local HITM                   :       3402  &lt;&lt; loads that hit in a modified cache on the same numa node (local HITM).</span><br><span class="line">16    Load Remote HITM                  :      12757  &lt;&lt; loads that hit in a modified cache on a remote numa node (remote HITM).</span><br><span class="line">17    Load Remote HIT                   :       5295</span><br><span class="line">18    Load Local DRAM                   :        976  &lt;&lt; loads that hit in the local node&#x27;s main memory.</span><br><span class="line">19    Load Remote DRAM                  :       3246  &lt;&lt; loads that hit in a remote node&#x27;s main memory.</span><br><span class="line">20    Load MESI State Exclusive         :       4222 </span><br><span class="line">21    Load MESI State Shared            :          0</span><br><span class="line">22    Load LLC Misses                   :      22274  &lt;&lt; loads not found in any local node caches.</span><br><span class="line">23    LLC Misses to Local DRAM          :        4.4% &lt;&lt; % hitting in local node&#x27;s main memory.</span><br><span class="line">24    LLC Misses to Remote DRAM         :       14.6% &lt;&lt; % hitting in a remote node&#x27;s main memory.</span><br><span class="line">25    LLC Misses to Remote cache (HIT)  :       23.8% &lt;&lt; % hitting in a clean cache in a remote node.</span><br><span class="line">26    LLC Misses to Remote cache (HITM) :       57.3% &lt;&lt; % hitting in remote modified cache. (most expensive - false sharing)</span><br><span class="line">27    Store Operations                  :     259539  &lt;&lt; store instruction sample count</span><br><span class="line">28    Store - uncacheable               :          0</span><br><span class="line">29    Store - no mapping                :         11</span><br><span class="line">30    Store L1D Hit                     :     256696  &lt;&lt; stores that got L1 cache when requested.</span><br><span class="line">31    Store L1D Miss                    :       2832  &lt;&lt; stores that couldn&#x27;t get the L1 cache when requested (L1 miss).</span><br><span class="line">32    No Page Map Rejects               :       2376</span><br><span class="line">33    Unable to parse data source       :          1</span><br></pre></td></tr></table></figure>
+
+<p><strong>shared data cache line table</strong>表格显示了fasle sharing发生的地方，它列表是按照拥有的HITMs数量从高到低排列显示的，</p>
+<p><strong>Shared Cache Line Distribution Pareto</strong>是最重要的表，它展示了每个冲突竞争的cacheline的详细信息。</p>
+<h5 id="举例-3"><a href="#举例-3" class="headerlink" title="举例"></a><strong>举例</strong></h5><p>参考文章：<a target="_blank" rel="noopener" href="https://www.bookstack.cn/read/perf-little-book/posts-check-cache-false-sharing.md">https://www.bookstack.cn/read/perf-little-book/posts-check-cache-false-sharing.md</a></p>
+<p>对比下数据：</p>
+<ul>
+<li>test.c</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 100000000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THRAED_NUM 8</span></span><br><span class="line"><span class="keyword">int</span> values[N];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum[THRAED_NUM];</span><br><span class="line">    <span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; THRAED_NUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//int local_sum;</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; N; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//local_sum += values[j] &gt;&gt; i;</span></span><br><span class="line">            sum[i] += values[j] &gt;&gt; i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//sum[i] = local_sum;</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -fopenmp -g test.c -o test</span><br></pre></td></tr></table></figure>
+
+<p>数据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@localhost test]# gcc -fopenmp -g test.c -o test</span><br><span class="line">[root@localhost test]# perf c2c record ./test</span><br><span class="line">[ perf record: Woken up 139 times to write data ]</span><br><span class="line">[ perf record: Captured and wrote 36.329 MB perf.data (424292 samples) ]</span><br><span class="line">[root@localhost test]# perf c2c report -i perf.data --stdio</span><br><span class="line"></span><br><span class="line">=================================================</span><br><span class="line">            Trace Event Information</span><br><span class="line">=================================================</span><br><span class="line">  Total records                     :     424292</span><br><span class="line">  Locked Load/Store Operations      :        129</span><br><span class="line">  Load Operations                   :     182641</span><br><span class="line">  Loads - uncacheable               :          5</span><br><span class="line">  Loads - IO                        :          0</span><br><span class="line">  Loads - Miss                      :          2</span><br><span class="line">  Loads - no mapping                :          0</span><br><span class="line">  Load Fill Buffer Hit              :     153672</span><br><span class="line">  Load L1D hit                      :      26947</span><br><span class="line">  Load L2D hit                      :        278</span><br><span class="line">  Load LLC hit                      :       1263</span><br><span class="line">  Load Local HITM                   :         78</span><br><span class="line">  Load Remote HITM                  :        456</span><br><span class="line">  Load Remote HIT                   :          6</span><br><span class="line">  Load Local DRAM                   :         10</span><br><span class="line">  Load Remote DRAM                  :        464</span><br><span class="line">  Load MESI State Exclusive         :        468</span><br><span class="line">  Load MESI State Shared            :          6</span><br><span class="line">  Load LLC Misses                   :        936</span><br><span class="line">  LLC Misses to Local DRAM          :        1.1%</span><br><span class="line">  LLC Misses to Remote DRAM         :       49.6%</span><br><span class="line">  LLC Misses to Remote cache (HIT)  :        0.6%</span><br><span class="line">  LLC Misses to Remote cache (HITM) :       48.7%</span><br><span class="line">  Store Operations                  :     241651</span><br><span class="line">  Store - uncacheable               :          0</span><br><span class="line">  Store - no mapping                :         32</span><br><span class="line">  Store L1D Hit                     :     212012</span><br><span class="line">  Store L1D Miss                    :      29607</span><br><span class="line">  No Page Map Rejects               :       5684</span><br><span class="line">  Unable to parse data source       :          0</span><br><span class="line"></span><br><span class="line">=================================================</span><br><span class="line">    Global Shared Cache Line Event Information</span><br><span class="line">=================================================</span><br><span class="line">  Total Shared Cache Lines          :         35</span><br><span class="line">  Load HITs on shared lines         :     180894</span><br><span class="line">  Fill Buffer Hits on shared lines  :     153200</span><br><span class="line">  L1D hits on shared lines          :      26135</span><br><span class="line">  L2D hits on shared lines          :        240</span><br><span class="line">  LLC hits on shared lines          :        859</span><br><span class="line">  Locked Access on shared lines     :          4</span><br><span class="line">  Store HITs on shared lines        :     219944</span><br><span class="line">  Store L1D hits on shared lines    :     194838</span><br><span class="line">  Total Merged records              :     220478</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201214154611317.png" alt="image-20201214154611317"></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201214154718036.png" alt="image-20201214154718036"></p>
+<p>数据中显示，程序的第15行，有问题；</p>
+<ul>
+<li>test.c</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> N 100000000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> THRAED_NUM 8</span></span><br><span class="line"><span class="keyword">int</span> values[N];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> sum[THRAED_NUM];</span><br><span class="line">    <span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; THRAED_NUM; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> local_sum;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; N; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            local_sum += values[j] &gt;&gt; i;</span><br><span class="line">            <span class="comment">//sum[i] += values[j] &gt;&gt; i;</span></span><br><span class="line">        &#125;</span><br><span class="line">        sum[i] = local_sum;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>数据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost test]# perf c2c record ./test</span><br><span class="line">[ perf record: Woken up 1 times to write data ]</span><br><span class="line">[ perf record: Captured and wrote 1.741 MB perf.data (20209 samples) ]</span><br><span class="line"></span><br><span class="line">=================================================</span><br><span class="line">            Trace Event Information</span><br><span class="line">=================================================</span><br><span class="line">  Total records                     :      20052</span><br><span class="line">  Locked Load/Store Operations      :         28</span><br><span class="line">  Load Operations                   :       9740</span><br><span class="line">  Loads - uncacheable               :          0</span><br><span class="line">  Loads - IO                        :          0</span><br><span class="line">  Loads - Miss                      :          0</span><br><span class="line">  Loads - no mapping                :          1</span><br><span class="line">  Load Fill Buffer Hit              :        102</span><br><span class="line">  Load L1D hit                      :       9517</span><br><span class="line">  Load L2D hit                      :         14</span><br><span class="line">  Load LLC hit                      :         99</span><br><span class="line">  Load Local HITM                   :          4</span><br><span class="line">  Load Remote HITM                  :          3</span><br><span class="line">  Load Remote HIT                   :          0</span><br><span class="line">  Load Local DRAM                   :          2</span><br><span class="line">  Load Remote DRAM                  :          5</span><br><span class="line">  Load MESI State Exclusive         :          7</span><br><span class="line">  Load MESI State Shared            :          0</span><br><span class="line">  Load LLC Misses                   :         10</span><br><span class="line">  LLC Misses to Local DRAM          :       20.0%</span><br><span class="line">  LLC Misses to Remote DRAM         :       50.0%</span><br><span class="line">  LLC Misses to Remote cache (HIT)  :        0.0%</span><br><span class="line">  LLC Misses to Remote cache (HITM) :       30.0%</span><br><span class="line">  Store Operations                  :      10312</span><br><span class="line">  Store - uncacheable               :          0</span><br><span class="line">  Store - no mapping                :         26</span><br><span class="line">  Store L1D Hit                     :      10107</span><br><span class="line">  Store L1D Miss                    :        179</span><br><span class="line">  No Page Map Rejects               :        397</span><br><span class="line">  Unable to parse data source       :          0</span><br><span class="line"></span><br><span class="line">=================================================</span><br><span class="line">    Global Shared Cache Line Event Information</span><br><span class="line">=================================================</span><br><span class="line">  Total Shared Cache Lines          :          7</span><br><span class="line">  Load HITs on shared lines         :          8</span><br><span class="line">  Fill Buffer Hits on shared lines  :          1</span><br><span class="line">  L1D hits on shared lines          :          0</span><br><span class="line">  L2D hits on shared lines          :          0</span><br><span class="line">  LLC hits on shared lines          :          4</span><br><span class="line">  Locked Access on shared lines     :          0</span><br><span class="line">  Store HITs on shared lines        :          0</span><br><span class="line">  Store L1D hits on shared lines    :          0</span><br><span class="line">  Total Merged records              :          7</span><br><span class="line"></span><br><span class="line">=================================================</span><br><span class="line">                 c2c details</span><br><span class="line">=================================================</span><br><span class="line">  Events                            : cpu/mem-loads,ldlat=30/P</span><br><span class="line">                                    : cpu/mem-stores/P</span><br><span class="line">  Cachelines sort on                : Total HITMs</span><br><span class="line">  Cacheline data grouping           : offset,iaddr</span><br><span class="line"></span><br><span class="line">=================================================</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201214155321846.png" alt="image-20201214155321846"></p>
+<p>cache to cache这部分还是不理解，需要找计算机的专业书籍来看看；</p>
+<h4 id="2-7-config"><a href="#2-7-config" class="headerlink" title="2.7 config"></a><strong>2.7 config</strong></h4><p>perf config用于读取和配置 .perfconfig配置文件， name = value 格式；</p>
+<h5 id="用法-5"><a href="#用法-5" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf config [&lt;file-option&gt;] [options] [section.name[=value] ...]</span><br><span class="line"></span><br><span class="line">   -l, --list            show current config variables</span><br><span class="line">       --system          use system config file</span><br><span class="line">       --user            use user config file</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-8-data"><a href="#2-8-data" class="headerlink" title="2.8 data"></a>2.8 data</h4><p>perf data可以将perf数据文件格式转换为其他格式（目前只支持ctf格式）；</p>
+<h5 id="用法-6"><a href="#用法-6" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf data [&lt;common options&gt;] &lt;command&gt; [&lt;options&gt;]</span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-4"><a href="#举例-4" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# perf data convert --to-ctf</span><br><span class="line">No conversion support compiled in. perf should be compiled with environment variables LIBBABELTRACE=1 and LIBBABELTRACE_DIR=/path/to/libbabeltrace/</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-9-diff"><a href="#2-9-diff" class="headerlink" title="2.9 diff"></a>2.9 diff</h4><p>This command displays the performance difference amongst two or more perf.data files captured via perf record.</p>
+<p>用于比较多个perf.data数据之间的不同。如果没有输入参数，默认比较perf.data.old和perf.data文件；</p>
+<h5 id="用法-7"><a href="#用法-7" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf diff [&lt;options&gt;] [old_file] [new_file]</span><br><span class="line"></span><br><span class="line">    -b, --baseline-only   Show only items with match in baseline</span><br><span class="line">    -C, --comms &lt;comm[,comm...]&gt;</span><br><span class="line">                          only consider symbols in these comms</span><br><span class="line">    -c, --compute &lt;delta,delta-abs,ratio,wdiff:w1,w2 (default delta-abs),cycles&gt;</span><br><span class="line">                          Entries differential computation selection</span><br><span class="line">    -d, --dsos &lt;dso[,dso...]&gt;</span><br><span class="line">                          only consider symbols in these dsos</span><br><span class="line">    -D, --dump-raw-trace  dump raw trace in ASCII</span><br><span class="line">    -f, --force           don&#x27;t complain, do it</span><br><span class="line">    -F, --formula         Show formula.</span><br><span class="line">    -m, --modules         load module symbols - WARNING: use only with -k and LIVE kernel</span><br><span class="line">    -o, --order &lt;n&gt;       Specify compute sorting.</span><br><span class="line">    -p, --period          Show period values.</span><br><span class="line">    -q, --quiet           Do not show any message</span><br><span class="line">    -s, --sort &lt;key[,key2...]&gt;</span><br><span class="line">                          sort by key(s): pid, comm, dso, symbol, parent, cpu, srcline, ... Please refer the man page for the complete list.</span><br><span class="line">    -S, --symbols &lt;symbol[,symbol...]&gt;</span><br><span class="line">                          only consider these symbols</span><br><span class="line">    -t, --field-separator &lt;separator&gt;</span><br><span class="line">                          separator for columns, no spaces will be added between columns &#x27;.&#x27; is reserved.</span><br><span class="line">    -v, --verbose         be more verbose (show symbol address, etc)</span><br><span class="line">        --cpu &lt;cpu&gt;       list of cpus to profile</span><br><span class="line">        --kallsyms &lt;file&gt;</span><br><span class="line">                          kallsyms pathname</span><br><span class="line">        --percentage &lt;relative|absolute&gt;</span><br><span class="line">                          How to display percentage of filtered entries</span><br><span class="line">        --pid &lt;pid[,pid...]&gt;</span><br><span class="line">                          only consider symbols in these pids</span><br><span class="line">        --symfs &lt;directory&gt;</span><br><span class="line">                          Look for files with symbols relative to this directory</span><br><span class="line">        --tid &lt;tid[,tid...]&gt;</span><br><span class="line">                          only consider symbols in these tids</span><br><span class="line">        --time &lt;str&gt;      Time span (time percent or absolute timestamp)</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="举例-5"><a href="#举例-5" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost test]# ls</span><br><span class="line">perf.data  perf.data.old  test  test.c</span><br><span class="line">[root@localhost test]# perf diff perf.data.old perf.data --cpu 0</span><br><span class="line"><span class="meta">#</span><span class="bash"> Event <span class="string">&#x27;cpu/mem-loads,ldlat=30/P&#x27;</span></span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="bash"><span class="comment"># Baseline  Delta Abs  Shared Object      Symbol</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ........  .........  .................  ............................</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="bash">    77.78%             [kernel.kallsyms]  [k] find_busiest_group</span></span><br><span class="line">    11.11%             [kernel.kallsyms]  [k] __update_load_avg_cfs_rq</span><br><span class="line">    11.11%             [kernel.kallsyms]  [k] account_user_time</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> Event <span class="string">&#x27;cpu/mem-stores/P&#x27;</span></span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="bash"><span class="comment"># Baseline  Delta Abs  Shared Object      Symbol</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> ........  .........  .................  ..........................</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="bash">    54.13%             [kernel.kallsyms]  [k] tick_sched_timer</span></span><br><span class="line">    37.15%             [kernel.kallsyms]  [k] repeat_nmi</span><br><span class="line">     4.59%             [kernel.kallsyms]  [k] __native_set_fixmap</span><br><span class="line">     3.36%             [kernel.kallsyms]  [k] finish_task_switch</span><br><span class="line">     0.39%             [kernel.kallsyms]  [k] perf_event_nmi_handler</span><br><span class="line">     0.29%             [kernel.kallsyms]  [k] nmi_handle</span><br><span class="line">     0.09%             [kernel.kallsyms]  [k] native_apic_mem_write</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-10-evlist"><a href="#2-10-evlist" class="headerlink" title="2.10 evlist"></a>2.10 evlist</h4><p>列出数据文件perf.data中所有性能事件。</p>
+<h5 id="用法-8"><a href="#用法-8" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf evlist [&lt;options&gt;]</span><br><span class="line"></span><br><span class="line">   -f, --force           don&#x27;t complain, do it</span><br><span class="line">   -F, --freq            Show the sample frequency</span><br><span class="line">   -g, --group           Show event group information</span><br><span class="line">   -i, --input &lt;file&gt;    Input file name</span><br><span class="line">   -v, --verbose         Show all event attr details</span><br><span class="line">       --trace-fields    Show tracepoint fields</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="举例-6"><a href="#举例-6" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost test]# perf evlist -i perf.data</span><br><span class="line">cpu/mem-loads,ldlat=30/P</span><br><span class="line">cpu/mem-stores/P</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-11-ftrace"><a href="#2-11-ftrace" class="headerlink" title="2.11 ftrace"></a>2.11 ftrace</h4><p>是内核ftrace功能的简化封装，可以跟踪指定进程的内核函数调用栈。目前perf ftrace只支持单线程跟踪，仅仅是从ftrace管道中读取数据输出到标准输出。</p>
+<h5 id="用法-9"><a href="#用法-9" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf ftrace [&lt;options&gt;] [&lt;command&gt;]</span><br><span class="line">   or: perf ftrace [&lt;options&gt;] -- &lt;command&gt; [&lt;options&gt;]</span><br><span class="line"></span><br><span class="line">   -a, --all-cpus        system-wide collection from all CPUs</span><br><span class="line">   -C, --cpu &lt;cpu&gt;       list of cpus to monitor</span><br><span class="line">   -D, --graph-depth &lt;n&gt;</span><br><span class="line">                         Max depth for function graph tracer</span><br><span class="line">   -G, --graph-funcs &lt;func&gt;</span><br><span class="line">                         Set graph filter on given functions</span><br><span class="line">   -g, --nograph-funcs &lt;func&gt;</span><br><span class="line">                         Set nograph filter on given functions</span><br><span class="line">   -N, --notrace-funcs &lt;func&gt;</span><br><span class="line">                         do not trace given functions</span><br><span class="line">   -p, --pid &lt;pid&gt;       trace on existing process id</span><br><span class="line">   -T, --trace-funcs &lt;func&gt;</span><br><span class="line">                         trace given functions only</span><br><span class="line">   -t, --tracer &lt;tracer&gt;</span><br><span class="line">                         tracer to use: function_graph(default) or function</span><br><span class="line">   -v, --verbose         be more verbose</span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-7"><a href="#举例-7" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf ftrace -g -p 120058</span><br><span class="line">  2)               |  switch_mm_irqs_off() &#123;</span><br><span class="line">  2)   0.327 us    |    load_new_mm_cr3();</span><br><span class="line">  2)   2.808 us    |  &#125;</span><br><span class="line"> ------------------------------------------</span><br><span class="line">  2)    &lt;idle&gt;-0    =&gt;  &lt;...&gt;-122943</span><br><span class="line"> ------------------------------------------</span><br><span class="line"></span><br><span class="line">  2)               |  finish_task_switch() &#123;</span><br><span class="line">  2)   ==========&gt; |</span><br><span class="line">  2)               |    smp_irq_work_interrupt() &#123;</span><br><span class="line">  2)               |      irq_enter() &#123;</span><br><span class="line">  2)   0.052 us    |        rcu_irq_enter();</span><br><span class="line">  2)   0.096 us    |        irqtime_account_irq();</span><br><span class="line">  2)   1.029 us    |      &#125;</span><br><span class="line">  2)               |      __wake_up() &#123;</span><br><span class="line">  2)               |        __wake_up_common_lock() &#123;</span><br><span class="line">  2)   0.128 us    |          _raw_spin_lock_irqsave();</span><br><span class="line">  2)   0.057 us    |          __wake_up_common();</span><br><span class="line">  2)   0.048 us    |          _raw_spin_unlock_irqrestore();</span><br><span class="line">  2)   1.842 us    |        &#125;</span><br><span class="line">  2)   2.550 us    |      &#125;</span><br><span class="line">  2)               |      irq_exit() &#123;</span><br><span class="line">  2)   0.080 us    |        irqtime_account_irq();</span><br><span class="line">  2)   0.037 us    |        idle_cpu();</span><br><span class="line">  2)   0.035 us    |        rcu_irq_exit();</span><br><span class="line">  2)   1.136 us    |      &#125;</span><br><span class="line">  2)   6.958 us    |    &#125;</span><br><span class="line">  2)   &lt;========== |</span><br><span class="line">  2)   8.031 us    |  &#125;</span><br><span class="line">  2)   0.047 us    |  finish_wait();</span><br><span class="line">  2)               |  mutex_lock() &#123;</span><br><span class="line">  2)               |    _cond_resched() &#123;</span><br><span class="line">  2)   0.033 us    |      rcu_all_qs();</span><br><span class="line">  2)   0.361 us    |    &#125;</span><br><span class="line">  2)   0.766 us    |  &#125;</span><br><span class="line">  2)   0.031 us    |  generic_pipe_buf_confirm();</span><br><span class="line">  2)               |  _cond_resched() &#123;</span><br><span class="line">  2)   0.032 us    |    rcu_all_qs();</span><br><span class="line">  2)   0.360 us    |  &#125;</span><br><span class="line">  2)   0.034 us    |  anon_pipe_buf_release();</span><br><span class="line">  2)   0.049 us    |  mutex_unlock();</span><br><span class="line">  2)               |  __wake_up_sync_key() &#123;</span><br><span class="line">  2)               |    __wake_up_common_lock() &#123;</span><br><span class="line">  2)   0.035 us    |      _raw_spin_lock_irqsave();</span><br><span class="line">  2)   0.036 us    |      __wake_up_common();</span><br><span class="line">  2)   0.045 us    |      _raw_spin_unlock_irqrestore();</span><br><span class="line">  2)   1.069 us    |    &#125;</span><br><span class="line">  2)   1.397 us    |  &#125;</span><br><span class="line">  2)   0.042 us    |  kill_fasync();</span><br><span class="line">  2)               |  touch_atime() &#123;</span><br><span class="line">  2)               |    atime_needs_update() &#123;</span><br><span class="line">  2)               |      current_time() &#123;</span><br><span class="line">  2)   0.034 us    |        ktime_get_coarse_real_ts64();</span><br><span class="line">  2)   0.042 us    |        timespec64_trunc();</span><br><span class="line">  2)   0.740 us    |      &#125;</span><br><span class="line">  2)   1.277 us    |    &#125;</span><br><span class="line">  2)   0.163 us    |    __sb_start_write();</span><br><span class="line">  2)   0.116 us    |    __mnt_want_write();</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-12-inject"><a href="#2-12-inject" class="headerlink" title="2.12 inject"></a>2.12 inject</h4><p>该工具读取perf record工具记录的事件流，并将其定向到标准输出。在被分析代码中的任何一点，都可以向事件流中注入其它事件。</p>
+<h5 id="用法-10"><a href="#用法-10" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Usage: perf inject [&lt;options&gt;]</span><br><span class="line"></span><br><span class="line">   -b, --build-ids       Inject build-ids into the output stream</span><br><span class="line">   -f, --force           don&#x27;t complain, do it</span><br><span class="line">   -i, --input &lt;file&gt;    input file name</span><br><span class="line">   -j, --jit             merge jitdump files into perf.data file</span><br><span class="line">   -o, --output &lt;file&gt;   output file name</span><br><span class="line">   -s, --sched-stat      Merge sched-stat and sched-switch for getting events where and how long tasks slept</span><br><span class="line">   -v, --verbose         be more verbose (show build ids, etc)</span><br><span class="line">       --itrace[=&lt;opts&gt;]</span><br><span class="line">                         Instruction Tracing options</span><br><span class="line">                               i:                      synthesize instructions events</span><br><span class="line">                               b:                      synthesize branches events</span><br><span class="line">                               c:                      synthesize branches events (calls only)</span><br><span class="line">                               r:                      synthesize branches events (returns only)</span><br><span class="line">                               x:                      synthesize transactions events</span><br><span class="line">                               w:                      synthesize ptwrite events</span><br><span class="line">                               p:                      synthesize power events</span><br><span class="line">                               e:                      synthesize error events</span><br><span class="line">                               d:                      create a debug log</span><br><span class="line">                               g[len]:                 synthesize a call chain (use with i or x)</span><br><span class="line">                               l[len]:                 synthesize last branch entries (use with i or x)</span><br><span class="line">                               sNUMBER:                skip initial number of events</span><br><span class="line">                               PERIOD[ns|us|ms|i|t]:   specify period to sample stream</span><br><span class="line">                               concatenate multiple options. Default is ibxwpe or cewp</span><br><span class="line"></span><br><span class="line">       --kallsyms &lt;file&gt;</span><br><span class="line">                         kallsyms pathname</span><br><span class="line">       --strip           strip non-synthesized events (use with --itrace)</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="举例-8"><a href="#举例-8" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost test]# ls</span><br><span class="line">perf.data  perf.data.old  test  test.c</span><br><span class="line">[root@localhost test]# perf inject -i perf.data --jit -o perf.data.jitted</span><br><span class="line">[root@localhost test]# ls</span><br><span class="line">perf.data  perf.data.jitted  perf.data.old  test  test.c</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-13-kallsyms"><a href="#2-13-kallsyms" class="headerlink" title="2.13 kallsyms"></a>2.13 kallsyms</h4><p>查找运行中的内核符号；</p>
+<h5 id="用法-11"><a href="#用法-11" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:python# perf kallsyms -h</span><br><span class="line"></span><br><span class="line"> Usage: perf kallsyms [&lt;options&gt;] symbol_name</span><br><span class="line"></span><br><span class="line">    -v, --verbose         be more verbose (show counter open errors, etc)</span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-9"><a href="#举例-9" class="headerlink" title="举例"></a>举例</h5><figure class="highlight plain"><figcaption><span>perf kallsyms -v vmw_cmdbuf_header_submit</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:python# perf kallsyms -v vmw_cmdbuf_header_submit</span><br><span class="line">vmw_cmdbuf_header_submit: [vmwgfx] &#x2F;lib&#x2F;modules&#x2F;5.4.0-56-generic&#x2F;kernel&#x2F;drivers&#x2F;gpu&#x2F;drm&#x2F;vmwgfx&#x2F;vmwgfx.ko 0xffffffffc040c300-0xffffffffc040c3a7 (0x1b380-0x1b427)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-14-kmem"><a href="#2-14-kmem" class="headerlink" title="2.14 kmem"></a>2.14 kmem</h4><p>针对内核内存（slab）子系统进行追踪测量的工具。</p>
+<p>比如内存分配/释放等。可以用来研究程序在哪里分配了大量内存，或者在什么地方产生碎片之类的和内存管理相关的问题。</p>
+<p>perf kmem和perf lock实际上都是perf tracepoint的子类，等同于perf record -e kmem:*和perf record -e lock:*。</p>
+<p>但是这些工具在内部队员是数据进行了慧聪和分析，因此统计报表更具可读性。</p>
+<p>perf kmem record：抓取命令的内核slab分配器事件</p>
+<p>perf kmem stat：生成内核slab分配器统计信息</p>
+<h5 id="用法-12"><a href="#用法-12" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf kmem [&lt;options&gt;] &#123;record|stat&#125;</span><br><span class="line"></span><br><span class="line">   -f, --force           don&#x27;t complain, do it</span><br><span class="line">   -i, --input &lt;file&gt;    input file name</span><br><span class="line">   -l, --line &lt;num&gt;      show n lines</span><br><span class="line">   -s, --sort &lt;key[,key2...]&gt;</span><br><span class="line">                         sort by keys: ptr, callsite, bytes, hit, pingpong, frag, page, order, migtype, gfp</span><br><span class="line">   -v, --verbose         be more verbose (show symbol address, etc)</span><br><span class="line">       --alloc           show per-allocation statistics</span><br><span class="line">       --caller          show per-callsite statistics</span><br><span class="line">       --live            Show live page stat</span><br><span class="line">       --page            Analyze page allocator</span><br><span class="line">       --raw-ip          show raw ip instead of symbol</span><br><span class="line">       --slab            Analyze slab allocator</span><br><span class="line">       --time &lt;str&gt;      Time span of interest (start,stop)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-10"><a href="#举例-10" class="headerlink" title="举例"></a>举例</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201216134713881.png" alt="image-20201216134713881"></p>
+<h4 id="2-15-kvm"><a href="#2-15-kvm" class="headerlink" title="2.15 kvm"></a>2.15 kvm</h4><p>用于测试kvm客户机的性能参数。</p>
+<h5 id="用法-13"><a href="#用法-13" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf kvm [&lt;options&gt;] &#123;top|record|report|diff|buildid-list|stat&#125;</span><br><span class="line"></span><br><span class="line">   -i, --input &lt;file&gt;    Input file name</span><br><span class="line">   -o, --output &lt;file&gt;   Output file name</span><br><span class="line">   -v, --verbose         be more verbose (show counter open errors, etc)</span><br><span class="line">       --guest           Collect guest os data</span><br><span class="line">       --guestkallsyms &lt;file&gt;</span><br><span class="line">                         file saving guest os /proc/kallsyms</span><br><span class="line">       --guestmodules &lt;file&gt;</span><br><span class="line">                         file saving guest os /proc/modules</span><br><span class="line">       --guestmount &lt;directory&gt;</span><br><span class="line">                         guest mount directory under which every guest os instance has a subdir</span><br><span class="line">       --guestvmlinux &lt;file&gt;</span><br><span class="line">                         file saving guest os vmlinux</span><br><span class="line">       --host            Collect host os data</span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-11"><a href="#举例-11" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">perf kvm --host record</span><br><span class="line">perf kvm --host report</span><br><span class="line"></span><br><span class="line">Samples: 41K of event &#x27;cycles&#x27;, Event count (approx.): 8303321915</span><br><span class="line">Overhead  Command          Shared Object               Symbol</span><br><span class="line">  21.84%  qemu-system-x86  [kernel.kallsyms]           [k] vmx_vmexit</span><br><span class="line">  18.92%  swapper          [kernel.kallsyms]           [k] intel_idle</span><br><span class="line">   3.23%  qemu-system-x86  [kernel.kallsyms]           [k] do_syscall_64</span><br><span class="line">   2.15%  qemu-system-x86  [kernel.kallsyms]           [k] native_write_msr</span><br><span class="line">   1.49%  qemu-system-x86  [kernel.kallsyms]           [k] syscall_return_via_sysret</span><br><span class="line">   1.39%  qemu-system-x86  [kernel.kallsyms]           [k] kvm_arch_vcpu_ioctl_run</span><br><span class="line">   1.25%  qemu-system-x86  [kernel.kallsyms]           [k] entry_SYSCALL_64</span><br><span class="line">   0.96%  qemu-system-x86  [kernel.kallsyms]           [k] kvm_put_guest_fpu</span><br><span class="line">   0.90%  qemu-system-x86  [kernel.kallsyms]           [k] kvm_on_user_return</span><br><span class="line">   0.86%  qemu-system-x86  [kernel.kallsyms]           [k] vcpu_enter_guest</span><br><span class="line">   0.79%  qemu-system-x86  [kernel.kallsyms]           [k] native_write_msr_safe</span><br><span class="line">   0.78%  qemu-system-x86  [kernel.kallsyms]           [k] vmx_vcpu_run.part.75</span><br><span class="line">   0.75%  qemu-system-x86  [kernel.kallsyms]           [k] native_set_debugreg</span><br><span class="line">   0.71%  qemu-system-x86  [kernel.kallsyms]           [k] __fget</span><br><span class="line">   0.60%  qemu-system-x86  [kernel.kallsyms]           [k] __x86_indirect_thunk_rax</span><br><span class="line">   0.55%  qemu-system-x86  qemu-system-x86_64          [.] object_dynamic_cast_assert</span><br><span class="line">   0.55%  qemu-system-x86  [kernel.kallsyms]           [k] native_load_gdt</span><br><span class="line">   0.52%  qemu-system-x86  [kernel.kallsyms]           [k] kvm_vcpu_ioctl</span><br><span class="line">   0.51%  qemu-system-x86  [kernel.kallsyms]           [k] __audit_syscall_exit</span><br><span class="line">   0.49%  qemu-system-x86  [kernel.kallsyms]           [k] vmx_prepare_switch_to_guest</span><br><span class="line">   0.47%  qemu-system-x86  [kernel.kallsyms]           [k] __srcu_read_lock</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="2-16-list"><a href="#2-16-list" class="headerlink" title="2.16 list"></a>2.16 list</h4><p>显示所有的能够触发perf采样点的事件。比如cpu-clock，task-clock，contex-switches等等。</p>
+<p>在 2.6.35 版本的内核中，该列表已经相当的长，但无论有多少，我们可以将它们划分为三类：</p>
+<p>Hardware Event 是由 PMU 硬件产生的事件，比如 cache 命中，当您需要了解程序对硬件特性的使用情况时，便需要对这些事件进行采样；</p>
+<p>Software Event 是内核软件产生的事件，比如进程切换，tick 数等 ;</p>
+<p>Tracepoint event 是内核中的静态 tracepoint 所触发的事件，这些 tracepoint 用来判断程序运行期间内核的行为细节，比如 slab 分配器的分配次数等。</p>
+<h5 id="举例-12"><a href="#举例-12" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf list</span><br><span class="line"></span><br><span class="line">List of pre-defined events (to be used in -e):</span><br><span class="line"></span><br><span class="line">  branch-instructions OR branches                    [Hardware event]</span><br><span class="line">  branch-misses                                      [Hardware event]</span><br><span class="line">  bus-cycles                                         [Hardware event]</span><br><span class="line">  cache-misses                                       [Hardware event]</span><br><span class="line">  cache-references                                   [Hardware event]</span><br><span class="line">  cpu-cycles OR cycles                               [Hardware event]</span><br><span class="line">  instructions                                       [Hardware event]</span><br><span class="line">  ref-cycles                                         [Hardware event]</span><br><span class="line"></span><br><span class="line">  alignment-faults                                   [Software event]</span><br><span class="line">  bpf-output                                         [Software event]</span><br><span class="line">  context-switches OR cs                             [Software event]</span><br><span class="line">  cpu-clock                                          [Software event]</span><br><span class="line">  cpu-migrations OR migrations                       [Software event]</span><br><span class="line">  dummy                                              [Software event]</span><br><span class="line">  emulation-faults                                   [Software event]</span><br><span class="line">  major-faults                                       [Software event]</span><br><span class="line">  minor-faults                                       [Software event]</span><br><span class="line">  page-faults OR faults                              [Software event]</span><br><span class="line">  task-clock                                         [Software event]</span><br><span class="line"></span><br><span class="line">  duration_time                                      [Tool event]</span><br><span class="line"></span><br><span class="line">  L1-dcache-load-misses                              [Hardware cache event]</span><br><span class="line">  L1-dcache-loads                                    [Hardware cache event]</span><br><span class="line">  L1-dcache-stores                                   [Hardware cache event]</span><br><span class="line">  L1-icache-load-misses                              [Hardware cache event]</span><br><span class="line">  LLC-load-misses                                    [Hardware cache event]</span><br><span class="line">  LLC-loads                                          [Hardware cache event]</span><br><span class="line">  LLC-store-misses                                   [Hardware cache event]</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-17-lock"><a href="#2-17-lock" class="headerlink" title="2.17 lock"></a>2.17 lock</h4><p>要使用此功能，内核需要编译选项的支持：<strong>CONFIG_LOCKDEP、CONFIG_LOCK_STAT</strong></p>
+<p>分析内核锁统计信息。</p>
+<p>锁是内核用于同步的方法，一旦加了锁，其他加锁的内核执行路径就必须等待，降低了并行。同时，如果加锁不正确还会造成死锁。</p>
+<p>因此对于内核锁进行分析是一项重要的调优工作。</p>
+<h5 id="用法-14"><a href="#用法-14" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf lock [&lt;options&gt;] &#123;record|report|script|info&#125;</span><br><span class="line"></span><br><span class="line">   -D, --dump-raw-trace  dump raw trace in ASCII</span><br><span class="line">   -f, --force           don&#x27;t complain, do it</span><br><span class="line">   -i, --input &lt;file&gt;    input file name</span><br><span class="line">   -v, --verbose         be more verbose (show symbol address, etc)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-18-mem"><a href="#2-18-mem" class="headerlink" title="2.18 mem"></a>2.18 mem</h4><p>测试内存存取性能数据。</p>
+<h5 id="用法-15"><a href="#用法-15" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf mem [&lt;options&gt;] &#123;record|report&#125;</span><br><span class="line"></span><br><span class="line">   -C, --cpu &lt;cpu&gt;       list of cpus to profile</span><br><span class="line">   -D, --dump-raw-samples</span><br><span class="line">                         dump raw samples in ASCII</span><br><span class="line">   -f, --force           don&#x27;t complain, do it</span><br><span class="line">   -i, --input &lt;file&gt;    input file name</span><br><span class="line">   -p, --phys-data       Record/Report sample physical addresses</span><br><span class="line">   -t, --type &lt;type&gt;     memory operations(load,store) Default load,store</span><br><span class="line">   -U, --hide-unresolved</span><br><span class="line">                         Only display entries resolved to a symbol</span><br><span class="line">   -x, --field-separator &lt;separator&gt;</span><br><span class="line">                         separator for columns, no spaces will be added between columns &#x27;.&#x27; is reserved.</span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-13"><a href="#举例-13" class="headerlink" title="举例"></a>举例</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201217172725747.png" alt="image-20201217172725747"></p>
+<h4 id="2-19-record"><a href="#2-19-record" class="headerlink" title="2.19 record"></a>2.19 record</h4><p>运行一个命令，并将其数据保存到perf.data中。随后，可以使用perf report进行分析。</p>
+<p>perf record和perf report可以更精确的分析一个应用，perf record可以精确到函数级别。并且在函数里面混合显示汇编语言和代码。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">perf record [-e &lt;EVENT&gt; | --event=EVENT] [-a] &lt;command&gt;</span><br><span class="line">perf record [-e &lt;EVENT&gt; | --event=EVENT] [-a] — &lt;command&gt; [&lt;options&gt;]</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-20-report"><a href="#2-20-report" class="headerlink" title="2.20 report"></a>2.20 report</h4><p>读取perf record创建的数据文件，并给出热点分析结果。</p>
+<p>top适合对整体性能分析，stat适合单个程序，report则可以分析更细粒度，具体到代码指令。</p>
+<h5 id="用法-16"><a href="#用法-16" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-i 导入的数据文件名称，如果没有则默认为perf.data</span><br><span class="line"></span><br><span class="line">-g 生成函数调用关系图，**此时内核要打开CONFIG_KALLSYMS；用户空间库或者执行文件需要带符号信息(not stripped)，编译选项需要加上-g。**</span><br><span class="line"></span><br><span class="line">--sort 从更高层面显示分类统计信息，比如： pid, comm, dso, symbol, parent, cpu,socket, srcline, weight, local_weight.</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-21-sched"><a href="#2-21-sched" class="headerlink" title="2.21 sched"></a>2.21 sched</h4><p>调度器的好坏直接影响一个系统的整体运行效率。在这个领域，内核黑客们常会发生争执，一个重要原因是对于不同的调度器，每个人给出的评测报告都各不相同，甚至常常有相反的结论。因此一个权威的统一的评测工具将对结束这种争论有益。Perf sched 便是这种尝试。</p>
+<h5 id="用法-17"><a href="#用法-17" class="headerlink" title="用法"></a>用法</h5><p>子命令：</p>
+<p><strong>record</strong>：统计数据</p>
+<p><strong>latency</strong>：输出每个任务的延迟数据</p>
+<p><strong>map</strong>：显示上下文切换的映射</p>
+<p><strong>replay</strong>： 仿真perf.data数据，可重复仿真运行测试性能</p>
+<p><strong>script</strong>：同perf script功能</p>
+<p><strong>timehist</strong>：提供scheduling事件分析报告</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf sched [&lt;options&gt;] &#123;record|latency|map|replay|script|timehist&#125;</span><br><span class="line"></span><br><span class="line">   -D, --dump-raw-trace  dump raw trace in ASCII</span><br><span class="line">   -f, --force           don&#x27;t complain, do it</span><br><span class="line">   -i, --input &lt;file&gt;    input file name</span><br><span class="line">   -v, --verbose         be more verbose (show symbol address, etc)</span><br></pre></td></tr></table></figure>
+
+<p>用户一般使用’ perf sched record ’收集调度相关的数据，然后就可以用’ perf sched latency ’查看诸如调度延迟等和调度器相关的统计数据。</p>
+<p>其他几个命令也同样读取 record 收集到的数据并从其他不同的角度来展示这些数据</p>
+<h5 id="举例-14"><a href="#举例-14" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf sched record sleep 1</span><br><span class="line">[ perf record: Woken up 1 times to write data ]</span><br><span class="line">[ perf record: Captured and wrote 8.557 MB perf.data (49023 samples) ]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">perf sched latency:</span><br><span class="line"></span><br><span class="line"> -----------------------------------------------------------------------------------------------------------------</span><br><span class="line">  Task                  |   Runtime ms  | Switches | Average delay ms | Maximum delay ms | Maximum delay at       |</span><br><span class="line"> -----------------------------------------------------------------------------------------------------------------</span><br><span class="line">  ksoftirqd/14:96       |      0.451 ms |        3 | avg:    2.315 ms | max:    3.981 ms | max at: 280823.049244 s</span><br><span class="line">  kworker/53:0-mm:1635514 |      0.008 ms |        1 | avg:    0.293 ms | max:    0.293 ms | max at: 280823.408523 s</span><br><span class="line">  kworker/49:3-mm:1693592 |      0.008 ms |        1 | avg:    0.188 ms | max:    0.188 ms | max at: 280823.134432 s</span><br><span class="line">  kworker/31:0-mm:1181706 |      0.023 ms |        2 | avg:    0.065 ms | max:    0.105 ms | max at: 280823.183359 s</span><br><span class="line">  kworker/41:0-ev:1674483 |      0.007 ms |        1 | avg:    0.062 ms | max:    0.062 ms | max at: 280823.256325 s</span><br><span class="line">  tail:1881449          |      1.235 ms |        1 | avg:    0.061 ms | max:    0.061 ms | max at: 280823.136554 s</span><br><span class="line">  kworker/40:2-ev:933115 |      0.027 ms |        2 | avg:    0.059 ms | max:    0.106 ms | max at: 280823.881309 s</span><br><span class="line">  kworker/38:3-ev:1698336 |      0.019 ms |        3 | avg:    0.053 ms | max:    0.141 ms | max at: 280823.600360 s</span><br><span class="line">  kworker/32:0-mm:1784542 |      0.007 ms |        1 | avg:    0.051 ms | max:    0.051 ms | max at: 280823.366285 s</span><br><span class="line">  kworker/48:1-ev:1877889 |      0.052 ms |        4 | avg:    0.041 ms | max:    0.110 ms | max at: 280823.744327 s</span><br><span class="line">  QuorumPeer[myid:76988 |      0.084 ms |        1 | avg:    0.034 ms | max:    0.034 ms | max at: 280823.441806 s</span><br><span class="line">  who:1881451           |      1.315 ms |        1 | avg:    0.031 ms | max:    0.031 ms | max at: 280823.139770 s</span><br><span class="line">  kworker/4:2-mm_:1866327 |      0.007 ms |        1 | avg:    0.031 ms | max:    0.031 ms | max at: 280823.281280 s</span><br><span class="line">  kworker/29:2-mm:1823927 |      0.013 ms |        1 | avg:    0.030 ms | max:    0.030 ms | max at: 280823.263316 s</span><br><span class="line">  SPICE Worker:(5)      |      7.424 ms |      172 | avg:    0.026 ms | max:    0.048 ms | max at: 280823.087379 s</span><br><span class="line">  gvfsd-fuse:(2)        |      0.075 ms |        2 | avg:    0.025 ms | max:    0.045 ms | max at: 280823.139171 s</span><br><span class="line">  bash:(2)              |      1.604 ms |        9 | avg:    0.023 ms | max:    0.036 ms | max at: 280823.254885 s</span><br><span class="line">  kworker/u113:2-:1880846 |      0.115 ms |        6 | avg:    0.022 ms | max:    0.036 ms | max at: 280823.254836 s</span><br><span class="line">  kworker/35:0-mm:1862481 |      0.017 ms |        2 | avg:    0.022 ms | max:    0.038 ms | max at: 280823.263328 s</span><br><span class="line">  rngd:1631             |      0.165 ms |       14 | avg:    0.022 ms | max:    0.045 ms | max at: 280823.805026 s</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">上面latency结果中各个 column 的含义如下：</span><br><span class="line"> Task: 进程的名字和 pid </span><br><span class="line"> Runtime: 实际运行时间</span><br><span class="line"> Switches: 进程切换的次数</span><br><span class="line"> Average delay: 平均的调度延迟</span><br><span class="line"> Maximum delay: 最大延迟</span><br><span class="line">这里最值得人们关注的是 Maximum delay，一般从这里可以看到对交互性影响最大的特性：调度延迟，如果调度延迟比较大，那么用户就会感受到视频或者音频断断续续的。</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>perf sched map</code>结果：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201217173900465.png" alt="image-20201217173900465"></p>
+<p>星号表示调度事件发生所在的 CPU。</p>
+<p>点号表示该 CPU 正在 IDLE。</p>
+<p>Map 的好处在于提供了一个的总的视图，将成百上千的调度事件进行总结，显示了系统任务在 CPU 之间的分布，假如有不好的调度迁移，比如一个任务没有被及时迁移到 idle 的 CPU 却被迁移到其他忙碌的 CPU，类似这种调度器的问题可以从 map 的报告中一眼看出来。</p>
+<p><code>perf sched replay</code>:</p>
+<p>Perf replay 这个工具更是专门为调度器开发人员所设计，它试图重放 perf.data 文件中所记录的调度场景。很多情况下，一般用户假如发现调度器的奇怪行为，他们也无法准确说明发生该情形的场景，或者一些测试场景不容易再次重现，或者仅仅是出于“偷懒”的目的，使用 perf replay，perf 将模拟 perf.data 中的场景，无需开发人员花费很多的时间去重现过去，这尤其利于调试过程，因为需要一而再，再而三地重复新的修改是否能改善原始的调度场景所发现的问题。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf sched replay</span><br><span class="line">run measurement overhead: 61 nsecs</span><br><span class="line">sleep measurement overhead: 52656 nsecs</span><br><span class="line">the run test took 1000030 nsecs</span><br><span class="line">the sleep test took 1053803 nsecs</span><br><span class="line">nr_run_events:        24218</span><br><span class="line">nr_sleep_events:      26210</span><br><span class="line">nr_wakeup_events:     12036</span><br><span class="line">target-less wakeups:  16</span><br><span class="line">multi-target wakeups: 53</span><br><span class="line">task      0 (             swapper:         0), nr_events: 34269</span><br><span class="line">task      1 (             swapper:         1), nr_events: 1</span><br><span class="line">task      2 (                  :2:         2), nr_events: 1</span><br><span class="line">task      3 (                 :10:        10), nr_events: 1</span><br><span class="line">task      4 (                :100:       100), nr_events: 1</span><br><span class="line">task      5 (               :9687:      9687), nr_events: 1</span><br><span class="line">task      6 (              :10004:     10004), nr_events: 1</span><br><span class="line">task      7 (           gsd-power:     10049), nr_events: 1</span><br><span class="line">task      8 (           gsd-power:     10053), nr_events: 1</span><br><span class="line">task      9 (           gsd-power:     10085), nr_events: 1</span><br><span class="line">task     10 (              :10006:     10006), nr_events: 1</span><br><span class="line">task     11 (     gsd-print-notif:     10019), nr_events: 1</span><br><span class="line">task     12 (     gsd-print-notif:     10023), nr_events: 1</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="2-22-script"><a href="#2-22-script" class="headerlink" title="2.22 script"></a>2.22 script</h4><p>根据脚本来分析perf.data数据。可以编写perl和python脚本来辅助分析。自带的脚本有：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf script -l</span><br><span class="line">List of available trace scripts:</span><br><span class="line">  event_analyzing_sample               analyze all perf samples</span><br><span class="line">  compaction-times [-h] [-u] [-p|-pv] [-t | [-m] [-fs] [-ms]] [pid|pid-range|comm-regex] display time taken by mm compaction</span><br><span class="line">  mem-phys-addr                        resolve physical address samples</span><br><span class="line">  stackcollapse                        produce callgraphs in short form for scripting use</span><br><span class="line">  netdev-times [tx] [rx] [dev=] [debug] display a process of packet and processing time</span><br><span class="line">  net_dropmonitor                      display a table of dropped frames</span><br><span class="line">  syscall-counts [comm]                system-wide syscall counts</span><br><span class="line">  sched-migration                      sched migration overview</span><br><span class="line">  export-to-sqlite [database name] [columns] [calls] export perf data to a sqlite3 database</span><br><span class="line">  powerpc-hcalls</span><br><span class="line">  export-to-postgresql [database name] [columns] [calls] export perf data to a postgresql database</span><br><span class="line">  sctop [comm] [interval]              syscall top</span><br><span class="line">  syscall-counts-by-pid [comm]         system-wide syscall counts, by pid</span><br><span class="line">  failed-syscalls-by-pid [comm]        system-wide failed syscalls, by pid</span><br><span class="line">  futex-contention                     futext contention measurement</span><br><span class="line">  intel-pt-events                      print Intel PT Power Events and PTWRITE</span><br><span class="line">  rw-by-file &lt;comm&gt;                    r/w activity for a program, by file</span><br><span class="line">  failed-syscalls [comm]               system-wide failed syscalls</span><br><span class="line">  rwtop [interval]                     system-wide r/w top</span><br><span class="line">  wakeup-latency                       system-wide min/max/avg wakeup latency</span><br><span class="line">  rw-by-pid                            system-wide r/w activity</span><br></pre></td></tr></table></figure>
+
+<p><code>perf script  record &lt;script&gt; &lt;command&gt;</code>用于记录，对应的<code>perf script  report &lt;script&gt; &lt;command&gt;</code>则用于显示数据。</p>
+<p><code>perf script &lt;script&gt; &lt;required-script-args&gt; &lt;command&gt;</code>实时记录事件，不会把数据保存到硬盘。</p>
+<h5 id="举例-15"><a href="#举例-15" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf script report event_analyzing_sample</span><br><span class="line">In trace_begin:</span><br><span class="line"></span><br><span class="line">comm=bytearray(b&#x27;perf\x00)\x00\x000\x00\x00\x00\x00\x00\x00\x00&#x27;) common_callchain=[] common_comm=:1848848 common_cpu=7 common_ns=128968792 common_pid=1848848 common_s=277782 pid=1848855 prio=120 success=1 target_cpu=11</span><br><span class="line">comm=bytearray(b&#x27;kworker/u113:2\x00\x00&#x27;) common_callchain=[] common_comm=ls common_cpu=11 common_ns=131027987 common_pid=1848855 common_s=277782 pid=1845831 prio=120 success=1 target_cpu=36</span><br><span class="line">In trace_end:</span><br><span class="line"></span><br><span class="line">There is 680264 records in gen_events table</span><br><span class="line">Statistics about the general events grouped by thread/symbol/dso:</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            comm   number        histogram</span><br><span class="line">==========================================</span><br><span class="line">         swapper   380530     ###################</span><br><span class="line"> qemu-system-x86   191107     ##################</span><br><span class="line">            perf    94123     #################</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="2-23-stat"><a href="#2-23-stat" class="headerlink" title="2.23 stat"></a>2.23 stat</h4><p>perf stat用于运行指令，并分析其统计结果。虽然perf top也可以指定pid，但是必须先启动应用才能查看信息。</p>
+<p>perf stat能完整统计应用整个生命周期的信息。</p>
+<h5 id="用法-18"><a href="#用法-18" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf stat [&lt;options&gt;] [&lt;command&gt;]</span><br><span class="line">    -a, --all-cpus        system-wide collection from all CPUs</span><br><span class="line">    -A, --no-aggr         disable CPU count aggregation</span><br><span class="line">    -B, --big-num         print large numbers with thousands&#x27; separators</span><br><span class="line">    -C, --cpu &lt;cpu&gt;       list of cpus to monitor in system-wide</span><br><span class="line">    -D, --delay &lt;n&gt;       ms to wait before starting measurement after program start</span><br><span class="line">    -d, --detailed        detailed run - start a lot of events</span><br><span class="line">    -e, --event &lt;event&gt;   event selector. use &#x27;perf list&#x27; to list available events</span><br><span class="line">    -G, --cgroup &lt;name&gt;   monitor event in cgroup name only</span><br><span class="line">    -g, --group           put the counters into a counter group</span><br><span class="line">    -I, --interval-print &lt;n&gt;</span><br><span class="line">                          print counts at regular interval in ms (overhead is possible for values &lt;= 100ms)</span><br><span class="line">    -i, --no-inherit      child tasks do not inherit counters</span><br><span class="line">    -M, --metrics &lt;metric/metric group list&gt;</span><br><span class="line">                          monitor specified metrics or metric groups (separated by ,)</span><br><span class="line">    -n, --null            null run - dont start any counters</span><br><span class="line">    -o, --output &lt;file&gt;   output file name</span><br><span class="line">    -p, --pid &lt;pid&gt;       stat events on existing process id  //指定进程pid</span><br><span class="line">    -r, --repeat &lt;n&gt;      repeat command and print average + stddev (max: 100, forever: 0)</span><br><span class="line">    -S, --sync            call sync() before starting a run</span><br><span class="line">    -t, --tid &lt;tid&gt;       stat events on existing thread id</span><br><span class="line">    -T, --transaction     hardware transaction statistics</span><br><span class="line">    -v, --verbose         be more verbose (show counter open errors, etc)</span><br><span class="line">    -x, --field-separator &lt;separator&gt;</span><br><span class="line">                          print counts with custom separator</span><br><span class="line">        --append          append to the output file</span><br><span class="line">        --filter &lt;filter&gt;</span><br><span class="line">                          event filter</span><br><span class="line">        --interval-clear  clear screen in between new interval</span><br><span class="line">        --interval-count &lt;n&gt;</span><br><span class="line">                          print counts for fixed number of times</span><br><span class="line">        --log-fd &lt;n&gt;      log output to fd, instead of stderr</span><br><span class="line">        --metric-only     Only print computed metrics. No raw values</span><br><span class="line">        --no-merge        Do not merge identical named events</span><br><span class="line">        --per-core        aggregate counts per physical processor core</span><br><span class="line">        --per-die         aggregate counts per processor die</span><br><span class="line">        --per-socket      aggregate counts per processor socket</span><br><span class="line">        --per-thread      aggregate counts per thread</span><br><span class="line">        --post &lt;command&gt;  command to run after to the measured command</span><br><span class="line">        --pre &lt;command&gt;   command to run prior to the measured command</span><br><span class="line">        --scale           Use --no-scale to disable counter scaling for multiplexing</span><br><span class="line">        --smi-cost        measure SMI cost</span><br><span class="line">        --table           display details about each run (only with -r option)</span><br><span class="line">        --timeout &lt;n&gt;     stop workload and print counts after a timeout period in ms (&gt;= 10ms)</span><br><span class="line">        --topdown         measure topdown level 1 statistics</span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-16"><a href="#举例-16" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf stat ls</span><br><span class="line"> Performance counter stats for &#x27;ls&#x27;:</span><br><span class="line"></span><br><span class="line">              0.98 msec task-clock                #    0.726 CPUs utilized</span><br><span class="line">                 0      context-switches          #    0.000 K/sec</span><br><span class="line">                 0      cpu-migrations            #    0.000 K/sec</span><br><span class="line">                96      page-faults               #    0.098 M/sec</span><br><span class="line">         2,427,546      cycles                    #    2.486 GHz</span><br><span class="line">         1,963,341      instructions              #    0.81  insn per cycle</span><br><span class="line">           391,211      branches                  #  400.601 M/sec</span><br><span class="line">            14,916      branch-misses             #    3.81% of all branches</span><br><span class="line"></span><br><span class="line">       0.001345674 seconds time elapsed</span><br><span class="line"></span><br><span class="line">       0.000683000 seconds user</span><br><span class="line">       0.000683000 seconds sys</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost jrg]# perf stat</span><br><span class="line">^C</span><br><span class="line"> Performance counter stats for &#x27;system wide&#x27;:</span><br><span class="line"></span><br><span class="line">         58,817.62 msec cpu-clock                 #   55.475 CPUs utilized</span><br><span class="line">            32,551      context-switches          #    0.553 K/sec</span><br><span class="line">                62      cpu-migrations            #    0.001 K/sec</span><br><span class="line">               749      page-faults               #    0.013 K/sec</span><br><span class="line">     2,901,510,136      cycles                    #    0.049 GHz</span><br><span class="line">     1,016,253,852      instructions              #    0.35  insn per cycle</span><br><span class="line">       202,174,764      branches                  #    3.437 M/sec</span><br><span class="line">        11,997,035      branch-misses             #    5.93% of all branches</span><br><span class="line"></span><br><span class="line">       1.060261691 seconds time elapsed</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">cpu-clock：任务真正占用的处理器时间，单位为ms。CPUs utilized = task-clock / time elapsed，CPU的占用率。</span><br><span class="line">context-switches：程序在运行过程中上下文的切换次数。</span><br><span class="line">CPU-migrations：程序在运行过程中发生的处理器迁移次数。Linux为了维持多个处理器的负载均衡，在特定条件下会将某个任务从一个CPU迁移到另一个CPU。</span><br><span class="line">CPU迁移和上下文切换：发生上下文切换不一定会发生CPU迁移，而发生CPU迁移时肯定会发生上下文切换。发生上下文切换有可能只是把上下文从当前CPU中换出，下一次调度器还是将进程安排在这个CPU上执行。</span><br><span class="line">page-faults：缺页异常的次数。当应用程序请求的页面尚未建立、请求的页面不在内存中，或者请求的页面虽然在内存中，但物理地址和虚拟地址的映射关系尚未建立时，都会触发一次缺页异常。另外TLB不命中，页面访问权限不匹配等情况也会触发缺页异常。</span><br><span class="line">cycles：消耗的处理器周期数。如果把被ls使用的cpu cycles看成是一个处理器的，那么它的主频为2.486GHz。可以用cycles / task-clock算出。</span><br><span class="line">instructions：执行了多少条指令。IPC为平均每个cpu cycle执行了多少条指令。</span><br><span class="line">branches：遇到的分支指令数。</span><br><span class="line">branch-misses是预测错误的分支指令数。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>统计更多选项</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf stat -e task-clock,context-switches,cpu-migrations,page-faults,cycles,instructions,branches,branch-misses,L1-dcache-loads,L1-dcache-load-misses,LLC-loads,LLC-load-misses,dTLB-loads,dTLB-load-misses</span><br><span class="line">^C</span><br><span class="line"> Performance counter stats for &#x27;system wide&#x27;:</span><br><span class="line"></span><br><span class="line">         70,320.23 msec task-clock                #   55.846 CPUs utilized</span><br><span class="line">            39,186      context-switches          #    0.557 K/sec</span><br><span class="line">                87      cpu-migrations            #    0.001 K/sec</span><br><span class="line">               741      page-faults               #    0.011 K/sec</span><br><span class="line">     5,744,216,840      cycles                    #    0.082 GHz                      (21.45%)</span><br><span class="line">     1,460,300,936      instructions              #    0.25  insn per cycle           (30.52%)</span><br><span class="line">       276,595,324      branches                  #    3.933 M/sec                    (35.96%)</span><br><span class="line">        20,787,859      branch-misses             #    7.52% of all branches          (40.15%)</span><br><span class="line">       429,103,243      L1-dcache-loads           #    6.102 M/sec                    (23.70%)</span><br><span class="line">        46,528,058      L1-dcache-load-misses     #   10.84% of all L1-dcache hits    (20.50%)</span><br><span class="line">        23,797,515      LLC-loads                 #    0.338 M/sec                    (19.81%)</span><br><span class="line">           398,316      LLC-load-misses           #    1.67% of all LL-cache hits     (24.26%)</span><br><span class="line">       442,296,850      dTLB-loads                #    6.290 M/sec                    (19.25%)</span><br><span class="line">         5,169,611      dTLB-load-misses          #    1.17% of all dTLB cache hits   (18.79%)</span><br><span class="line"></span><br><span class="line">       1.259180585 seconds time elapsed</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-24-test"><a href="#2-24-test" class="headerlink" title="2.24 test"></a>2.24 test</h4><p>用于sanity test。perf自带了不少测试用例，可用于测试。</p>
+<h5 id="用法-19"><a href="#用法-19" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# perf test -h</span><br><span class="line"></span><br><span class="line"> Usage: perf test [&lt;options&gt;] [&#123;list &lt;test-name-fragment&gt;|[&lt;test-name-fragments&gt;|&lt;test-numbers&gt;]&#125;]</span><br><span class="line"></span><br><span class="line">    -F, --dont-fork       Do not fork for testcase</span><br><span class="line">    -s, --skip &lt;tests&gt;    tests to skip</span><br><span class="line">    -v, --verbose         be more verbose (show symbol address, etc)</span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-17"><a href="#举例-17" class="headerlink" title="举例"></a>举例</h5><p>perf list查看有哪些测试用例</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# perf test list</span><br><span class="line"> 1: vmlinux symtab matches kallsyms</span><br><span class="line"> 2: Detect openat syscall event</span><br><span class="line"> 3: Detect openat syscall event on all cpus</span><br><span class="line"> 4: Read samples using the mmap interface</span><br><span class="line"> 5: Test data source output</span><br><span class="line"> 6: Parse event definition strings</span><br><span class="line"> 7: Simple expression parser</span><br><span class="line"> 8: PERF_RECORD_* events &amp; perf_sample fields</span><br><span class="line"> 9: Parse perf pmu format</span><br><span class="line">10: DSO data read</span><br><span class="line">11: DSO data cache</span><br><span class="line">12: DSO data reopen</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>以test 51为例</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# perf test list 51</span><br><span class="line">51: Print cpu map</span><br><span class="line"></span><br><span class="line">root@ubuntu:~# perf test 51</span><br><span class="line">51: Print cpu map                              : Ok</span><br><span class="line"></span><br><span class="line">root@ubuntu:~# perf test Print</span><br><span class="line">51: Print cpu map                              : Ok</span><br><span class="line">53: is_printable_array                         : Ok</span><br><span class="line">54: Print bitmap                               : Ok</span><br><span class="line">57: unit_number__scnprintf                     : Ok</span><br><span class="line"></span><br><span class="line">root@ubuntu:~# perf test -F -v Print</span><br><span class="line">51: Print cpu map                              :</span><br><span class="line">--- start ---</span><br><span class="line">---- end ----</span><br><span class="line">Print cpu map: Ok</span><br><span class="line">53: is_printable_array                         :</span><br><span class="line">--- start ---</span><br><span class="line">---- end ----</span><br><span class="line">is_printable_array: Ok</span><br><span class="line">54: Print bitmap                               :</span><br><span class="line">--- start ---</span><br><span class="line">bitmap: 1</span><br><span class="line">bitmap: 1,5</span><br><span class="line">bitmap: 1,3,5,7,9,11,13,15,17,19,21-40</span><br><span class="line">bitmap: 2-5</span><br><span class="line">bitmap: 1,3-6,8-10,24,35-37</span><br><span class="line">bitmap: 1,3-6,8-10,24,35-37</span><br><span class="line">bitmap: 1-10,12-20,22-30,32-40</span><br><span class="line">---- end ----</span><br><span class="line">Print bitmap: Ok</span><br><span class="line">57: unit_number__scnprintf                     :</span><br><span class="line">--- start ---</span><br><span class="line">n 1, str &#x27;1B&#x27;, buf &#x27;1B&#x27;</span><br><span class="line">n 10240, str &#x27;10K&#x27;, buf &#x27;10K&#x27;</span><br><span class="line">n 20971520, str &#x27;20M&#x27;, buf &#x27;20M&#x27;</span><br><span class="line">n 32212254720, str &#x27;30G&#x27;, buf &#x27;30G&#x27;</span><br><span class="line">n 0, str &#x27;0B&#x27;, buf &#x27;0B&#x27;</span><br><span class="line">---- end ----</span><br><span class="line">unit_number__scnprintf: Ok</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-25-timechart"><a href="#2-25-timechart" class="headerlink" title="2.25 timechart"></a>2.25 timechart</h4><p>将统计信息转换为图形显示模式的工具。</p>
+<p>主要两种用途：</p>
+<p><code>perf timechart record &lt;command&gt;</code>，记录系统级事件，默认只记录scheduler和CPU事件（诸如进程切换，运行时间，cpu电源状态等）。不过也可以用来记录IO活动。</p>
+<p><code>perf timechart</code>可以将perf.data中的数据以图表形式显示。</p>
+<h5 id="用法-20"><a href="#用法-20" class="headerlink" title="用法"></a>用法</h5><p>record参数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-P 只记录power相关events</span><br><span class="line">-T 只记录task相关events</span><br><span class="line">-I 只记录IO相关events</span><br><span class="line">-g 记录调用关系</span><br><span class="line"></span><br><span class="line">[root@localhost test]# perf timechart record -h</span><br><span class="line"> Usage: perf timechart record [&lt;options&gt;]</span><br><span class="line">    -g, --callchain       record callchain</span><br><span class="line">    -I, --io-only         record only IO data</span><br></pre></td></tr></table></figure>
+
+<p>timechart参数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost test]# perf timechart -h</span><br><span class="line"> Usage: perf timechart [&lt;options&gt;] &#123;record&#125;</span><br><span class="line">    -f, --force           don&#x27;t complain, do it</span><br><span class="line">    -i, --input &lt;file&gt;    input file name</span><br><span class="line">    -n, --proc-num &lt;n&gt;    min. number of tasks to print</span><br><span class="line">    -o, --output &lt;file&gt;   output file name</span><br><span class="line">    -p, --process &lt;process&gt;</span><br><span class="line">                          process selector. Pass a pid or process name.</span><br><span class="line">    -t, --topology        sort CPUs according to topology</span><br><span class="line">    -w, --width &lt;n&gt;       page width		//调整输出图宽度</span><br><span class="line">        --highlight &lt;duration or task name&gt;</span><br><span class="line">                          highlight tasks. Pass duration in ns or process name.</span><br><span class="line">        --io-merge-dist &lt;time&gt;</span><br><span class="line">                          merge events that are merge-dist us apart</span><br><span class="line">        --io-min-time &lt;time&gt;</span><br><span class="line">                          all IO faster than min-time will visually appear longer</span><br><span class="line">        --io-skip-eagain  skip EAGAIN errors</span><br><span class="line">        --symfs &lt;directory&gt;</span><br><span class="line">                          Look for files with symbols relative to this directory</span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-18"><a href="#举例-18" class="headerlink" title="举例"></a>举例</h5><p>命令<code>perf timechart record git pull</code></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/output.svg" alt="output"></p>
+<h4 id="2-26-top"><a href="#2-26-top" class="headerlink" title="2.26 top"></a>2.26 top</h4><p>实时显示性能统计数据。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">amples: 2K of event &#x27;cpu-clock:pppH&#x27;, 4000 Hz, Event count (approx.): 414561842 lost: 0/0 drop: 0/0</span><br><span class="line">Overhead  Shared Object                 Symbol</span><br><span class="line">  37.18%  [kernel]                      [k] __lock_text_start                                                                   </span><br><span class="line">  12.92%  [kernel]                      [k] vmw_cmdbuf_header_submit                                                           </span><br><span class="line">  12.03%  [kernel]                      [k] clear_page_orig                                                                     </span><br><span class="line">   1.93%  [kernel]                      [k] finish_task_switch                                                                   </span><br><span class="line">   0.61%  libc-2.31.so                  [.] __memmove_avx_unaligned_erms</span><br><span class="line">   0.58%  [kernel]                      [k] do_syscall_64</span><br><span class="line">   0.55%  [kernel]                      [k] exit_to_usermode_loop</span><br><span class="line">   0.50%  [kernel]                      [k] mpt_put_msg_frame</span><br><span class="line">   0.46%  [kernel]                      [k] rmqueue</span><br><span class="line">   0.46%  [kernel]                      [k] number</span><br><span class="line">   0.43%  [kernel]                      [k] kallsyms_expand_symbol.constprop.0</span><br><span class="line">   0.43%  perf                          [.] rb_next</span><br><span class="line">   0.42%  libslang.so.2.3.2             [.] SLsmg_write_chars</span><br><span class="line">   0.38%  [kernel]                      [k] arch_local_irq_enable</span><br><span class="line">   0.33%  libc-2.31.so                  [.] malloc</span><br><span class="line">   0.33%  [kernel]                      [k] vsnprintf</span><br><span class="line">   0.31%  [kernel]                      [k] memcg_kmem_get_cache</span><br><span class="line">   0.29%  [kernel]                      [k] memset_orig</span><br><span class="line">   0.28%  libc-2.31.so                  [.] read</span><br><span class="line">   0.28%  perf                          [.] __symbols__insert.constprop.0</span><br><span class="line">   0.26%  libpixman-1.so.0.38.4         [.] 0x000000000006e0ff</span><br><span class="line">   0.26%  [kernel]                      [k] native_write_msr</span><br><span class="line">   0.24%  [kernel]                      [k] __fget</span><br><span class="line">   0.23%  libpixman-1.so.0.38.4         [.] 0x000000000008cac5</span><br><span class="line">   0.23%  libpixman-1.so.0.38.4         [.] 0x000000000008cadb</span><br><span class="line">   0.23%  perf                          [.] rust_demangle_callback</span><br><span class="line">   ...</span><br></pre></td></tr></table></figure>
+
+<p>第一列：符号引发的性能事件的比例，指占用的cpu周期比例。</p>
+<p>第二列：符号所在的DSO(Dynamic Shared Object)，可以是应用程序、内核、动态链接库、模块。</p>
+<p>第三列：DSO的类型。[.]表示此符号属于用户态的ELF文件，包括可执行文件与动态链接库；[k]表述此符号属于内核或模块。</p>
+<p>第四列：符号名。有些符号不能解析为函数名，只能用地址表示</p>
+<h5 id="用法-21"><a href="#用法-21" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf top [&lt;options&gt;]</span><br><span class="line"></span><br><span class="line">    -a, --all-cpus        system-wide collection from all CPUs</span><br><span class="line">    -b, --branch-any      sample any taken branches</span><br><span class="line">    -c, --count &lt;n&gt;       event period to sample</span><br><span class="line">    -C, --cpu &lt;cpu&gt;       list of cpus to monitor</span><br><span class="line">    -d, --delay &lt;n&gt;       number of seconds to delay between refreshes</span><br><span class="line">    -D, --dump-symtab     dump the symbol table used for profiling</span><br><span class="line">    -E, --entries &lt;n&gt;     display this many functions</span><br><span class="line">    -e, --event &lt;event&gt;   event selector. use &#x27;perf list&#x27; to list available events  //指定event</span><br><span class="line">    -f, --count-filter &lt;n&gt;</span><br><span class="line">                          only display functions with more events than this</span><br><span class="line">    -F, --freq &lt;freq or &#x27;max&#x27;&gt;</span><br><span class="line">                          profile at this frequency</span><br><span class="line">    -g                    enables call-graph recording and display  //得到函数调用关系图</span><br><span class="line">    -i, --no-inherit      child tasks do not inherit counters</span><br><span class="line">    -j, --branch-filter &lt;branch filter mask&gt;</span><br><span class="line">                          branch stack filter modes</span><br><span class="line">    -K, --hide_kernel_symbols</span><br><span class="line">                          hide kernel symbols</span><br><span class="line">    -k, --vmlinux &lt;file&gt;  vmlinux pathname</span><br><span class="line">    -M, --disassembler-style &lt;disassembler style&gt;</span><br><span class="line">                          Specify disassembler style (e.g. -M intel for intel syntax)</span><br><span class="line">    -m, --mmap-pages &lt;pages&gt;</span><br><span class="line">                          number of mmap data pages</span><br><span class="line">    -n, --show-nr-samples</span><br><span class="line">                          Show a column with the number of samples</span><br><span class="line">    -p, --pid &lt;pid&gt;       profile events on existing process id</span><br><span class="line">    -r, --realtime &lt;n&gt;    collect data with this RT SCHED_FIFO priority</span><br><span class="line">    -s, --sort &lt;key[,key2...]&gt;</span><br><span class="line">                          sort by key(s): pid, comm, dso, symbol, parent, cpu, srcline, ... Please refer the man page for the complete list.</span><br><span class="line">    -t, --tid &lt;tid&gt;       profile events on existing thread id</span><br><span class="line">    -U, --hide_user_symbols</span><br><span class="line">                          hide user symbols</span><br><span class="line">    -u, --uid &lt;user&gt;      user to profile</span><br><span class="line">    -v, --verbose         be more verbose (show counter open errors, etc)</span><br><span class="line">    -w, --column-widths &lt;width[,width...]&gt;</span><br><span class="line">                          don&#x27;t try to adjust column width, use these fixed values</span><br><span class="line">    -z, --zero            zero history across updates</span><br><span class="line">        --asm-raw         Display raw encoding of assembly instructions (default)</span><br><span class="line">        --call-graph &lt;record_mode[,record_size],print_type,threshold[,print_limit],order,sort_key[,branch]&gt;</span><br><span class="line">                          setup and enables call-graph (stack chain/backtrace):</span><br><span class="line"></span><br><span class="line">                                record_mode:    call graph recording mode (fp|dwarf|lbr)</span><br><span class="line">                                record_size:    if record_mode is &#x27;dwarf&#x27;, max size of stack recording (&lt;bytes&gt;)</span><br><span class="line">                                                default: 8192 (bytes)</span><br><span class="line">                                print_type:     call graph printing style (graph|flat|fractal|folded|none)</span><br><span class="line">                                threshold:      minimum call graph inclusion threshold (&lt;percent&gt;)</span><br><span class="line">                                print_limit:    maximum number of call graph entry (&lt;number&gt;)</span><br><span class="line">                                order:          call graph order (caller|callee)</span><br><span class="line">                                sort_key:       call graph sort key (function|address)</span><br><span class="line">                                branch:         include last branch info to call graph (branch)</span><br><span class="line">                                value:          call graph value (percent|period|count)</span><br><span class="line"></span><br><span class="line">                                Default: fp,graph,0.5,caller,function</span><br><span class="line">        --children        Accumulate callchains of children and show total overhead as well</span><br><span class="line">        --comms &lt;comm[,comm...]&gt;</span><br><span class="line">                          only consider symbols in these comms</span><br><span class="line">        --demangle-kernel</span><br><span class="line">                          Enable kernel symbol demangling</span><br><span class="line">        --dsos &lt;dso[,dso...]&gt;</span><br><span class="line">                          only consider symbols in these dsos</span><br><span class="line">        --fields &lt;key[,keys...]&gt;</span><br><span class="line">                          output field(s): overhead, period, sample plus all of sort keys</span><br><span class="line">        --force           don&#x27;t complain, do it</span><br><span class="line">        --group           put the counters into a counter group</span><br><span class="line">        --hierarchy       Show entries in a hierarchy</span><br><span class="line">        --ignore-callees &lt;regex&gt;</span><br><span class="line">                          ignore callees of these functions in call graphs</span><br><span class="line">        --ignore-vmlinux  don&#x27;t load vmlinux even if found</span><br><span class="line">        --kallsyms &lt;file&gt;</span><br><span class="line">                          kallsyms pathname</span><br><span class="line">        --max-stack &lt;n&gt;   Set the maximum stack depth when parsing the callchain. Default: kernel.perf_event_max_stack or 127</span><br><span class="line">        --namespaces      Record namespaces events</span><br><span class="line">        --no-bpf-event    do not record bpf events</span><br><span class="line">        --num-thread-synthesize &lt;n&gt;</span><br><span class="line">                          number of thread to run event synthesize</span><br><span class="line">        --objdump &lt;path&gt;  objdump binary to use for disassembly and annotations</span><br><span class="line">        --overwrite       Use a backward ring buffer, default: no</span><br><span class="line">        --percent-limit &lt;percent&gt;</span><br><span class="line">                          Don&#x27;t show entries under that percent</span><br><span class="line">        --percentage &lt;relative|absolute&gt;</span><br><span class="line">                          How to display percentage of filtered entries</span><br><span class="line">        --proc-map-timeout &lt;n&gt;</span><br><span class="line">                          per thread proc mmap processing timeout in ms</span><br><span class="line">        --raw-trace       Show raw trace event output (do not use print fmt or plugins)</span><br><span class="line">        --show-total-period</span><br><span class="line">                          Show a column with the sum of periods</span><br><span class="line">        --source          Interleave source code with assembly code (default)</span><br><span class="line">        --stdio           Use the stdio interface</span><br><span class="line">        --sym-annotate &lt;symbol name&gt;</span><br><span class="line">                          symbol to annotate</span><br><span class="line">        --symbols &lt;symbol[,symbol...]&gt;</span><br><span class="line">                          only consider these symbols</span><br><span class="line">        --tui             Use the TUI interface</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="举例-19"><a href="#举例-19" class="headerlink" title="举例"></a>举例</h5><p>写一个死循环函数t1，perf top查看性能；</p>
+<p>示例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;stdlib.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;stdio.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">longa</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">int</span> i,j; </span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">1000000</span>; i++) </span><br><span class="line">        j=i; <span class="comment">//am I silly or crazy? I feel boring and desperate. </span></span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo2</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">int</span> i; </span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span> ; i &lt; <span class="number">10</span>; i++) </span><br><span class="line">        longa(); </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">foo1</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">int</span> i; </span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i&lt; <span class="number">100</span>; i++) </span><br><span class="line">        longa(); </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    foo1(); </span><br><span class="line">    foo2(); </span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        foo1(); </span><br><span class="line">        foo2(); </span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>t1的main函数占了96%的cpu周期，性能全部耗在t1上。实际环境中没这么容易找到问题，可结合-e参数指定event来判断</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">amples: 80K of event &#x27;cpu-clock:pppH&#x27;, 4000 Hz, Event count (approx.): 7881621045 lost: 0/0 drop: 0/0</span><br><span class="line">Overhead  Shared Object                  Symbol</span><br><span class="line">  96.05%  t1                             [.] main</span><br><span class="line">   0.56%  [kernel]                       [k] __softirqentry_text_start</span><br><span class="line">   0.55%  [kernel]                       [k] clear_page_orig</span><br><span class="line">   0.17%  [kernel]                       [k] vmw_cmdbuf_header_submit</span><br><span class="line">   0.16%  [kernel]                       [k] __lock_text_start</span><br><span class="line">   0.06%  ld-2.31.so                     [.] do_lookup_x</span><br><span class="line">   0.04%  [kernel]                       [k] mpt_put_msg_frame</span><br><span class="line">   0.04%  [kernel]                       [k] exit_to_usermode_loop</span><br><span class="line">   0.04%  [kernel]                       [k] do_syscall_64</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>perf top --call-graph graph</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Samples: 25K of event &#x27;cpu-clock:pppH&#x27;, 4000 Hz, Event count (approx.): 6058000000 lost: 0/0 drop: 0/0</span><br><span class="line">  Children      Self  Shared Object                 Symbol</span><br><span class="line">-   94.37%    94.25%  t1                            [.] longa</span><br><span class="line">     94.25% __libc_start_mai</span><br><span class="line">      - main</span><br><span class="line">         - 85.62% foo1</span><br><span class="line">              longa</span><br><span class="line">         - 8.63% foo2</span><br><span class="line">              longa</span><br><span class="line">-   59.45%     0.00%  libc-2.31.so                  [.] __libc_start_main</span><br><span class="line">     __libc_start_main</span><br><span class="line">   - main</span><br><span class="line">      - 54.05% foo1</span><br><span class="line">           longa</span><br><span class="line">      - 5.40% foo2</span><br><span class="line">           longa</span><br><span class="line">-   59.45%     0.00%  t1                            [.] main</span><br><span class="line">   - main</span><br><span class="line">      - 54.05% foo1</span><br><span class="line">           longa</span><br><span class="line">      - 5.40% foo2</span><br><span class="line">           longa</span><br><span class="line">-   54.05%     0.00%  t1                            [.] foo1</span><br><span class="line">     foo1</span><br><span class="line">     longa</span><br><span class="line">-    5.40%     0.00%  t1                            [.] foo2</span><br><span class="line">     foo2</span><br><span class="line">     longa</span><br><span class="line">+    1.82%     0.07%  [kernel]                      [k] do_syscall_64</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-27-version"><a href="#2-27-version" class="headerlink" title="2.27 version"></a>2.27 version</h4><p>查看当前perf版本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@pi:~# perf version</span><br><span class="line">perf version 5.4.73</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="2-28-probe"><a href="#2-28-probe" class="headerlink" title="2.28 probe"></a>2.28 probe</h4><p>动态插入采样监测点。</p>
+<p>内核需要编译支持CONFIG_DEBUG_INFO</p>
+<h4 id="2-29-trace"><a href="#2-29-trace" class="headerlink" title="2.29 trace"></a>2.29 trace</h4><p>追踪系统调用。strace工具</p>
+<h5 id="用法-22"><a href="#用法-22" class="headerlink" title="用法"></a>用法</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">Usage: perf trace [&lt;options&gt;] [&lt;command&gt;]</span><br><span class="line">    or: perf trace [&lt;options&gt;] -- &lt;command&gt; [&lt;options&gt;]</span><br><span class="line">    or: perf trace record [&lt;options&gt;] [&lt;command&gt;]</span><br><span class="line">    or: perf trace record [&lt;options&gt;] -- &lt;command&gt; [&lt;options&gt;]</span><br><span class="line"></span><br><span class="line">    -a, --all-cpus        system-wide collection from all CPUs</span><br><span class="line">    -C, --cpu &lt;cpu&gt;       list of cpus to monitor</span><br><span class="line">    -D, --delay &lt;n&gt;       ms to wait before starting measurement after program start</span><br><span class="line">    -e, --event &lt;event&gt;   event/syscall selector. use &#x27;perf list&#x27; to list available events</span><br><span class="line">    -f, --force           don&#x27;t complain, do it</span><br><span class="line">    -F, --pf &lt;all|maj|min&gt;</span><br><span class="line">                          Trace pagefaults</span><br><span class="line">    -G, --cgroup &lt;name&gt;   monitor event in cgroup name only</span><br><span class="line">    -i, --input &lt;file&gt;    Analyze events in file</span><br><span class="line">    -m, --mmap-pages &lt;pages&gt;</span><br><span class="line">                          number of mmap data pages</span><br><span class="line">    -o, --output &lt;file&gt;   output file name</span><br><span class="line">    -p, --pid &lt;pid&gt;       trace events on existing process id</span><br><span class="line">    -s, --summary         Show only syscall summary with statistics</span><br><span class="line">    -S, --with-summary    Show all syscalls and summary with statistics</span><br><span class="line">    -t, --tid &lt;tid&gt;       trace events on existing thread id</span><br><span class="line">    -T, --time            Show full timestamp, not time relative to first start</span><br><span class="line">    -u, --uid &lt;user&gt;      user to profile</span><br><span class="line">    -v, --verbose         be more verbose</span><br><span class="line">        --call-graph &lt;record_mode[,record_size]&gt;</span><br><span class="line">                          setup and enables call-graph (stack chain/backtrace):</span><br><span class="line"></span><br><span class="line">                                record_mode:    call graph recording mode (fp|dwarf|lbr)</span><br><span class="line">                                record_size:    if record_mode is &#x27;dwarf&#x27;, max size of stack recording (&lt;bytes&gt;)</span><br><span class="line">                                                default: 8192 (bytes)</span><br><span class="line"></span><br><span class="line">                                Default: fp</span><br><span class="line">        --comm            show the thread COMM next to its id</span><br><span class="line">        --duration &lt;float&gt;</span><br><span class="line">                          show only events with duration &gt; N.M ms</span><br><span class="line">        --expr &lt;expr&gt;     list of syscalls/events to trace</span><br><span class="line">        --failure         Show only syscalls that failed</span><br><span class="line">        --filter-pids &lt;CSV list of pids&gt;</span><br><span class="line">                          pids to filter (by the kernel)</span><br><span class="line">        --kernel-syscall-graph</span><br><span class="line">                          Show the kernel callchains on the syscall exit path</span><br><span class="line">        --map-dump &lt;BPF map&gt;</span><br><span class="line">                          BPF map to periodically dump</span><br><span class="line">        --max-events &lt;n&gt;  Set the maximum number of events to print, exit after that is reached.</span><br><span class="line">        --max-stack &lt;n&gt;   Set the maximum stack depth when parsing the callchain, anything beyond the specified depth will be ignored. Default: kernel.perf_event_max_stack or 127</span><br><span class="line">        --min-stack &lt;n&gt;   Set the minimum stack depth when parsing the callchain, anything below the specified depth will be ignored.</span><br><span class="line">        --no-inherit      child tasks do not inherit counters</span><br><span class="line">        --print-sample    print the PERF_RECORD_SAMPLE PERF_SAMPLE_ info, for debugging</span><br><span class="line">        --proc-map-timeout &lt;n&gt;</span><br><span class="line">                          per thread proc mmap processing timeout in ms</span><br><span class="line">        --sched           show blocking scheduler events</span><br><span class="line">        --sort-events     Sort batch of events before processing, use if getting out of order events</span><br><span class="line">        --syscalls        Trace syscalls</span><br><span class="line">        --tool_stats      show tool stats</span><br></pre></td></tr></table></figure>
+
+<h5 id="举例-20"><a href="#举例-20" class="headerlink" title="举例"></a>举例</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost jrg]# perf trace</span><br><span class="line">     0.000 ( 1.008 ms): qemu-system-x8/2231208 futex(uaddr: 0x55d15469b5a8, op: WAIT_BITSET|PRIVATE_FLAG|CLOCK_REALTIME, utime: 0x7fb6395fd630, val3: MATCH_ANY) = -1 ETIMEDOUT (Connection timed out)</span><br><span class="line">     1.013 ( 1.006 ms): qemu-system-x8/2231208 futex(uaddr: 0x55d15469b5a8, op: WAIT_BITSET|PRIVATE_FLAG|CLOCK_REALTIME, utime: 0x7fb6395fd630, val3: MATCH_ANY) = -1 ETIMEDOUT (Connection timed out)</span><br><span class="line">     2.024 (         ): qemu-system-x8/2231208 futex(uaddr: 0x55d15469b5a8, op: WAIT_BITSET|PRIVATE_FLAG|CLOCK_REALTIME, utime: 0x7fb6395fd630, val3: MATCH_ANY) ...</span><br><span class="line">18446744073709.520 ( 1.020 ms): qemu-system-x8/2342046 futex(uaddr: 0x55f9bd192208, op: WAIT_BITSET|PRIVATE_FLAG|CLOCK_REALTIME, utime: 0x7f69d65fd630, val3: MATCH_ANY) = -1 ETIMEDOUT (Connection timed out)</span><br><span class="line">     1.004 ( 0.995 ms): qemu-system-x8/2342046 futex(uaddr: 0x55f9bd192208, op: WAIT_BITSET|PRIVATE_FLAG|CLOCK_REALTIME, utime: 0x7f69d65fd630, val3: MATCH_ANY) = -1 ETIMEDOUT (Connection timed out)</span><br><span class="line">     2.004 (         ): qemu-system-x8/2342046 futex(uaddr: 0x55f9bd192208, op: WAIT_BITSET|PRIVATE_FLAG|CLOCK_REALTIME, utime: 0x7f69d65fd630, val3: MATCH_ANY) ...</span><br><span class="line">     0.920 (         ): qemu-system-x8/2364252 ppoll(ufds: 0x562288f9fa70, nfds: 27, tsp: 0x7ffe1f525420, sigsetsize: 8) ...</span><br><span class="line">     0.942 ( 0.988 ms): qemu-system-x8/2364252 ppoll(ufds: 0x562288f9fa70, nfds: 27, tsp: 0x7ffe1f525420, sigsetsize: 8) = 0 (Timeout)</span><br><span class="line">     1.951 ( 0.006 ms): qemu-system-x8/2364252 ppoll(ufds: 0x562288f9fa70, nfds: 27, tsp: 0x7ffe1f525420, sigsetsize: 8) = 0 (Timeout)</span><br><span class="line">     1.971 (         ): qemu-system-x8/2364252 ppoll(ufds: 0x562288f9fa70, nfds: 27, tsp: 0x7ffe1f525420, sigsetsize: 8) ...</span><br><span class="line">     0.525 (         ): qemu-system-x8/11141 ioctl(fd: 17&lt;anon_inode:kvm-vcpu:1&gt;, cmd: KVM_RUN)                 ...</span><br><span class="line">     0.539 ( 0.997 ms): qemu-system-x8/11141 ioctl(fd: 17&lt;anon_inode:kvm-vcpu:1&gt;, cmd: KVM_RUN)                    = 0</span><br><span class="line">     1.543 ( 0.023 ms): qemu-system-x8/11141 ioctl(fd: 17&lt;anon_inode:kvm-vcpu:1&gt;, cmd: KVM_RUN)                    = 0</span><br><span class="line">     1.569 ( 0.955 ms): qemu-system-x8/11141 ioctl(fd: 17&lt;anon_inode:kvm-vcpu:1&gt;, cmd: KVM_RUN)                    = 0</span><br><span class="line">     2.533 ( 0.010 ms): qemu-system-x8/11141 ioctl(fd: 17&lt;anon_inode:kvm-vcpu:1&gt;, cmd: KVM_RUN)                    = 0</span><br><span class="line">     2.545 (         ): qemu-system-x8/11141 ioctl(fd: 17&lt;anon_inode:kvm-vcpu:1&gt;, cmd: KVM_RUN)                 ...</span><br><span class="line">     0.385 (         ): qemu-system-x8/11140 ioctl(fd: 16&lt;anon_inode:kvm-vcpu:0&gt;, cmd: KVM_RUN)                 ...</span><br><span class="line">     0.397 (         ): qemu-system-x8/11140 ioctl(fd: 16&lt;anon_inode:kvm-vcpu:0&gt;, cmd: KVM_RUN)                 ...</span><br><span class="line">     0.405 (         ): qemu-system-x8/11140 ioctl(fd: 16&lt;anon_inode:kvm-vcpu:0&gt;, cmd: KVM_RUN)                 ...</span><br><span class="line">     0.413 (         ): qemu-system-x8/11140 ioctl(fd: 16&lt;anon_inode:kvm-vcpu:0&gt;, cmd: KVM_RUN)                 ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>参考文档：</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/arnoldlu/p/6241297.html">https://www.cnblogs.com/arnoldlu/p/6241297.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/linux/l-cn-perf1/">https://www.ibm.com/developerworks/cn/linux/l-cn-perf1/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/developerworks/cn/linux/l-cn-perf2/">https://www.ibm.com/developerworks/cn/linux/l-cn-perf2/</a></p>
+<p>perf的man手册</p>
+
+    </div>
+</div>
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 109;
+        width: 600px !important;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            width: 88%
+        }
+    }
+</style>
+<script>
+    $(function () { $('#article').click(function (e) { if (e.target.tagName == "IMG") { if ($('#nonediv').length == 0) { let MImg = `<div id='noneimg'><img src='${e.target.currentSrc}'></div>`; let MDiv = "<div id='nonediv' style='cursor: pointer;display: none; position: fixed;left: 0;top: 0; right: 0;bottom: 0;background-color: #333;opacity:0.5;z-index: 108;'></div>"; $('#article').append(MDiv); $('#article').append(MImg); $("#nonediv").fadeIn("slow"); $("#noneimg img").fadeIn("slow") } } else { if ($('#nonediv').length !== 0) { $("#noneimg ").fadeOut("slow"); $("#nonediv").fadeOut("slow"); setTimeout(function () { $('#nonediv').remove(); $('#noneimg').remove() }, 500) } } }); $('.article-content').addClass('content-move') });
+</script>
+<div class="Last-Next">
+    
+
+    
+    <a href="/2020/12/18/2020-12-18-x86-amd64-ia64/">
+        <div class="next">
+            <span>下一篇</span>
+            <p>x86及amd64及IA64的概念</p>
+        </div>
+    </a>
+    
+</div>
+		
+<link rel="stylesheet" href="/css/food.css">
+
+<div class="footer">
+	<div class="Copyright">
+		©2020 By Junixcn.   Repository : <a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/junixcn/junixcn.github.io.git">junixcn</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/junixcn">
+			<img src="/image/github-logo.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: block;
+            border-radius: 50%;
+            width: 66px;
+            height: 66px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            transition: border .5s;
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 30px;
+            height: 30px;
+            margin-top: 17.5px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $('#js-go_top').gotoTop({ offset: 500, speed: 300, animationShow: { 'transform': 'translate(0,0)', 'transition': 'transform .5s ease-in-out' }, animationHide: { 'transform': 'translate(100px,0)', 'transition': 'transform .5s ease-in-out' } });
+</script>
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/QiaoBug/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+
+	</body>
+
+</html>
