@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		
+<title>System-Performance Notes-Junixcn</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" type="image/x-icon" href="/image/favicon.ico">
+
+<meta name="keywords" content="Notes">
+<meta name="description" content="描述">
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+<!-- Baidu Analytics -->
+<script defer>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?4b5fe1472f22fa";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+	<meta name="generator" content="Hexo 5.2.0"></head>
+
+	<body>
+		
+<link rel="stylesheet" href="/css/page.css">
+
+
+<link rel="stylesheet" href="/css/page_cente.css">
+
+
+<link rel="stylesheet" href="/css/atom-one-dark.css">
+
+
+<link rel="stylesheet" href="/css/header.css">
+
+<div class="header">
+	<div class="header-top">
+		<div class="h-left">
+			<a href="/">
+				<img src="/image/logo.png" alt="">
+			</a>
+		</div>
+		<div class="h-right">
+			<ul>
+				
+				
+				<li>
+					<a href="/">主页</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+				
+				<li>
+					<a href="/archives">列表</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+				
+				<li>
+					<a href="/categories">分类</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+				
+				<li>
+					<a href="/tags">标签</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+				
+				<li>
+					<a href="/links">链接</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+				
+				<li>
+					<a href="/about">关于</a>
+					<span class="dot"></span>
+				</li>
+				
+				
+			</ul>
+		</div>
+		<div class="h-right-close">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+				<path fill="none" d="M0 0h24v24H0z" />
+				<path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" fill="rgba(68,68,68,1)" />
+			</svg>
+		</div>
+	</div>
+</div>
+<div class="sidebar">
+    <div class="topo">
+        <h2>Junixcn</h2>
+    </div>
+    <ul>
+        
+        <li>
+            <a href="/">主页</a>
+        </li>
+        
+        <li>
+            <a href="/archives">列表</a>
+        </li>
+        
+        <li>
+            <a href="/categories">分类</a>
+        </li>
+        
+        <li>
+            <a href="/tags">标签</a>
+        </li>
+        
+        <li>
+            <a href="/links">链接</a>
+        </li>
+        
+        <li>
+            <a href="/about">关于</a>
+        </li>
+        
+    </ul>
+    <div class="my_foot">
+        
+        <a target="_blank" rel="noopener" href="https://github.com/junixcn">
+            <img src="/image/github-logo.png" alt="Quiet主题">
+        </a>
+        
+    </div>
+</div>
+<div class='shelter'
+    style='cursor: pointer;display: none; position: fixed;left: 0;top: 0; right: 0;bottom: 0;background-color: #333;opacity:0.5;z-index: 108;'>
+</div>
+<style>
+    .sidebar {
+        width: 0;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        z-index: 999;
+        text-align: center;
+        box-shadow: -6px 0 20px rgba(98, 94, 94, .815)
+    }
+
+    .topo {
+        width: 100%;
+        height: 200px;
+        background: url(https://api.ixiaowai.cn/gqapi/gqapi.php) no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        display: flex;
+        align-items: flex-end
+    }
+
+    .topo h2 {
+        color: #fff;
+        z-index: 1;
+        position: relative;
+        margin: 0 0 10px 10px;
+        font-size: 1.2em;
+        box-sizing: border-box
+    }
+
+    .topo:before {
+        content: '';
+        background-image: url(/image/pattern.png);
+        background-repeat: repeat;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1
+    }
+
+    .sidebar ul {
+        width: 100%;
+        margin-top: 50px
+    }
+
+    .sidebar ul li {
+        height: 50px;
+        list-style: none;
+        font-size: 1.2em;
+        text-align: right;
+        margin-right: 10px
+    }
+
+    .sidebar ul li a {
+        display: grid;
+        color: #5d606a;
+        text-overflow: ellipsis;
+        width: 100%;
+        text-decoration: none
+    }
+
+    .my_foot {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: absolute;
+        bottom: 0
+    }
+
+    .my_foot a {
+        text-decoration: none;
+        margin-right: 10px;
+        display: inline-block
+    }
+
+    .my_foot a img {
+        width: 30px;
+        height: 30px
+    }
+</style>
+
+<script>
+    $(function () { $('.h-right-close>svg').click(function () { $('.sidebar').animate({ width: "66%" }, 500); $('.shelter').fadeIn("slow") }); $('.shelter').click(function (e) { $('.sidebar').animate({ width: "0" }, 500); $('.shelter').fadeOut("slow") }) })
+</script>
+<script>
+	$(function () { $(window).scroll(function () { if ($(document).scrollTop() > 100) { $(".header-top").removeClass("header-move2"); $('.header-top').addClass('header-move1') } else { $(".header-top").removeClass("header-move1"); $('.header-top').addClass('header-move2') } }) });
+</script>
+<div class="header-bg bg-content-img">
+    <div class="bg-content">
+        <ul class="tag">
+            
+        </ul>
+        <h1>System-Performance Notes</h1>
+        <div class="article-info">
+            <div class="article-author">
+                
+                <svg t="1604839279282" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="2901" width="20" height="20">
+                    <path
+                        d="M513 956.3c-247.7 0-448-200.3-448-448S265.3 66.2 513 66.2s448 200.3 448 448-200.3 442.1-448 442.1z m0-830.9c-212.2 0-388.8 170.7-388.8 388.8C124.2 726.3 294.9 903 513 903c212.2 0 388.8-170.7 388.8-388.8S725.2 125.4 513 125.4z m0 430.2c-94.2 0-170.7-76.5-170.7-170.7S418.8 207.8 513 207.8s170.7 76.5 170.7 170.7S607.2 555.6 513 555.6z m0-289.1c-64.6 0-112 52.8-112 112s47.4 117.9 112 117.9 112-52.8 112-112-47.4-117.9-112-117.9z m0 689.8c-135.7 0-259-58.7-341.9-158.9l-11.8-17.8 11.8-17.8c76.5-117.9 206.2-188.5 347.8-188.5 135.7 0 265 64.6 341.9 182.6l11.8 17.8-11.8 17.8C778 897.1 648.7 956.3 513 956.3zM230.3 773.2C300.9 849.7 406.9 897 513 897c112 0 218.1-47.4 288.6-129.8-70.5-88.2-170.7-135.6-282.7-135.6s-218.1 53.3-288.6 141.6z"
+                        p-id="2902" fill="#ffffff"></path>
+                </svg>
+                
+                <span> <a href="">Junixcn</a></span>
+                <p>2021-01-05 10:08:00</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="article-content">
+    <div id="article" class="content">
+        <h2 id="System-Performance-Notes"><a href="#System-Performance-Notes" class="headerlink" title="System Performance Notes"></a>System Performance Notes</h2><h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h3><h4 id="1-4-视角"><a href="#1-4-视角" class="headerlink" title="1.4 视角"></a>1.4 视角</h4><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201225142342277.png" alt="image-20201225142342277"></p>
+<table>
+<thead>
+<tr>
+<th>性能分析视角</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>工作负载分析</td>
+<td>应用开发人员关心</td>
+</tr>
+<tr>
+<td>资源分析</td>
+<td>系统管理员关心</td>
+</tr>
+</tbody></table>
+<h4 id="1-5-性能分析的挑战性"><a href="#1-5-性能分析的挑战性" class="headerlink" title="1.5 性能分析的挑战性"></a>1.5 性能分析的挑战性</h4><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主观性</td>
+<td>技术一般是客观的，但性能一般是主观性很强的<br />比如“The average disk I/O response time is 1 ms”是“好”还是“差”，恐怕也因人而已；</td>
+</tr>
+<tr>
+<td>复杂性</td>
+<td>系统整体的复杂性；<br />多模块交互的复杂性（单个模块可能没问题，交互就会出现性能问题）<br />性能瓶颈问题<br />工作负载的复杂</td>
+</tr>
+<tr>
+<td>多原因</td>
+<td>性能问题往往很难找到根原因；比如多个单独看起来没问题的事件一起发生就引起了性能问题</td>
+</tr>
+<tr>
+<td>多问题并存</td>
+<td>即使一个成熟的系统上，也会有许多已知但未解决的性能问题；性能分析的难点之一并不是找一个性能问题，而是找到和你问题最相关的performance issues；<br />量化分析（quantify）issues的重要程度，并且估计解决后能带来的性能提升程度；<br />latency（延时）非常适合用来量化性能指标；</td>
+</tr>
+</tbody></table>
+<h4 id="1-6-延时latency"><a href="#1-6-延时latency" class="headerlink" title="1.6 延时latency"></a>1.6 延时latency</h4><p>latency是什么：是等待完成的时间；</p>
+<p><em>Latency is a measure of time spent waiting, and is an essential performance metric</em></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201225152523816.png" alt="image-20201225152523816"></p>
+<p>如图，访问数据库的latency是100ms，其中阻塞再磁盘读写上占了80ms，那么可以消除磁盘读写的性能损耗，使得latency降至20ms，性能提升5倍（5x），这个提升是可以量化的；</p>
+<p>上面计算方法不一定适用于其他metrics（指标）。</p>
+<h4 id="1-7-观察性能observability"><a href="#1-7-观察性能observability" class="headerlink" title="1.7 观察性能observability"></a>1.7 观察性能observability</h4><p>系统可观察，观察的工具一般分几类：</p>
+<table>
+<thead>
+<tr>
+<th>观察工具使用的方法</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>计数器（counters）</td>
+<td>应用程序和内核通常会提供有关其状态和活动的数据：操作计数，字节计数，延迟测量，资源利用率和错误率。 它们通常以称为计数器的整数变量的形式实现，这些变量在软件中进行了硬编码，其中一些是累积的且始终递增</td>
+</tr>
+<tr>
+<td>分析（profiling）</td>
+<td>在系统性能中，术语“分析”通常是指使用执行采样的工具：通过测量数据的子集绘制一些粗略的示图等</td>
+</tr>
+<tr>
+<td>跟踪（tracing）</td>
+<td>跟踪一般都是基于事件驱动的数据采集过程，例如针对系统调用的追踪工具strace，针对网络分析的抓包工具tcpdump，通用能追踪软硬件事件的跟踪工具如ftrace、bcc以及bpftrace等</td>
+</tr>
+</tbody></table>
+<p>观察的工具一般不包括benchmark工具，因为它是通过workload来测试系统得出数据，这便修改了系统的原始状态；</p>
+<h5 id="counters、statistics、metrics"><a href="#counters、statistics、metrics" class="headerlink" title="counters、statistics、metrics"></a>counters、statistics、metrics</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 何为counters？</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在《system performance： enterprise and cloud， 2nd》一书中得到了比较权威的解释</span></span><br><span class="line">Applications and the kernel typically provide data on their state and activity: operation counts,byte counts, latency measurements, resource utilization, and error rates. They are typicallyimplemented as integer variables called counters that are hard-coded in the software, some ofwhich are cumulative and always increment.</span><br><span class="line"><span class="meta">#</span><span class="bash"> 计数器：应用程序或者内核通常会在软件中硬编码进去一些整形变量，用于操作统计、字节统计、延时衡量、资源利用统计、错误计数等；比如/proc文件系统下的各种统计文件节点；</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201225171130364.png" alt="image-20201225171130364"></p>
+<h5 id="profiling"><a href="#profiling" class="headerlink" title="profiling"></a>profiling</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 何为profiling？</span></span><br><span class="line">In systems performance, the term profiling usually refers to the use of tools that perform sampling:taking a subset (a sample) of measurements to paint a coarse picture of the target.</span><br><span class="line"><span class="meta">#</span><span class="bash"> 基于工具的样点采集，并用其中的数据绘制一些直观示意图的分析方法；</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="tracing"><a href="#tracing" class="headerlink" title="tracing"></a>tracing</h5><p>跟踪一般都是基于事件驱动的数据采集过程，例如针对系统调用的追踪工具strace，针对网络分析的抓包工具tcpdump，通用能追踪软硬件事件的跟踪工具如ftrace、bcc以及bpftrace等。这些都基于event source，比如静态测量点、动态测量点以及可编程工具bpf；</p>
+<p>static instrument在linux中又叫tracepoints，硬编码的测量追踪点；</p>
+<p>dynamic instrument类似动态debug一样，软件运行中在内存中插入instrument测量点；Dtrace工具值得好好分析下；</p>
+<p>BPF，原来是代表berkerly packet filter，但现在已经不是这个意思了，它也不算缩写，就代表一种方法，一种跟踪方法；<em>eBPF was initially used to describe this extended BPF; however, the technology is now referred to as just BPF</em>；</p>
+<h4 id="1-8-测试性能experimentation"><a href="#1-8-测试性能experimentation" class="headerlink" title="1.8 测试性能experimentation"></a>1.8 测试性能experimentation</h4><p>macro-benchmark tools 较为宏观的整体负载测试工具；</p>
+<p>micro-benchmark tools 针对具体小方向的负载测试工具，比如网络、cpu等；</p>
+<h4 id="1-9-云计算cloud-computing"><a href="#1-9-云计算cloud-computing" class="headerlink" title="1.9 云计算cloud computing"></a>1.9 云计算cloud computing</h4><h4 id="1-10-方法论methodology"><a href="#1-10-方法论methodology" class="headerlink" title="1.10 方法论methodology"></a>1.10 方法论methodology</h4><h3 id="2-方法"><a href="#2-方法" class="headerlink" title="2. 方法"></a>2. 方法</h3><h4 id="2-1-术语"><a href="#2-1-术语" class="headerlink" title="2.1 术语"></a>2.1 术语</h4><p>系统性能的关键术语</p>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IOPS</td>
+<td>数据传输的一个度量方法，input/outpu per second；对于磁盘读写，IOPS指每秒读和写的次数；</td>
+</tr>
+<tr>
+<td>throughput</td>
+<td>评价操作执行的速率；数据传输方面，throughput用于描述数据传输速度（bytes/s或bits/s）。某些场景下如数据库，吞吐量指的是操作的速度（每秒的操作数或者每秒业务数）</td>
+</tr>
+<tr>
+<td>response time</td>
+<td>一个操作完成所需要的时间，包括等待时间、执行时间、结果返回时间等；</td>
+</tr>
+<tr>
+<td>latency</td>
+<td>延时时间，一个操作等待被执行所花费的时间；某些场景下，也可指response time；</td>
+</tr>
+<tr>
+<td>utilization</td>
+<td>使用率，资源使用率；</td>
+</tr>
+<tr>
+<td>saturation</td>
+<td>饱和度，资源无法满足服务的工作排队工作量程度；</td>
+</tr>
+<tr>
+<td>bottleneck</td>
+<td>瓶颈，系统性能中指性能上限；</td>
+</tr>
+<tr>
+<td>workload</td>
+<td>工作负载；</td>
+</tr>
+<tr>
+<td>cache</td>
+<td>缓存，用于复制或者缓冲一定量数据的高速存储区域；</td>
+</tr>
+</tbody></table>
+<h4 id="2-2-模型"><a href="#2-2-模型" class="headerlink" title="2.2 模型"></a>2.2 模型</h4><p><strong>SUT: system under test</strong></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227122509306.png" alt="image-20201227122509306"></p>
+<p>perturbations（扰动）会影响系统测试结果。</p>
+<p>perturbations有哪些：scheduled system activity、other users of the system、 other workloads。</p>
+<p><strong>queueing system</strong></p>
+<p>很多工作组件和场景可以抽象成queue system model。 比如磁盘读写；</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227123620475.png" alt="image-20201227123620475"></p>
+<h4 id="2-3-概念"><a href="#2-3-概念" class="headerlink" title="2.3 概念"></a>2.3 概念</h4><h5 id="2-3-1-latency"><a href="#2-3-1-latency" class="headerlink" title="2.3.1 latency"></a>2.3.1 latency</h5><p>延时，性能研究的关键角色；</p>
+<p>latency 和 throughput 是某些性能研究的最关键的要点；</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227123759422.png" alt="image-20201227123759422"></p>
+<p>何为latency：操作等待被执行的时间；</p>
+<h5 id="2-3-2-time-scales"><a href="#2-3-2-time-scales" class="headerlink" title="2.3.2 time scales"></a>2.3.2 time scales</h5><p>系统各组件的操作所处的时间量级差别很大。比如一次寄存器访问延时0.3ns，相当于生活中的1s时间。</p>
+<h5 id="2-3-3-权衡三角"><a href="#2-3-3-权衡三角" class="headerlink" title="2.3.3 权衡三角"></a>2.3.3 权衡三角</h5><p>常见的性能调整的权衡是CPU和memory之间，因为内存能用于缓存数据结果，降低的CPU的使用。</p>
+<h3 id="3-操作系统"><a href="#3-操作系统" class="headerlink" title="3. 操作系统"></a>3. 操作系统</h3><h4 id="3-1-术语"><a href="#3-1-术语" class="headerlink" title="3.1 术语"></a>3.1 术语</h4><table>
+<thead>
+<tr>
+<th>常见术语</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>operating system</td>
+<td>操作系统，安装在系统环境上的可用于执行程序的软件和文件系统，包含kernel、管理tools、系统库等；</td>
+</tr>
+<tr>
+<td>kernel</td>
+<td>内核，管理系统的程序，管理硬件设备、内存、CPU调度，对CPU拥有特权；</td>
+</tr>
+<tr>
+<td>process</td>
+<td>进程，OS中抽象出来的用于执行程序的实体；</td>
+</tr>
+<tr>
+<td>thread</td>
+<td>线程，可被CPU调度的执行context；内核有多个线程，一个进程可以有一个或多个线程；</td>
+</tr>
+<tr>
+<td>task</td>
+<td>任务，linux运行实体，可以指一个进程（单线程）、多线程进程中的一个线程、或者内核线程；</td>
+</tr>
+<tr>
+<td>BPF program</td>
+<td>在BPF环境中运行的内核态程序；</td>
+</tr>
+<tr>
+<td>main memory</td>
+<td>主存，系统的物理内存（比如RAM）；</td>
+</tr>
+<tr>
+<td>virtual memory</td>
+<td>虚拟内存，支持多任务执行的主存的抽象概念；</td>
+</tr>
+<tr>
+<td>kernel space</td>
+<td>内核空间，虚拟内存中给kernel使用的地址空间；</td>
+</tr>
+<tr>
+<td>user space</td>
+<td>用户空间，虚拟内存中给user使用的地址空间；</td>
+</tr>
+<tr>
+<td>user land</td>
+<td>用户级的程序和库（/usr/bin, /usr/lib…);</td>
+</tr>
+<tr>
+<td>context switch</td>
+<td>上下文切换，一个进程或一个线程切换到另一个进程或线程，这是CPU调度器的基本功能，切换过程中包含对CPU寄存器的保存切换；</td>
+</tr>
+<tr>
+<td>mode switch</td>
+<td>模式切换，用户态和内核态的切换；</td>
+</tr>
+<tr>
+<td>system call</td>
+<td>系统调用；</td>
+</tr>
+<tr>
+<td>processor</td>
+<td>处理器，一个包含一个或多个CPU的物理芯片；</td>
+</tr>
+<tr>
+<td>trap</td>
+<td>陷入，给内核发送信号获取系统内核程序执行（特权执行），可通过系统调用、异常、中断触发trap；</td>
+</tr>
+<tr>
+<td>hardware interrupt</td>
+<td>硬件中断，物理设备给内核kernel发送信号，获取如I/O等服务；一个中断便是一次trap；</td>
+</tr>
+</tbody></table>
+<h4 id="3-2-背景"><a href="#3-2-背景" class="headerlink" title="3.2 背景"></a>3.2 背景</h4><h5 id="3-2-1-内核"><a href="#3-2-1-内核" class="headerlink" title="3.2.1 内核"></a>3.2.1 内核</h5><p><strong>system libraries并不是一个完整的圆环</strong>，因为linux运行应用程序直接调用system calls来进入内核；</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228103025123.png" alt="image-20201228103025123"></p>
+<p>新的linux允许BPF程序调用KPI： BPF helper；这样便运行一些程序或者系统函数被用于BPF，提供更高的安全级别和高性能。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228103202116.png" alt="image-20201228103202116"></p>
+<h5 id="3-2-2-内核态和用户态"><a href="#3-2-2-内核态和用户态" class="headerlink" title="3.2.2 内核态和用户态"></a>3.2.2 内核态和用户态</h5><p>用户态切换到内核态，就叫mode switch。</p>
+<p>用户态切换到内核态的过程中，那些阻塞在比如磁盘等待、网络/IO等地方的进程还会引起context switch，以便调度其他进程来执行；</p>
+<p><strong>mode switch 和 context switch会带来额外的CPU循环消耗，如何避免？</strong></p>
+<table>
+<thead>
+<tr>
+<th>避免模式切换带来损耗的方法</th>
+<th>详细</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user-mode syscalls</td>
+<td>用户态系统调用：可以在用户态实现部分系统调用功能，linux kernel通过将a virtual dynamic shared object(vDSO) 映射到进程地址空间中来实现，比如系统调用gettimeofday, getcpu等；</td>
+</tr>
+<tr>
+<td>memory mappings</td>
+<td>内存映射：used for demand paging；</td>
+</tr>
+<tr>
+<td>kernel bypass</td>
+<td>越过内核，比如DPDK（the data plane development kit）；</td>
+</tr>
+<tr>
+<td>kernel-mode applications</td>
+<td>内核态应用程序，比如TUX web服务器，eBPF技术等；</td>
+</tr>
+</tbody></table>
+<p>用户态和内核态都有它们自己的执行环境，包含栈、寄存器。某些处理器架构将内核态和用户态的地址空间分隔，这样在模式切换时还需要切换虚拟内存环境。</p>
+<h5 id="3-2-3-系统调用"><a href="#3-2-3-系统调用" class="headerlink" title="3.2.3 系统调用"></a>3.2.3 系统调用</h5><p>诸如<code>write()/open()</code>等等的system calls，一般器用途很明显。</p>
+<p>以下几个用途不是很明显：</p>
+<table>
+<thead>
+<tr>
+<th>系统调用</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ioctl</td>
+<td>I/O设置以及一些混杂需求的设置下发；</td>
+</tr>
+<tr>
+<td>mmap</td>
+<td>This is commonly used to map executables and libraries to the process address space, and for memory-mapped files；</td>
+</tr>
+<tr>
+<td>brk</td>
+<td>用于扩展堆指针，定义进程内存空间的大小；</td>
+</tr>
+<tr>
+<td>futex</td>
+<td>Fast user-space mutex，用于处理用户态锁；</td>
+</tr>
+</tbody></table>
+<h5 id="3-2-4-中断"><a href="#3-2-4-中断" class="headerlink" title="3.2.4 中断"></a>3.2.4 中断</h5><p>同步中断、异步中断</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228113444664.png" alt="image-20201228113444664"></p>
+<p>异步中断实例：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228113834313.png" alt="image-20201228113834313"></p>
+<p>同步中断：</p>
+<p>同步中断都是由软件指令产生的。</p>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>详解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>traps</td>
+<td>对内核的一次谨慎调用，比如中断指令，例如linux-x86中的int 0x80软中断；</td>
+</tr>
+<tr>
+<td>exceptions</td>
+<td>异常，比如除0；</td>
+</tr>
+<tr>
+<td>fault</td>
+<td>通常用于内存事件，比如page fault；</td>
+</tr>
+</tbody></table>
+<h5 id="3-2-5-clock-and-idle"><a href="#3-2-5-clock-and-idle" class="headerlink" title="3.2.5 clock and idle"></a>3.2.5 clock and idle</h5><p>时钟中断，linux中用jiffies记录从开机到现在的时钟中断次数。unix内核中的一个重要组件就是clock()程序，时钟中断，通常表示为频率，linux现在是1000Hz，也就是1秒钟有1000个时钟中断，每个时钟中断间隔1ms，这叫tick（节拍），这也是性能影响因素之一，</p>
+<ul>
+<li>tick latency，节拍延迟，假设时钟频率是100Hz，那么进程延迟最多10ms就会进入下一个tick；这个问题用高频率real-time中断方式解决。</li>
+<li>tick overhead，节拍损耗，ticks消耗CPU周期，并会干扰应用程序，是operating system jitter的原因之一。</li>
+</ul>
+<p><strong>idle thread</strong>：当CPU空闲时，调度器会安排其到idle线程，idle任务能够power down CPU以节省能源；</p>
+<h5 id="3-2-6-进程"><a href="#3-2-6-进程" class="headerlink" title="3.2.6 进程"></a>3.2.6 进程</h5><p>何为进程？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A process is an environment for executing a user-level program, It consists of a memory address space, file descriptors, thread stacks, and registers</span><br></pre></td></tr></table></figure>
+
+<p>何为线程？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A process contains one or more threads, which operate in the process address space and share the same file descriptors. A thread is an executable context consisting of a stack, registers, and an instruction pointer (also called a program counter).</span><br><span class="line"><span class="meta">#</span><span class="bash"> 共享进程地址空间和文件描述符，拥有自己的栈、寄存器和指令指针（program counter）</span></span><br></pre></td></tr></table></figure>
+
+<p>在Linux系统中，进程process和线程thread都称为任务task。</p>
+<p>进程的创建fork()和clone()用了copy-on-write（COW）写时复制技术，以提高系统性能。</p>
+<p><strong>进程的生命周期</strong>：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228145933926.png" alt="image-20201228145933926"></p>
+<p><strong>进程环境总览</strong>：</p>
+<p>process environment：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228150219945.png" alt="image-20201228150219945"></p>
+<p>该图也不是完全准确：内核空间应该比用户空间小。</p>
+<h5 id="3-2-7-栈"><a href="#3-2-7-栈" class="headerlink" title="3.2.7 栈"></a>3.2.7 栈</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228151104247.png" alt="image-20201228151104247"></p>
+<h5 id="3-2-8-虚拟内存"><a href="#3-2-8-虚拟内存" class="headerlink" title="3.2.8 虚拟内存"></a>3.2.8 虚拟内存</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228151054312.png" alt="image-20201228151054312"></p>
+<h5 id="3-2-9-调度器"><a href="#3-2-9-调度器" class="headerlink" title="3.2.9 调度器"></a>3.2.9 调度器</h5><p>scheduler的目的是什么？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">The basic intent is to divide CPU time among the active processes and threads, and to maintain a notion of priority so that more important work can execute sooner</span><br><span class="line"><span class="meta">#</span><span class="bash"> 基本目标是将CPU时间划分给不同的进程和线程，在优先级基础上保持平衡，以保证更重要的任务能够尽快被执行</span></span><br></pre></td></tr></table></figure>
+
+<p>调度器只对处于<code>read-to-run</code>状态的进程进行调度，需要被调度的进程在每个优先级的队列里，俗称运行队列<strong>run   queues</strong>。</p>
+<p>调度器可以动态的修改进程的priority以便提高系统性能。工作负载workloads可以分为两大类：</p>
+<ul>
+<li>CPU-bound：计算密集型；</li>
+<li>I/O-bound： I/O密集型；</li>
+</ul>
+<h5 id="3-2-10-文件系统"><a href="#3-2-10-文件系统" class="headerlink" title="3.2.10 文件系统"></a>3.2.10 文件系统</h5><p>文件系统通过mount来挂在到tree上。一个经典的文件组织架构图如下：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228152316245.png" alt="image-20201228152316245"></p>
+<p><strong>虚拟文件系统VFS</strong>：</p>
+<p>是内核文件系统的一个抽象接口，方便添加管理新的文件系统。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228152857177.png" alt="image-20201228152857177"></p>
+<p><strong>I/O栈：</strong></p>
+<p>什么是I/O栈：从用户态软件到存储设备的路径叫做I/O stack。下图中左边一条路径可以越过文件系统直达块存储设备，该路径经常被用于管理工具和数据库。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228153330425.png" alt="image-20201228153330425"></p>
+<h5 id="3-2-11-缓存"><a href="#3-2-11-缓存" class="headerlink" title="3.2.11 缓存"></a>3.2.11 缓存</h5><p>由于磁盘I/O操作的延时很长，软件栈中的很多层级通过缓存读写来避免这点缺点。</p>
+<h5 id="3-2-12-网络"><a href="#3-2-12-网络" class="headerlink" title="3.2.12 网络"></a>3.2.12 网络</h5><p>TCP/IP协议栈</p>
+<h5 id="3-2-13-设备驱动"><a href="#3-2-13-设备驱动" class="headerlink" title="3.2.13 设备驱动"></a>3.2.13 设备驱动</h5><p>字符设备驱动、块设备驱动</p>
+<h5 id="3-2-14-多处理器"><a href="#3-2-14-多处理器" class="headerlink" title="3.2.14 多处理器"></a>3.2.14 多处理器</h5><p>多处理器系统通常实现为SMP系统（symmetric multiprocessing，所有CPU被平等对待）。在SMP系统上，通常是NUMA（non-uniform memory access，非一致内存访问），这对性能也是一种挑战。</p>
+<p><strong>IPIs</strong></p>
+<p>SMP系统中，CPU之间也需要coordinate（同步协调），通过inter-processor interrupt（IPI）（也叫作<em>SMP call</em>或者<em>CPU cross call</em>）来实现，IPIs也用于抢占实现。</p>
+<h5 id="3-2-15-抢占"><a href="#3-2-15-抢占" class="headerlink" title="3.2.15 抢占"></a>3.2.15 抢占</h5><p>内核允许更高优先级的用户级进程来抢占内核并执行。</p>
+<p>支持抢占的内核成为完全抢占的（<em>fully preemptible</em>），尽管其中有些代码还是不能被中断。</p>
+<p>Linux还支持自愿内核抢占（<em>voluntary kernel preemption</em>），这能避免完全抢占的复杂性。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">CONFIG_PREEMPT_VOLUNTRAY ---- 自愿内核抢占</span></span><br><span class="line"><span class="meta">#</span><span class="bash">CONFIG_PREEMPT ---- 允许所有内核代码（除了部分特殊段）开启抢占</span></span><br><span class="line"><span class="meta">#</span><span class="bash">CONFIG_PREEMPT_NONE ---- 关闭抢占</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="3-2-16-资源管理"><a href="#3-2-16-资源管理" class="headerlink" title="3.2.16 资源管理"></a>3.2.16 资源管理</h5><p>比如通过<code>nice()</code>设置CPU优先级，通过<code>unlimit(1)</code>限制资源等。</p>
+<p>Linux中，<strong>control group（cgroup）</strong>对于云计算当中管理OS虚拟化的性能影响很重要。</p>
+<h5 id="3-2-17-可观察性"><a href="#3-2-17-可观察性" class="headerlink" title="3.2.17 可观察性"></a>3.2.17 可观察性</h5><h4 id="3-4-Linux-kernel"><a href="#3-4-Linux-kernel" class="headerlink" title="3.4 Linux kernel"></a>3.4 Linux kernel</h4><h5 id="3-4-1-内核开发"><a href="#3-4-1-内核开发" class="headerlink" title="3.4.1 内核开发"></a>3.4.1 内核开发</h5><p>linux内核开发过程中尤其和性能相关的关键点：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU scheduling classes</td>
+<td></td>
+</tr>
+<tr>
+<td>I/O scheduling classes</td>
+<td></td>
+</tr>
+<tr>
+<td>TCP congestion algorithms</td>
+<td>TCP拥塞算法</td>
+</tr>
+<tr>
+<td>Overcommit</td>
+<td>Along with the out-of-memory (OOM) killer, this is a strategy for doing more with less main memory</td>
+</tr>
+<tr>
+<td>Futex (2.5.7)</td>
+<td>fast user-space mutex, this is used to provide high-performing userlevel  synchronization primitives</td>
+</tr>
+<tr>
+<td>Huge pages (2.5.36)</td>
+<td></td>
+</tr>
+<tr>
+<td>OProfile (2.5.43)</td>
+<td>A system profiler for studying CPU usage and other events, for both the kernel and applications.</td>
+</tr>
+<tr>
+<td>RCU (2.5.43)</td>
+<td></td>
+</tr>
+<tr>
+<td>epoll (2.5.46)</td>
+<td></td>
+</tr>
+<tr>
+<td>Modular I/O scheduling (2.6.10)</td>
+<td>Linux provides pluggable scheduling algorithms for scheduling block device I/O</td>
+</tr>
+<tr>
+<td>DebugFS (2.6.11)</td>
+<td></td>
+</tr>
+<tr>
+<td>Cpusets (2.6.12)</td>
+<td>exclusive CPU grouping for processes</td>
+</tr>
+<tr>
+<td>Voluntary kernel preemption (2.6.13)</td>
+<td></td>
+</tr>
+<tr>
+<td>inotify (2.6.13)</td>
+<td>A framework for monitoring file system events</td>
+</tr>
+<tr>
+<td>blktrace (2.6.17)</td>
+<td>A framework and tool for tracing block I/O events（后来迁移到了tracepoints）</td>
+</tr>
+<tr>
+<td>splice (2.6.17)</td>
+<td>A system call to move data quickly between file descriptors and pipes, without a trip through user-space</td>
+</tr>
+<tr>
+<td>Delay accounting (2.6.18)</td>
+<td>Tracks per-task delay states</td>
+</tr>
+<tr>
+<td>IO accounting (2.6.20)</td>
+<td>Measures various storage I/O statistics per process</td>
+</tr>
+<tr>
+<td>DynTicks (2.6.21)</td>
+<td>Dynamic ticks allow the kernel timer interrupt (clock) to not fire during idle, saving CPU resources and power</td>
+</tr>
+<tr>
+<td>SLUB (2.6.22)</td>
+<td>new and simplified version of the slab memory allocator</td>
+</tr>
+<tr>
+<td>CFS (2.6.23)</td>
+<td>Completely fair scheduler</td>
+</tr>
+<tr>
+<td>cgroups (2.6.24)</td>
+<td>Control groups allow resource usage to be measured and limited for groups of processes</td>
+</tr>
+<tr>
+<td>TCP LRO (2.6.24)</td>
+<td></td>
+</tr>
+<tr>
+<td>latencytop (2.6.25)</td>
+<td>观察延时的工具</td>
+</tr>
+<tr>
+<td>Tracepoints (2.6.28)</td>
+<td></td>
+</tr>
+<tr>
+<td>perf (2.6.31)</td>
+<td>Linux Performance Events (perf) is a set of tools for performance observability, including CPU performance counter profiling and static and dynamic tracing</td>
+</tr>
+<tr>
+<td>No BKL (2.6.37)</td>
+<td>移除了linux内核中的大内核锁</td>
+</tr>
+<tr>
+<td>KVM</td>
+<td>The Kernel-based Virtual Machine (KVM) technology <br />KVM allows virtual operating system instances to be created, running their own kernel</td>
+</tr>
+<tr>
+<td>BPF JIT (3.0)</td>
+<td>A Just-In-Time (JIT) compiler for the Berkeley Packet Filter (BPF) to improve packet filtering performance by compiling BPF bytecode to native instructions</td>
+</tr>
+<tr>
+<td>CFS bandwidth control (3.2)</td>
+<td>A CPU scheduling algorithm that supports CPU quotas and throttling</td>
+</tr>
+<tr>
+<td>TCP anti-bufferbloat (3.3+)</td>
+<td>为了对抗bufferbloat问题，个人理解TCP缓存臃肿，缓冲区越来越大不是好事，转发设备就变成了存储设备，延时越来越长</td>
+</tr>
+<tr>
+<td>uprobes (3.5)</td>
+<td>The infrastructure for dynamic tracing of user-level software, used by other tools (perf, SystemTap, etc.).</td>
+</tr>
+<tr>
+<td>TCP early retransmit (3.5)</td>
+<td></td>
+</tr>
+<tr>
+<td>TFO (3.6, 3.7, 3.13)</td>
+<td>TCP Fast Open (TFO) can reduce the TCP three-way handshake to a single SYN packet with a TFO cookie, improving performance</td>
+</tr>
+<tr>
+<td>NUMA balancing (3.8+)</td>
+<td></td>
+</tr>
+<tr>
+<td>SO_REUSEPORT (3.9)</td>
+<td>A socket option to allow multiple listener sockets to bind to the same port, improving multi-threaded scalability；原来这个功能linux-3.9才实现的哇</td>
+</tr>
+<tr>
+<td>SSD cache devices (3.9)</td>
+<td>Device mapper support for an SSD device to be used as a cache for a slower rotating disk</td>
+</tr>
+<tr>
+<td>bcache (3.10)</td>
+<td>An SSD cache technology for the block interface</td>
+</tr>
+<tr>
+<td>TCP TLP (3.10)</td>
+<td>TCP Tail Loss Probe (TLP) is a scheme to avoid costly timer-based retransmits by sending new data or the last unacknowledged segment after a shorter probe timeout, to trigger faster recovery</td>
+</tr>
+<tr>
+<td>NO_HZ_FULL (3.10, 3.12)</td>
+<td>Also known as timerless multitasking or a tickless kernel, this allows non-idle threads to run without clock ticks, avoiding workload perturbations</td>
+</tr>
+<tr>
+<td>Multiqueue block I/O (3.13)</td>
+<td>This provides per-CPU I/O submission queues rather than a single request queue</td>
+</tr>
+<tr>
+<td>SCHED_DEADLINE (3.14)</td>
+<td></td>
+</tr>
+<tr>
+<td>TCP autocorking (3.14)</td>
+<td></td>
+</tr>
+<tr>
+<td>MCS locks and qspinlocks (3.15)</td>
+<td>Efficient kernel locks</td>
+</tr>
+<tr>
+<td>Extended BPF (3.18+)</td>
+<td>An in-kernel execution environment for running secure kernelmode programs</td>
+</tr>
+<tr>
+<td>Overlayfs (3.18)</td>
+<td>A union mount file system included in Linux. It creates virtual file systems on top of others, which can also be modified without changing the first. 容器中使用较多</td>
+</tr>
+<tr>
+<td>DCTCP (3.18)</td>
+<td>The Data Center TCP (DCTCP) congestion control algorithm</td>
+</tr>
+<tr>
+<td>DAX (4.0)</td>
+<td>Direct Access (DAX) allows user space to read from persistent-memory storage devices directly, without buffer overheads</td>
+</tr>
+<tr>
+<td>Queued spinlocks (4.2)</td>
+<td>Offering better performance under contention</td>
+</tr>
+<tr>
+<td>TCP lockless listener (4.4)</td>
+<td>The TCP listener fast path became lockless（和TCP快转有关？）</td>
+</tr>
+<tr>
+<td>cgroup v2 (4.5, 4.15)</td>
+<td></td>
+</tr>
+<tr>
+<td>epoll scalability (4.5)</td>
+<td></td>
+</tr>
+<tr>
+<td>KCM (4.6)</td>
+<td></td>
+</tr>
+<tr>
+<td>TCP NV (4.8)</td>
+<td></td>
+</tr>
+<tr>
+<td>XDP (4.8, 4.18)</td>
+<td>eXpress Data Path (XDP) is a BPF-based programmable fast path for high-performance networking</td>
+</tr>
+<tr>
+<td>TCP BBR (4.9)</td>
+<td>Bottleneck Bandwidth and RTT (BBR) is a TCP congestion control algorithm that provides improved latency and throughput over networks suffering packet loss and bufferbloat. 谷歌提出的新型拥塞控制算法BBR</td>
+</tr>
+<tr>
+<td>Hardware latency tracer (4.9)</td>
+<td>An Ftrace tracer that can detect system latency caused by hardware and firmware, including system management interrupts (SMIs)</td>
+</tr>
+<tr>
+<td>perf c2c (4.10)</td>
+<td>The cache-to-cache (c2c) perf subcommand can help identify CPU cache performance issues, including false sharing</td>
+</tr>
+<tr>
+<td>Intel CAT (4.10)</td>
+<td>Support for Intel Cache Allocation Technology (CAT) allowing tasks to have dedicated CPU cache space. This can be used by containers to help with the noisy neighbor problem</td>
+</tr>
+<tr>
+<td>Multiqueue I/O schedulers: BPQ, Kyber (4.12)</td>
+<td></td>
+</tr>
+<tr>
+<td>Kernel TLS (4.13, 4.17)</td>
+<td></td>
+</tr>
+<tr>
+<td>MSG_ZEROCOPY (4.14)</td>
+<td>A send(2) flag to avoid extra copies of packet bytes between an application and the network interface</td>
+</tr>
+<tr>
+<td>PCID (4.14)</td>
+<td>Linux added support for process-context ID (PCID), a processor MMU feature to help avoid TLB flushes on context switches</td>
+</tr>
+<tr>
+<td>PSI (4.20, 5.2)</td>
+<td>Pressure stall information (PSI) is a set of new metrics to show time spent stalled on CPU, memory, or I/O; 压力阻塞信息统计</td>
+</tr>
+<tr>
+<td>TCP EDT (4.20)</td>
+<td>The TCP stack switched to Early Departure Time (EDT)</td>
+</tr>
+<tr>
+<td>Multi-queue I/O (5.0)</td>
+<td>Multi-queue block I/O schedulers became the default in 5.0, and classic schedulers were removed.</td>
+</tr>
+<tr>
+<td>UDP GRO (5.0)</td>
+<td>UDP Generic Receive Offload (GRO) improves performance by allowing packets to be aggregated by the driver and card and passed up stack</td>
+</tr>
+<tr>
+<td>io_uring (5.1)</td>
+<td>A generic asynchronous interface for fast communication between applications and the kernel, making use of shared ring buffers. Primary uses include fast disk and network I/O</td>
+</tr>
+<tr>
+<td>MADV_COLD, MADV_PAGEOUT (5.4)</td>
+<td>These madvise(2) flags are hints to the kernel that memory is needed but not anytime soon</td>
+</tr>
+<tr>
+<td>MultiPath TCP (5.6)</td>
+<td>Multiple network links (e.g., 3G and WiFi) can be used to improve the performance and reliability of a single TCP connection</td>
+</tr>
+<tr>
+<td>Boot-time tracing (5.6)</td>
+<td>Allows Ftrace to trace the early boot process</td>
+</tr>
+<tr>
+<td>Thermal pressure (5.7)</td>
+<td>The scheduler accounts for thermal throttling to make better placement decisions. 这个是什么特性？和调度器性能有关</td>
+</tr>
+<tr>
+<td>perf flame graphs (5.8)</td>
+<td>perf火焰图</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>Linux中和性能较为相关的主题介绍：systemd，KPTI，extended BPF。</p>
+<h5 id="3-4-2-systemd"><a href="#3-4-2-systemd" class="headerlink" title="3.4.2 systemd"></a>3.4.2 systemd</h5><p>systemd包含的两个重要功能：</p>
+<ul>
+<li>包含依赖关系感知的服务启动</li>
+<li>服务时间统计</li>
+</ul>
+<p>性能相关的一个方向就是系统启动时间，systemd可以显示哪里可以调教启动时间</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# systemd-analyze </span><br><span class="line">Startup finished in 7.197s (kernel) + 1min 32.950s (userspace) = 1min 40.147s </span><br><span class="line">graphical.target reached after 19.606s in userspace</span><br><span class="line">root@ubuntu:~# </span><br><span class="line">root@ubuntu:~# systemd-analyze critical-chain</span><br><span class="line">The time when unit became active or started is printed after the &quot;@&quot; character.</span><br><span class="line">The time the unit took to start is printed after the &quot;+&quot; character.</span><br><span class="line"></span><br><span class="line">graphical.target @19.606s</span><br><span class="line">└─multi-user.target @19.606s</span><br><span class="line">  └─kerneloops.service @19.567s +39ms</span><br><span class="line">    └─network-online.target @19.552s</span><br><span class="line">      └─vmware-tools.service @10.629s +8.922s</span><br><span class="line">        └─basic.target @10.414s</span><br><span class="line">          └─sockets.target @10.414s</span><br><span class="line">            └─snapd.socket @10.412s +1ms</span><br><span class="line">              └─sysinit.target @10.349s</span><br><span class="line">                └─snapd.apparmor.service @10.007s +341ms</span><br><span class="line">                  └─apparmor.service @9.259s +747ms</span><br><span class="line">                    └─local-fs.target @9.258s</span><br><span class="line">                      └─run-user-1000-gvfs.mount @45.084s</span><br><span class="line">                        └─run-user-1000.mount @44.854s</span><br><span class="line">                          └─local-fs-pre.target @3.865s</span><br><span class="line">                            └─systemd-tmpfiles-setup-dev.service @3.625s +239ms</span><br><span class="line">                              └─systemd-sysusers.service @3.286s +338ms</span><br><span class="line">                                └─systemd-remount-fs.service @3.174s +53ms</span><br><span class="line">                                  └─systemd-journald.socket @2.945s</span><br><span class="line">                                    └─system.slice @2.937s</span><br><span class="line">                                      └─-.slice @2.937s</span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以看出vmware-tools.server花费了8.922s，时间最长</span></span><br><span class="line"></span><br><span class="line"><span class="meta"> #</span><span class="bash"> blame子命令中显示了启动时间的由长到短的排序</span></span><br><span class="line">root@ubuntu:~# systemd-analyze blame</span><br><span class="line">54.409s apt-daily.service                                    </span><br><span class="line">30.781s fwupd-refresh.service                                </span><br><span class="line"> 8.922s vmware-tools.service                                 </span><br><span class="line"> 8.457s networkd-dispatcher.service                          </span><br><span class="line"> 8.066s snapd.service                                        </span><br><span class="line"> 7.526s man-db.service                                       </span><br><span class="line"> 5.914s dev-sda5.device                                      </span><br><span class="line"> 5.505s udisks2.service                                      </span><br><span class="line"> 5.248s NetworkManager.service                               </span><br><span class="line"> 5.047s accounts-daemon.service                              </span><br><span class="line"> 4.869s polkit.service                                       </span><br><span class="line"> 3.258s dev-loop8.device                                     </span><br><span class="line"> 3.234s avahi-daemon.service                                 </span><br><span class="line"> 3.216s dev-loop9.device                                     </span><br><span class="line"> 3.177s dev-loop2.device                                     </span><br><span class="line"> 3.130s switcheroo-control.service</span><br><span class="line"> ...</span><br></pre></td></tr></table></figure>
+
+
+
+<p><code>systemd-analyze plot &gt; xxx.svg</code>生成启动的时间详细图表</p>
+<img src="https://raw.githubusercontent.com/junixcn/images/master/aaa-1609145924143.svg" alt="startup"  />
+
+
+
+<h5 id="3-4-3-KPTI"><a href="#3-4-3-KPTI" class="headerlink" title="3.4.3 KPTI"></a>3.4.3 KPTI</h5><p>KPTI(Kernel PageTable Isolation)全称内核页表隔离。KPTI是由K<a target="_blank" rel="noopener" href="http://www.elecfans.com/tags/ai/">AI</a>SER补丁修改而来。之前，进程地址空间被分成了内核地址空间和用户地址空间。其中内核地址空间映射到了整个物理地址空间，而用户地址空间只能映射到指定的物理地址空间。内核地址空间和用户地址空间共用一个页全局目录表(PGD表示进程的整个地址空间) 。meltdown漏洞就恰恰利用了这一点。攻击者在非法访问内核地址和<a target="_blank" rel="noopener" href="http://www.elecfans.com/tags/cpu/">CPU</a>处理异常的时间窗口，通过访存微指令获取内核数据。为了彻底防止用户程序获取内核数据，可以令内核地址空间和用户地址空间使用两组页表集(也就是使用两个PGD)。</p>
+<p><strong>KPTI对性能有很大影响</strong>。在上下文切换中带来TLB冲刷，影响性能。linux后来引进了PCID，在某些场景下可以避免TLB冲刷。</p>
+<h5 id="3-4-5-extended-BPF"><a href="#3-4-5-extended-BPF" class="headerlink" title="3.4.5 extended BPF"></a>3.4.5 extended BPF</h5><p>BPF程序运行在内核态。</p>
+<p>BPF bytecode must first pass through a verifier that checks for safety, ensuring that the BPF program will not crash or corrupt the kernel. It may also use a BPF Type Format (BTF) system for understanding data types and structures. BPF programs can output data via a perf ring buffer, an efficient way to emit per-event data, or via maps, which are suited for statistics.</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201228171811258.png" alt="image-20201228171811258"></p>
+<h3 id="4-观察工具"><a href="#4-观察工具" class="headerlink" title="4. 观察工具"></a>4. 观察工具</h3><h4 id="4-1-tool-coverage"><a href="#4-1-tool-coverage" class="headerlink" title="4.1 tool coverage"></a>4.1 tool coverage</h4><p>工具功能总览图：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227130157154.png" alt="Linux-workload-observability-tools"></p>
+<h5 id="4-1-1-static-performance-tools"><a href="#4-1-1-static-performance-tools" class="headerlink" title="4.1.1 static performance tools"></a>4.1.1 static performance tools</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227132507875.png" alt="image-20201227132507875"></p>
+<h5 id="4-1-2-crisis-tools"><a href="#4-1-2-crisis-tools" class="headerlink" title="4.1.2 crisis tools"></a>4.1.2 crisis tools</h5><h4 id="4-2-tools-type"><a href="#4-2-tools-type" class="headerlink" title="4.2 tools type"></a>4.2 tools type</h4><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227142423386.png" alt="image-20201227142423386"></p>
+<h5 id="4-2-1-计数器类型"><a href="#4-2-1-计数器类型" class="headerlink" title="4.2.1 计数器类型"></a>4.2.1 计数器类型</h5><p>Kernels maintain various counters for providing system statistics. They are usually implemented<br>as unsigned integers that are incremented when events occur.</p>
+<p><strong>系统级别的工具</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vmstat</td>
+<td>Virtual and physical memory statistics, system-wide</td>
+<td></td>
+</tr>
+<tr>
+<td>mpstat</td>
+<td>Per-CPU usage</td>
+<td></td>
+</tr>
+<tr>
+<td>iostat</td>
+<td>Per-disk I/O usage, reported from the block device interface</td>
+<td></td>
+</tr>
+<tr>
+<td>nstat</td>
+<td>TCP/IP stack statistics</td>
+<td></td>
+</tr>
+<tr>
+<td>sar</td>
+<td>Various statistics; can also archive them for historical reporting</td>
+<td></td>
+</tr>
+</tbody></table>
+<p><strong>进程级别的工具</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ps</td>
+<td>Shows process status, shows various process statistics, including memory and CPU usage</td>
+</tr>
+<tr>
+<td>top</td>
+<td>Shows top processes, sorted by CPU usage or another statistic.</td>
+</tr>
+<tr>
+<td>pmap</td>
+<td>Lists process memory segments with usage statistics</td>
+</tr>
+</tbody></table>
+<h5 id="4-2-2-分析类型"><a href="#4-2-2-分析类型" class="headerlink" title="4.2.2 分析类型"></a>4.2.2 分析类型</h5><p><strong>系统级别</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>perf</td>
+<td>The standard Linux profiler, which includes profiling subcommands</td>
+</tr>
+<tr>
+<td>profile</td>
+<td>A BPF-based CPU profiler from the BCC repository (covered in Chapter 15, BPF) that frequency counts stack traces in kernel context</td>
+</tr>
+<tr>
+<td>Intel VTune Amplifier XE</td>
+<td>Linux and Windows profiling, with a graphical interface including source browsing</td>
+</tr>
+</tbody></table>
+<p><strong>进程级别</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>gprof</td>
+<td>The GNU profiling tool, which analyzes profiling information added by compilers (e.g., gcc -pg).</td>
+</tr>
+<tr>
+<td>cachegrind</td>
+<td>A tool from the valgrind toolkit, can profile hardware cache usage (and more) and visualize profiles using kcachegrind</td>
+</tr>
+<tr>
+<td>Java Flight Recorder（JER）</td>
+<td>Programming languages often have their own special-purpose profilers that can inspect language context. For example, JFR for Java</td>
+</tr>
+</tbody></table>
+<h5 id="4-2-3-追踪工具"><a href="#4-2-3-追踪工具" class="headerlink" title="4.2.3 追踪工具"></a>4.2.3 追踪工具</h5><p><strong>系统级别</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>tcpdump</td>
+<td>抓包工具</td>
+</tr>
+<tr>
+<td>biosnoop</td>
+<td>Block I/O tracing (uses BCC or bpftrace)</td>
+</tr>
+<tr>
+<td>execsnoop</td>
+<td>New processes tracing (uses BCC or bpftrace)</td>
+</tr>
+<tr>
+<td>perf</td>
+<td>The standard Linux profiler, can also trace events</td>
+</tr>
+<tr>
+<td>perf trace</td>
+<td>A special perf subcommand that traces system calls system-wide</td>
+</tr>
+<tr>
+<td>ftrace</td>
+<td>The Linux built-in tracer</td>
+</tr>
+<tr>
+<td>BCC</td>
+<td>A BPF-based tracing library and toolkit</td>
+</tr>
+<tr>
+<td>bpftrace</td>
+<td>A BPF-based tracer (bpftrace(8)) and toolkit</td>
+</tr>
+</tbody></table>
+<p><strong>进程级别</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>strace</td>
+<td>System call tracing</td>
+</tr>
+<tr>
+<td>gdb</td>
+<td>A source-level debugger</td>
+</tr>
+</tbody></table>
+<h5 id="4-2-4-监控"><a href="#4-2-4-监控" class="headerlink" title="4.2.4 监控"></a>4.2.4 监控</h5><p>monitor工具一般记录保存statistics，以便分析使用。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>sar</td>
+<td>Collect, report, or save system activity information</td>
+</tr>
+<tr>
+<td>snmp</td>
+<td>Devices and operating systems can support SNMP and in some cases provide it by default, avoiding the need to install third-party agents or exporters</td>
+</tr>
+<tr>
+<td>agents</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h4 id="4-3-观察的资源"><a href="#4-3-观察的资源" class="headerlink" title="4.3 观察的资源"></a>4.3 观察的资源</h4><p>linux可供观测的资源，最主要的来源就是<code>/proc</code>和<code>/sys</code>两个目录。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227152620579.png" alt="image-20201227152620579"></p>
+<p>linux跟踪资源汇总</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227152424406.png" alt="image-20201227152424406"></p>
+<h5 id="4-3-1-proc文件系统"><a href="#4-3-1-proc文件系统" class="headerlink" title="4.3.1 /proc文件系统"></a>4.3.1 /proc文件系统</h5><p>/proc is dynamically created by the kernel and is not backed by storage devices (it runs inmemory). It is mostly read-only, providing statistics for observability tools. Some files are writeable, for controlling process and kernel behavior.</p>
+<p><strong>进程级别的statistics</strong></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227153233620.png" alt="image-20201227153233620"></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>limits</td>
+<td>实际资源限制</td>
+</tr>
+<tr>
+<td>maps</td>
+<td>映射内存区域</td>
+</tr>
+<tr>
+<td>sched</td>
+<td>CPU调度器的统计数据</td>
+</tr>
+<tr>
+<td>schedstat</td>
+<td>获取到CPU运行时间、延时和时间片（runtime、latency、time slice）</td>
+</tr>
+<tr>
+<td>smaps</td>
+<td>映射内存区域的使用统计</td>
+</tr>
+<tr>
+<td>stat</td>
+<td>进程状态和统计数据，包括总体CPU和内存使用情况</td>
+</tr>
+<tr>
+<td>statm</td>
+<td>以page为单位的内存使用统计</td>
+</tr>
+<tr>
+<td>status</td>
+<td>stat和statm的信息，用户可读</td>
+</tr>
+<tr>
+<td>fd</td>
+<td>（打开的）文件符号链接目录</td>
+</tr>
+<tr>
+<td>cgroup</td>
+<td>cgroup组员信息</td>
+</tr>
+<tr>
+<td>task</td>
+<td>每个线程的详细数据</td>
+</tr>
+</tbody></table>
+<p><strong>系统相关的statistics</strong></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227154415789.png" alt="image-20201227154415789"></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cpuinfo</td>
+<td>物理处理器信息，包括每个虚拟CPU、厂商名、时钟速率、缓存大小</td>
+</tr>
+<tr>
+<td>diskstats</td>
+<td>所有的磁盘的I/O统计数据</td>
+</tr>
+<tr>
+<td>interrupts</td>
+<td>每个CPU的中断统计</td>
+</tr>
+<tr>
+<td>loadavg</td>
+<td>负载平均值</td>
+</tr>
+<tr>
+<td>meminfo</td>
+<td>系统内存使用情况breakdown</td>
+</tr>
+<tr>
+<td>net/dev</td>
+<td>网络接口汇总</td>
+</tr>
+<tr>
+<td>net/netstat</td>
+<td>系统级networking数据统计</td>
+</tr>
+<tr>
+<td>net/tcp</td>
+<td>活动的TCP套接字信息</td>
+</tr>
+<tr>
+<td>pressure</td>
+<td>Pressure stall information (PSI) files；cpu、io、memory的压力阻塞记录，分析比如OOM问题</td>
+</tr>
+<tr>
+<td>schedstat</td>
+<td>系统级别的CPU调度统计</td>
+</tr>
+<tr>
+<td>self</td>
+<td>当前进程的符号链接</td>
+</tr>
+<tr>
+<td>slabinfo</td>
+<td>内核slab缓存分配使用情况</td>
+</tr>
+<tr>
+<td>stat</td>
+<td>内核和系统的资源统计汇总：CPUs、磁盘、页表、swap、进程</td>
+</tr>
+<tr>
+<td>zoneinfo</td>
+<td>memory zone信息</td>
+</tr>
+</tbody></table>
+<h5 id="4-3-2-sys文件系统"><a href="#4-3-2-sys文件系统" class="headerlink" title="4.3.2 /sys文件系统"></a>4.3.2 /sys文件系统</h5><p>不同于/proc系统，/sys一开始是为统计device driver statistics设计的，不过现在也发展到全面统计数据。</p>
+<h5 id="4-3-4-延时核算"><a href="#4-3-4-延时核算" class="headerlink" title="4.3.4 延时核算"></a>4.3.4 延时核算</h5><p>内核开启<code>CONFIG_TASK_DELAY_ACCT</code>后，就会为每个任务统计以下数据：</p>
+<ul>
+<li>Scheduler latency: 调度延时，等待获取到CPU的时间</li>
+<li> Block I/O：块I/O，等待块I/O完成</li>
+<li>Swapping：交换，等待换页（内存压力）</li>
+<li>Memory reclaim：内存回收，等待内存回收例程</li>
+</ul>
+<p>内核Documentation/accounting/delay-accounting.txt中帮助文档，且有个例子tools/accounting/getdelays.c</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227164759571.png" alt="image-20201227164759571"></p>
+<p>这是在一个高负载的系统上采集的数据，CPU延时很严重。</p>
+<h5 id="4-3-4-netlink"><a href="#4-3-4-netlink" class="headerlink" title="4.3.4 netlink"></a>4.3.4 netlink</h5><p>netlink机制，用户态和内核态通信的方法之一，genetlink更方便扩展。</p>
+<h5 id="4-3-5-tracepoints"><a href="#4-3-5-tracepoints" class="headerlink" title="4.3.5 tracepoints"></a>4.3.5 tracepoints</h5><p>Tracepoints are hard-coded instrumentation points placed at logical locations in kernel code。</p>
+<p>举例：</p>
+<p>在系统调用的start和end处、调度事件、文件系统操作、以及磁盘I/O等地方都有tarcepoints。有些tracepoint需要开启内核支持，比如CONFIG_RCU_TRACE用于支持rcu tracepoints。</p>
+<p><strong>tracepoint overhead（跟踪点的开销）</strong></p>
+<p>激活了tracepoints后，会增大CPU开销、文件记录操作开销等，这些额外的开销是否干扰到测试关心的性能数据，具体情况具体分析。</p>
+<h5 id="4-3-6-kprobes"><a href="#4-3-6-kprobes" class="headerlink" title="4.3.6 kprobes"></a>4.3.6 kprobes</h5><p>kprobes (short for kernel probes) is a Linux kernel event source for tracers based on dynamic instrumentation。</p>
+<p>kprobes可以跟踪任一内核函数或指令。</p>
+<p>kprobe如何使用：标准做法是在正在运行的内核代码中修改指令以插入我们想要的监测点；测量函数入口时可以使用已有的ftrace功能，减少额外overhead开销。</p>
+<p>kprobes和tracepoints对比：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201227165948578.png" alt="image-20201227165948578"></p>
+<p>kprobe可观察函数入参，kretprobes观察函数返回值</p>
+<h5 id="4-3-7-uprobes"><a href="#4-3-7-uprobes" class="headerlink" title="4.3.7 uprobes"></a>4.3.7 uprobes</h5><p>uprobes (user-space probes) are similar to kprobes, but for user-space.</p>
+<h5 id="4-3-8-USDT"><a href="#4-3-8-USDT" class="headerlink" title="4.3.8 USDT"></a>4.3.8 USDT</h5><p>User-level statically-defined tracing (USDT) is the user-space version of tracepoints</p>
+<h5 id="4-3-9-Hardware-Counters（PMCs）"><a href="#4-3-9-Hardware-Counters（PMCs）" class="headerlink" title="4.3.9 Hardware Counters（PMCs）"></a>4.3.9 Hardware Counters（PMCs）</h5><p>The processor and other devices commonly support <strong>hardware counters</strong> for observing activity. The main source are the processors, where they are commonly called <strong>performance monitoring counters (PMCs)</strong>. They are known by other names as well: <strong>CPU performance counters (CPCs)</strong>, <strong>performance instrumentation counters (PICs)</strong>, and <strong>performance monitoring unit events (PMU events)</strong>. These all refer to the same thing: <strong>programmable hardware registers on the processor that provide low-level performance information at the CPU cycle level</strong>.</p>
+<p>处理器上的可编程硬件寄存器，可提供CPU循环级别的系统性能信息；</p>
+<p>PMC面临的挑战：</p>
+<ul>
+<li>溢流式采样的精度问题</li>
+<li>云环境中的可用性问题</li>
+</ul>
+<h5 id="4-3-10-其他观测资源"><a href="#4-3-10-其他观测资源" class="headerlink" title="4.3.10 其他观测资源"></a>4.3.10 其他观测资源</h5><p>MSR: model-specific registers；</p>
+<p>ptrace:系统调用，被gdb用于调试，被strace用于跟踪</p>
+<p>netfilter conntrack：netfilter连接跟踪机制；</p>
+<h4 id="4-4-sar工具"><a href="#4-4-sar工具" class="headerlink" title="4.4 sar工具"></a>4.4 sar工具</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 如何开启sysstat统计？</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> vi /etc/default/sysstat</span></span><br><span class="line">Enable=&quot;true&quot;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# sar -u -n TCP 3 3</span><br><span class="line">Linux 5.4.0-58-generic (ubuntu) 	2020年12月28日 	_x86_64_	(2 CPU)</span><br><span class="line"></span><br><span class="line">18时05分02秒     CPU     %user     %nice   %system   %iowait    %steal     %idle</span><br><span class="line">18时05分05秒     all     11.59      0.00     38.10      0.21      0.00     50.10</span><br><span class="line"></span><br><span class="line">18时05分02秒  active/s passive/s    iseg/s    oseg/s</span><br><span class="line">18时05分05秒      3.67      0.00     15.00     19.33</span><br><span class="line"></span><br><span class="line">18时05分05秒     CPU     %user     %nice   %system   %iowait    %steal     %idle</span><br><span class="line">18时05分08秒     all      9.64      0.00     32.13      3.61      0.00     54.62</span><br><span class="line"></span><br><span class="line">18时05分05秒  active/s passive/s    iseg/s    oseg/s</span><br><span class="line">18时05分08秒      4.33      0.00     92.33     95.33</span><br><span class="line"></span><br><span class="line">18时05分08秒     CPU     %user     %nice   %system   %iowait    %steal     %idle</span><br><span class="line">18时05分11秒     all     10.82      0.00     48.12      0.22      0.00     40.84</span><br><span class="line"></span><br><span class="line">18时05分08秒  active/s passive/s    iseg/s    oseg/s</span><br><span class="line">18时05分11秒      0.33      0.00     13.67     14.33</span><br><span class="line"></span><br><span class="line">Average:        CPU     %user     %nice   %system   %iowait    %steal     %idle</span><br><span class="line">Average:        all     10.67      0.00     39.19      1.39      0.00     48.74</span><br><span class="line"></span><br><span class="line">Average:     active/s passive/s    iseg/s    oseg/s</span><br><span class="line">Average:         2.78      0.00     40.33     43.00</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="4-5-tracing工具"><a href="#4-5-tracing工具" class="headerlink" title="4.5 tracing工具"></a>4.5 tracing工具</h4><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>perf</td>
+<td>Linux官方分析工具，擅长CPU分析（采样分析）和PMC统计，也能分析其他event事件</td>
+</tr>
+<tr>
+<td>ftrace</td>
+<td>Linux官方跟踪工具，可以不需要依赖运行（需要内核开启一些CONFIG）</td>
+</tr>
+<tr>
+<td>BPF</td>
+<td>Extended BPF工具，BCC,bpftrace</td>
+</tr>
+<tr>
+<td>system tap</td>
+<td>A high-level language and tracer with many tapsets (libraries) for tracing different targets. 工具stapbpf暂未研究</td>
+</tr>
+<tr>
+<td>LTTng</td>
+<td>A tracer optimized for black-box recording: optimally recording many events for later analysis</td>
+</tr>
+</tbody></table>
+<p><strong>perf用于CPU分析，ftrace用于内核代码跟踪，BCC/bpftrace用于其他任何地方（内存、文件系统、磁盘、网络以及应用程序追踪）</strong>。</p>
+<h3 id="6-CPU"><a href="#6-CPU" class="headerlink" title="6. CPU"></a>6. CPU</h3><h4 id="6-3-概念"><a href="#6-3-概念" class="headerlink" title="6.3 概念"></a>6.3 概念</h4><h5 id="6-3-1-时钟频率clock-rate"><a href="#6-3-1-时钟频率clock-rate" class="headerlink" title="6.3.1 时钟频率clock rate"></a>6.3.1 时钟频率clock rate</h5><p>时钟是一个驱动所有处理器逻辑的数字信号，每个CPU指令都可能花费一个或多个时钟周期（称为CPU周期）来执行。例如一个4GHz的CPU每秒运行40亿个时钟周期。</p>
+<h5 id="6-3-2-指令instructions"><a href="#6-3-2-指令instructions" class="headerlink" title="6.3.2 指令instructions"></a>6.3.2 指令instructions</h5><p>一个指令包括以下步骤，每个步骤都由CPU中的功能单元（functional unit）处理：</p>
+<ul>
+<li>instruction fetch 指令预取</li>
+<li>instruction decode 指令解码</li>
+<li>excute 执行</li>
+<li>memory access 内存访问</li>
+<li>register write-back 寄存次回写</li>
+</ul>
+<p>最后两步是可选的，许多指令只操作寄存器并不需要访问内存。</p>
+<p>每个步骤都需要<strong>至少一个clock cycle时钟周期</strong>来执行。内存访问经常是最慢的，因为它通常需要几十个时钟周期读或写主存，在此期间指令执行陷入停滞，这些周期叫stall cycles（停滞周期），CPU缓存存在的必要性：它极大降低内存访问需要的周期数。</p>
+<h5 id="6-3-3-指令流水线instruction-pipeline"><a href="#6-3-3-指令流水线instruction-pipeline" class="headerlink" title="6.3.3 指令流水线instruction pipeline"></a>6.3.3 指令流水线instruction pipeline</h5><p>指令流水线通过同时执行不同指令的不同部分来提供效率。</p>
+<p><strong>branch prediction</strong></p>
+<p>分支预测。</p>
+<p>Modern processors can perform out-of-order execution of the pipeline, where later instructions<br>can be completed while earlier instructions are stalled, improving instruction throughput. However, <strong>conditional branch instructions(条件分支指令）</strong> pose a problem. Branch instructions jump execution to a different instruction, and conditional branches do so based on a test. With conditional branches, the processor does not know what the later instructions will be. As an optimization, processors often implement branch prediction, where they will guess the outcome of the test and begin processing the outcome instructions. <strong>If the guess later proves to be wrong</strong>, the progress in the instruction pipeline must be discarded, <strong>hurting performance</strong>.</p>
+<h5 id="6-3-4-指令宽度instruction-width"><a href="#6-3-4-指令宽度instruction-width" class="headerlink" title="6.3.4 指令宽度instruction width"></a>6.3.4 指令宽度instruction width</h5><p>同一种类型的functional unit（功能单元）可以有好几个，这样每个时钟周期里可以处理更多的指令。这种CPU架构称为superscalar（超标量），通常和pipeline（流水线）一起使用提高指令吞吐量。</p>
+<p>instruction width（指令宽度）是指同时处理的目标指令数量。现代处理器一般宽度为3或者4，意味着每个clock cycle里最多完成3~4个指令。当然如何执行取决于处理器本身， 不同环节有不同数量的功能单元处理指令。</p>
+<h5 id="6-3-5-指令长度instruction-size"><a href="#6-3-5-指令长度instruction-size" class="headerlink" title="6.3.5 指令长度instruction size"></a>6.3.5 指令长度instruction size</h5><p>对于处理器而言，指令长度可变的。比如x86，复杂指令集（complex instruction set computer，CISC），最大允许15Bytes的指令长度；ARM，精简指令集（reduced instruction set computer，RISC），在4字节对齐的AArch32/A32处理器上指令长度是4Bytes，ARM Thumb指令集中则是2-4字节。</p>
+<h5 id="6-3-6-SMT"><a href="#6-3-6-SMT" class="headerlink" title="6.3.6 SMT"></a>6.3.6 SMT</h5><p>simultaneous multiprocessing（同步多线程），利用超标量架构和硬件多线程技术来达到一个时钟周期里在单个CPU上同时处理多个线程的指令。</p>
+<p>实例：intel超线程技术，通常一个核上支持2个硬件线程；POWER8，一个核上支持8个硬件线程。</p>
+<p>每个硬件线程的性能与单独的CPU内核不同，并且取决于在工作量上。 为了避免性能问题，内核可能会将CPU负载分散到各个内核中这样每个内核上只有一个硬件线程处于繁忙状态，从而避免了硬件线程争用。停滞周期繁重（低IPC）的工作负载也可能比那些工作负载具有更好的性能。指令繁重（高IPC），因为停顿周期减少了核心竞争。</p>
+<h5 id="6-3-7-IPC-CPI"><a href="#6-3-7-IPC-CPI" class="headerlink" title="6.3.7 IPC,CPI"></a>6.3.7 IPC,CPI</h5><p>instructions per cycle，IPC，每周期指令数。衡量CPU使用率的一个很重要的高级指标。</p>
+<p>cycles per instruction，CPI，每指令周期数，IPC的倒数。IPC经常用于Linux社区以及perf分析中，CPI通常被intel及其他地方所用。</p>
+<p>低IPC意味着CPU经常陷入停滞，通常是在访问内存。</p>
+<p>内存访问密集的负载，可以通过使用更快的内存（DRAM）来提高性能、提高内存本地行（软件配置）或者减少内存I/O数量。即使使用更高频率的CPU可能并不能达到提升预期的性能目标，因为CPU还是要等待内存I/O完成而花费同样的时间，更快的CPU意味着更多的停滞周期，而指令完成速率不变。</p>
+<p>IPC只是代表指令处理的效率，不是指令本身的效率。</p>
+<h5 id="6-3-8-使用率"><a href="#6-3-8-使用率" class="headerlink" title="6.3.8 使用率"></a>6.3.8 使用率</h5><p>CPU使用率是指一段时间内CPU实例忙于工作的时间比例百分比。</p>
+<p>如何计算？一段时间内CPU未运行内核idle线程，在运行其他比如用户应用线程、其他内核线程、处理中断等。</p>
+<h5 id="6-3-9-用户时间、内核时间"><a href="#6-3-9-用户时间、内核时间" class="headerlink" title="6.3.9 用户时间、内核时间"></a>6.3.9 用户时间、内核时间</h5><p>CPU花在执行用户态应用程序的代码称为用户时间，执行内核态代码的时间称为内核时间。</p>
+<h5 id="6-3-10-饱和度saturation"><a href="#6-3-10-饱和度saturation" class="headerlink" title="6.3.10 饱和度saturation"></a>6.3.10 饱和度saturation</h5><p>一个利用率100%的CPU是饱和的，这种情况下，线程需要被延时调度去等待CPU，降低了总体性能。</p>
+<h5 id="6-3-11-preemption抢占"><a href="#6-3-11-preemption抢占" class="headerlink" title="6.3.11 preemption抢占"></a>6.3.11 preemption抢占</h5><p>更高优先级的线程可以抢占CPU。</p>
+<h5 id="6-3-12-优先级反转priority-inversion"><a href="#6-3-12-优先级反转priority-inversion" class="headerlink" title="6.3.12 优先级反转priority inversion"></a>6.3.12 优先级反转priority inversion</h5><p>这是指低优先级的线程占有某个资源，反而阻塞了高优先级线程，这影响了高优先级任务的性能。</p>
+<p>这怎么解决：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229151004114.png" alt="image-20201229151004114"></p>
+<p>linux自2.6.18起提供了一个用户态的mutex支持优先级继承，用于实时负载。</p>
+<h5 id="6-3-13-多进程和多线程"><a href="#6-3-13-多进程和多线程" class="headerlink" title="6.3.13 多进程和多线程"></a>6.3.13 多进程和多线程</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229151551089.png" alt="image-20201229151551089"></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229151610920.png" alt="image-20201229151610920"></p>
+<h5 id="6-3-14-字长work-size"><a href="#6-3-14-字长work-size" class="headerlink" title="6.3.14 字长work size"></a>6.3.14 字长work size</h5><h5 id="6-3-15-编译器优化"><a href="#6-3-15-编译器优化" class="headerlink" title="6.3.15 编译器优化"></a>6.3.15 编译器优化</h5><h4 id="6-4-CPU架构"><a href="#6-4-CPU架构" class="headerlink" title="6.4 CPU架构"></a>6.4 CPU架构</h4><p>这里主要简要介绍和性能相关的架构概念，详细的CPU架构需要参考专业的书籍。 </p>
+<h5 id="6-4-1-硬件"><a href="#6-4-1-硬件" class="headerlink" title="6.4.1 硬件"></a>6.4.1 硬件</h5><p>CPU硬件包括了处理器及其子系统subsystems，以及多处理器的CPU之间的互联。</p>
+<p><strong>处理器：</strong>如下图所示典型的双核处理器架构图</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229152326542.png" alt="image-20201229152326542"></p>
+<p>control unit  控制单元，CPU核的核心功能，包含指令预取、解码、管理执行以及结果存储等。</p>
+<p>其他和性能有关的组件有：</p>
+<ul>
+<li>P-cache: Prefetch cache (per CPU core) 预取缓存</li>
+<li> W-cache: Write cache (per CPU core) 写缓存</li>
+<li> Clock: Signal generator for the CPU clock (or provided externally) 时钟</li>
+<li> Timestamp counter: For high-resolution time, incremented by the clock 时间戳计数器</li>
+<li> Microcode ROM: Quickly converts instructions to circuit signals 微代码ROM</li>
+<li> Temperature sensors: For thermal monitoring 温度传感器</li>
+<li> Network interfaces: If present on-chip (for high performance) 网络接口</li>
+</ul>
+<p><strong>P-States and C-States</strong></p>
+<p>The <strong>advanced configuration and power interface (ACPI)</strong> standard，英特尔处理器在使用，定了<em>processor performance states</em>（<strong>P-states</strong>）和<em>processor power states</em> (<strong>C-states</strong>）。</p>
+<table>
+<thead>
+<tr>
+<th>P-states</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>P0</td>
+<td>highest frequency states，部分英特尔CPU叫turbo bosst等级</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>lower frequence states</td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+</tr>
+<tr>
+<td>PN</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>P-states可以通过硬件（如处理器温度）或者软件（如内核省电模块）等来改变。通过<strong>MSRs</strong>寄存器可以查看当前状态（showboost(8)工具）。</p>
+<table>
+<thead>
+<tr>
+<th>C-states</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C0</td>
+<td>Executing. The CPU is fully on, processing instructions.</td>
+</tr>
+<tr>
+<td>C1</td>
+<td>Halts execution. Entered by the hlt instruction. Caches are maintained. Wakeup latency is the lowest from this state</td>
+</tr>
+<tr>
+<td>C1E</td>
+<td>Enhanced halt with lower power consumption (supported by some processors).</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>Halts execution. Entered by a hardware signal. This is a deeper sleep state with higher wakeup latency</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>A deeper sleep state with improved power savings over C1 and C2. The caches may maintain state, but stop snooping (cache coherency), deferring it to the OS.</td>
+</tr>
+</tbody></table>
+<p><strong>CPU caches</strong></p>
+<p>有片上（on-chip）、模上（on-die）、嵌入式（embedded）、集成（integrated）、外部（external）缓存</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229155028383.png" alt="image-20201229155028383"></p>
+<ul>
+<li>Level 1 instruction cache (I$)             一级指令缓存</li>
+<li>Level 1 data cache (D$)           一级数据缓存</li>
+<li>Translation lookaside buffer (TLB)      转译后备缓冲器</li>
+<li>Level 2 cache (E$)          二级缓存</li>
+<li>Level 3 cache (optional)             三级缓存（可选）</li>
+</ul>
+<p>Intel通常把main memory之前的最后一级缓存叫做**<em>last-level cache</em>（LLC）*<em>（可能是L3 cache也可能不是），也叫做</em>longest-latency cache*。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229155732967.png" alt="image-20201229155732967"></p>
+<p>For multicore and multithreading processors, some caches may be shared between cores and threads. For the examples in Table 6.3, all processors since the Intel Xeon 7460 (2008) have multiple Level 1 and Level 2 caches, typically one for each core (the sizes in the table refer to the per-core cache, not the total size).</p>
+<p><strong>latency延时</strong></p>
+<p>The access time for the Level 1 cache is typically a few CPU clock cycles, and for the larger Level 2 cache around a dozen clock cycles. Main memory access can take around 60 ns (around 240 cycles for a 4 GHz processor), and address translation by the MMU also adds latency.</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229160252114.png" alt="image-20201229160252114"></p>
+<p>该图是用benchmark工具plot出来的，表示了每一级缓存满了的情况下，延时的递增。</p>
+<p><strong>associativity相联性</strong></p>
+<p>相联性是定位缓存新条目范围的一种缓存特性，类型如下：</p>
+<ul>
+<li><strong>全关联</strong>：缓存可以在任意位置放置新条目。比如LRU算法可以剔除缓存中最老的项目。</li>
+<li><strong>直接映射</strong>：每个条目在缓存里只有一个有效的地方</li>
+<li><strong>组关联</strong>：通过映射（如哈希）定位缓存中的一组地址，再对这些使用另一个算法（如LRU）。</li>
+</ul>
+<p><strong>缓存行cache line</strong></p>
+<p>This is a range of bytes that are stored and transferred as a unit, 提高内存吞吐量。x86处理器典型的缓存行大小为64字节。</p>
+<p><strong>缓存一致性cache coherency</strong></p>
+<p>内存可能会同时被缓存在不同处理器的多个CPU里，当一个CPU修改了内存，所有的缓存需要知道他们的缓存拷贝已经失效，应该被丢弃，这样后续读才会取到新修改的拷贝，这个过程叫做缓存一致性，确保了CPU永远访问正确的内存状态，这也是设计可扩展多处理器系统的最大挑战之一，因为内存会被频繁修改。</p>
+<p>One of the effects of cache coherency is LLC access penalties. The following examples are provided as a rough guide :</p>
+<ul>
+<li>LLC hit, line unshared: ~40 CPU cycles</li>
+<li>LLC hit, line shared in another core: ~65 CPU cycles</li>
+<li>LLC hit, line modified in another core: ~75 CPU cycles</li>
+</ul>
+<p><strong>MMU</strong></p>
+<p>memory management unit内存管理单元，负责虚拟内存到物理内存的映射转换。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229162934798.png" alt="image-20201229162934798"></p>
+<p>上图中，MMU利用片上转译后备缓冲区（TLB)来进行缓存地址转换，如果缓存未命中，则有主存（DRAM）中页面（page tables）来处理，页面是由内核维护并通过MMU硬件直接读取。</p>
+<p>TLB的百度百科解释：</p>
+<p><strong>转译后备缓冲器</strong>，也被翻译为<strong>页表缓存</strong>、<strong>转址旁路缓存</strong>，为<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/CPU">CPU</a>的一种缓存，由存储器管理单元用于改进<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80">虚拟地址</a>到物理地址的转译速度。当前所有的桌面型及服务器型处理器（如 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/x86">x86</a>）皆使用TLB。TLB具有固定数目的空槽，用于存放将虚拟地址映射至<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80">物理地址</a>的标签页表条目。为典型的结合存储（content-addressable memory，首字母缩略字：CAM）。其搜索关键字为虚拟内存地址，其搜索结果为物理地址。如果请求的虚拟地址在TLB中存在，CAM 将给出一个非常快速的匹配结果，之后就可以使用得到的物理地址访问存储器。如果请求的虚拟地址不在TLB 中，就会使用标签页表进行虚实地址转换，而标签页表的访问速度比TLB慢很多。有些系统允许标签页表被交换到次级存储器，那么虚实地址转换可能要花非常长的时间。</p>
+<p><strong>互联interconnects</strong></p>
+<p>多处理器架构中，处理器通过共享系统总线或者专用互联连接起来。这与系统的内存架构有关系，如统一内存访问（UMA）和非一致内存访问（NUMA）。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229164304538.png" alt="image-20201229164304538"></p>
+<h5 id="Hardware-Counters（PMCs）"><a href="#Hardware-Counters（PMCs）" class="headerlink" title="Hardware Counters（PMCs）"></a>Hardware Counters（PMCs）</h5><p>Performance monitoring counters是观察统计资源的统称。</p>
+<p>PMCs：是可以通过编程来记录低级CPU活动的硬件寄存器，通常包含以下计数器：</p>
+<table>
+<thead>
+<tr>
+<th>计数器</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU cycles</td>
+<td>停滞周期和停滞周期的类型</td>
+</tr>
+<tr>
+<td>CPU指令</td>
+<td>引退的（执行过的）</td>
+</tr>
+<tr>
+<td>L1/L2/L3缓存访问</td>
+<td>命中（Hits）、未命中（Misses）</td>
+</tr>
+<tr>
+<td>floating-point unit浮点单元</td>
+<td>操作</td>
+</tr>
+<tr>
+<td>内存I/O</td>
+<td>读、写、阻塞周期</td>
+</tr>
+<tr>
+<td>资源I/O</td>
+<td>读、写、阻塞周期</td>
+</tr>
+</tbody></table>
+<p>通常每个CPU有2-8个可供编程来记录这些事件的寄存器。</p>
+<p>以Intel P6家族为例：</p>
+<p>该类型处理器提供4个型号特定寄存器（mode-specific register，MSR）来提供性能寄存器，2个MSRs是只读计数器；另外2个MSRs用来对计数器counter编程，可读可写，称为事件选择MSRs（event-select MSRs）。performance counters是40位寄存器，而event-select MSRs是32位寄存器，下图是event-select MSR的格式图。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229170457308.png" alt="image-20201229170457308"></p>
+<h5 id="6-4-2-软件"><a href="#6-4-2-软件" class="headerlink" title="6.4.2 软件"></a>6.4.2 软件</h5><p>支撑CPUs的内核软件包括：调度器scheduler、调度类scheduling classes、空闲线程idle thread。</p>
+<p><strong>scheduler</strong></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229171622656.png" alt="image-20201229171622656"></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229171641560.png" alt="image-20201229171641560"></p>
+<p>调度器功能：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>time sharing 分时</td>
+<td>可运行线程之间的多任务，优先执行最高优先级任务</td>
+</tr>
+<tr>
+<td>preemption 抢占</td>
+<td>一旦有高优先级线程变为可运行状态，调度器能够抢占当前运行的线程，执行较高优先级的线程</td>
+</tr>
+<tr>
+<td>load balancing 负载均衡</td>
+<td>把可运行的线程移到空闲或者较为不繁忙的CPU runqueue中去</td>
+</tr>
+</tbody></table>
+<p>图中的<strong>run queue</strong>是组织等待执行的任务（waiting tasks），Linux的CFS调度器使用红黑树来组织管理。</p>
+<p>Linux调度器：</p>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>scheduler_tick()</td>
+<td>系统定时器中断调用该函数来触发time sharing（分时），调度器会根据时间片（time slices）和优先级（priorities）来调度</td>
+</tr>
+<tr>
+<td>check_preepmt_curr()</td>
+<td>触发preemption（抢占）</td>
+</tr>
+<tr>
+<td>__schedule()</td>
+<td>线程切换管理</td>
+</tr>
+<tr>
+<td>pick_next_task()</td>
+<td>线程切换时选择高优先级的线程</td>
+</tr>
+<tr>
+<td>load_balance()</td>
+<td>负载均衡</td>
+</tr>
+<tr>
+<td>idle_balance()</td>
+<td>平衡线程迁移，迁移的损耗大于益处时，调度器会平衡，维持线程在同一个CPU上运行</td>
+</tr>
+<tr>
+<td>task_hot()</td>
+<td>CPU caches warm（CPU affinity），CPU亲和度</td>
+</tr>
+</tbody></table>
+<p><strong>scheduling classes</strong></p>
+<p>调度类用于管理可运行线程的行为，尤其是它们的优先级、时间片是否结束、时间片的长度等等。通过调度策略也可施加其他的控制，比如同一个优先级线程间的调度。</p>
+<p>下图是Linux中优先级，数值越小优先级越高。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201229174834799.png" alt="image-20201229174834799"></p>
+<p>Linux中的nice值设置了线程的静态优先级static priority，和这里调度器计算的dynamic priority有区别。</p>
+<p>Linux中的调度类：</p>
+<table>
+<thead>
+<tr>
+<th>scheduling classes</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RT</td>
+<td>为实时负载提供固定的高优先级。内核支持用户级和内核级的抢占，允许RT任务以低延时被分发，优先级范围是0-99</td>
+</tr>
+<tr>
+<td>O(1)</td>
+<td>O(1)调度器是linux2.6引进，比原来的O(n)性能高，动态的将I/O密集型任务的优先级比CPU密集型的任务优先级提高，对交互性任务和I/O负载来说延时更小</td>
+</tr>
+<tr>
+<td>CFS</td>
+<td>completly fair scheduling，完全公平调度，linux2.6.23引入，利用红黑树管理任务而不是过去的run queue</td>
+</tr>
+<tr>
+<td>Idle</td>
+<td>Runs threads with the lowest possible priority</td>
+</tr>
+<tr>
+<td>Deadline</td>
+<td>Added to Linux 3.14, applies earliest deadline first (EDF) scheduling using three parameters: runtime, period, and deadline.</td>
+</tr>
+</tbody></table>
+<p>To select a scheduling class, user-level processes select a scheduling policy that maps to a class, using either the sched_setscheduler(2) syscall or the chrt(1) tool.</p>
+<p><strong>调度策略</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>scheduler policies</th>
+<th></th>
+<th>使用的scheduling classes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RR</td>
+<td>SCHED_RR is round-robin scheduling(轮转调度策略)，一旦时间片用完，它就被移到它坐在优先级的run queue末尾，让其他同优先级的线程去运行，使用<strong>RT scheduling class</strong></td>
+<td>RT</td>
+</tr>
+<tr>
+<td>FIFO</td>
+<td>SCHED_FIFO is first-in, first-out scheduling（先进先出调度），一直运行队列头部的线程直到它资源退出，或者一个更高优先级的线程抵达。线程会一直运行，即便在运行队列的当中存在相同优先级的其他线程</td>
+<td>RT</td>
+</tr>
+<tr>
+<td>NORMAL</td>
+<td>SCHED_NORMAL (previously known as SCHED_OTHER) is time-sharing scheduling and is the default for user processes（分时调度，用户进程的默认策略）。调度器根据调度类动态调整优先级。对于O(1)，时间片长度根据静态优先级设置，即更高优先级的工作分配到更长的时间。对于CFS，时间片是动态的</td>
+<td>CFS</td>
+</tr>
+<tr>
+<td>BATCH</td>
+<td>SCHED_BATCH类似于SCHED_NORMAL，但期望是CPU密集型线程，并且不会被调度去中断其他I/O密集型线程</td>
+<td>CFS</td>
+</tr>
+<tr>
+<td>IDLE</td>
+<td>SCHED_IDLE uses the Idle scheduling class</td>
+<td>idle</td>
+</tr>
+<tr>
+<td>DEADLINE</td>
+<td>SCHED_DEADLINE uses the Deadline scheduling class</td>
+<td>Deadline</td>
+</tr>
+</tbody></table>
+<p>When there is no thread to run, <strong>a special idle task (also called idle thread) is executed as a placeholder until another thread is runnable</strong>.（当没有可运行的线程时，会运行idle线程空闲线程）</p>
+<p><strong>idle thread</strong></p>
+<p>the kernel “idle” thread (or idle task) runs on-CPU when there is no other runnable thread and has the lowest possible priority. It is usually programmed to inform the processor that CPU execution may either be halted (halt instruction) or throttled down to conserve power. The CPU will wake up on the next hardware interrupt.</p>
+<p><strong>NUMA Grouping</strong></p>
+<p>Performance on NUMA systems can be significantly improved by making the kernel NUMA-aware, so that it can make better scheduling and memory placement decisions.</p>
+<p><strong>Processor resource-ware</strong></p>
+<p>The CPU resource topology can also be understood by the kernel so that it can make better<br>scheduling decisions for power management, hardware cache usage, and load balancing.</p>
+<h4 id="6-5-方法"><a href="#6-5-方法" class="headerlink" title="6.5 方法"></a>6.5 方法</h4><h5 id="6-5-1-工具"><a href="#6-5-1-工具" class="headerlink" title="6.5.1 工具"></a>6.5.1 工具</h5><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>uptime</td>
+<td></td>
+</tr>
+<tr>
+<td>vmstat</td>
+<td></td>
+</tr>
+<tr>
+<td>mpstat</td>
+<td></td>
+</tr>
+<tr>
+<td>top</td>
+<td></td>
+</tr>
+<tr>
+<td>pidstat</td>
+<td></td>
+</tr>
+<tr>
+<td>perf/profile</td>
+<td></td>
+</tr>
+<tr>
+<td>perf</td>
+<td></td>
+</tr>
+<tr>
+<td>showboost/turboboost</td>
+<td></td>
+</tr>
+<tr>
+<td>dmesg</td>
+<td></td>
+</tr>
+</tbody></table>
+<h5 id="6-5-2-USE方法"><a href="#6-5-2-USE方法" class="headerlink" title="6.5.2 USE方法"></a>6.5.2 USE方法</h5><p>USE：utilization、saturation、errors</p>
+<h5 id="6-5-3-负责特征归纳workload-characterization"><a href="#6-5-3-负责特征归纳workload-characterization" class="headerlink" title="6.5.3 负责特征归纳workload characterization"></a>6.5.3 负责特征归纳workload characterization</h5><p>CPU负载特征归纳的基本属性：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>平均负载</td>
+<td>CPU load averages（utilization + saturation）</td>
+</tr>
+<tr>
+<td>用户时间与系统时间之比</td>
+<td>user-time to system-time ratio</td>
+</tr>
+<tr>
+<td>系统调用评率</td>
+<td>syscall rate</td>
+</tr>
+<tr>
+<td>自愿上下文切换评率</td>
+<td>voluntary context switch rate</td>
+</tr>
+<tr>
+<td>中断评率</td>
+<td>interrupt rate</td>
+</tr>
+</tbody></table>
+<h5 id="6-5-4-剖析法profiling"><a href="#6-5-4-剖析法profiling" class="headerlink" title="6.5.4 剖析法profiling"></a>6.5.4 剖析法profiling</h5><p>一般分两种方法:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>timer-based sampling</strong></td>
+<td>采集当前正在运行的函数或栈的基于时间的样点。<br />通常用99Hz/CPU的频率采样，为何不用100Hz（100Hz容易发生lock-step sampling）。采样对性能是有损耗的，同样是降低时间频率、延长采样时间，这样平均损耗就小</td>
+</tr>
+<tr>
+<td><strong>function tracing</strong></td>
+<td>性能的额外开销通常很大，超过10%</td>
+</tr>
+</tbody></table>
+<p>采样例子示意图，按一定频率采样，函数A调用函数B，函数B系统调用陷入内核阻塞，中断唤醒函数B再调用函数C，这期间，函数B阻塞的时候off-CPU没有被采样，函数C太短暂就没被采样。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201230092349088.png" alt="image-20201230092349088"></p>
+<p><strong>采样处理sample processing</strong></p>
+<p>采样处理也会面临问题：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>storage I/O</td>
+<td>采样量较大时，会产生I/O存储行为，这对原来的系统性能是一种干扰。比如perf record会记录perf.data文件。BPF中的profile(8)工具可以解决该问题（profile将sample保存在kernel memory里）</td>
+</tr>
+<tr>
+<td>阅读分析样本</td>
+<td>样本行量很大时，阅读分析也是一个问题，需要利用<em>flame graph</em>火焰图工具进行分析</td>
+</tr>
+</tbody></table>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201230093039605.png" alt="image-20201230093039605"></p>
+<p>如上图所示，BPF采样对性能额外损耗较小。但是perf(1)采样可以将sample保存后由其他工具进行分析解读，这个是BPF不具备的。</p>
+<h5 id="6-5-5-周期分析cycle-analysis"><a href="#6-5-5-周期分析cycle-analysis" class="headerlink" title="6.5.5 周期分析cycle analysis"></a>6.5.5 周期分析cycle analysis</h5><p>分析IPC(CPI)等</p>
+<h5 id="6-5-6-性能监控performance-monitoring"><a href="#6-5-6-性能监控performance-monitoring" class="headerlink" title="6.5.6 性能监控performance monitoring"></a>6.5.6 性能监控performance monitoring</h5><p>衡量CPU的指标有：</p>
+<ul>
+<li>使用率：查看百分比</li>
+<li>饱和度：查看运行队列长度或者调度延迟</li>
+</ul>
+<h4 id="6-6-工具"><a href="#6-6-工具" class="headerlink" title="6.6 工具"></a>6.6 工具</h4><h5 id="6-6-1-uptime"><a href="#6-6-1-uptime" class="headerlink" title="6.6.1 uptime"></a>6.6.1 uptime</h5><p>uptime查看平均负载</p>
+<p>平均负载：只针对可运行状态或者不可被中断状态的进程而言。它的值不是指CPU个数，它代表占比，比如平均负载为1，在一个cpu的系统上表示cpu的100%负载，而在4个cpu的系统上则表示cpu有75%的时间是idle。</p>
+<p><code>System load averages is the average number of processes that are either in a runnable or uninterruptable state</code></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/load-average.png" alt="load-average"></p>
+<p>Load averages 的三个值分别代表最近 1/5/15 分钟的平均系统负载。在多核系统中，这些值有可能经常大于1，比如四核系统的 100% 负载为 4，八核系统的 100% 负载为 8。</p>
+<p>Loadavg 有它固有的一些缺陷：</p>
+<ul>
+<li>uninterruptible的进程，无法区分它是在等待 CPU 还是 IO。无法精确评估单个资源的竞争程度；</li>
+<li>最短的时间粒度是 1 分钟，以 5 秒间隔采样。很难精细化管理资源竞争毛刺和短期过度使用；</li>
+<li>结果以进程数量呈现，还要结合 cpu 数量运算，很难直观判断当前系统资源是否紧张，是否影响任务吞吐量</li>
+</ul>
+<p><strong>PSI - Pressure Stall Information</strong></p>
+<p>每类资源的压力信息都通过 proc 文件系统的独立文件来提供，路径为 /proc/pressure/ – cpu, memory, and io.</p>
+<p>其中 CPU 压力信息格式如下：</p>
+<p>some avg10=2.98 avg60=2.81 avg300=1.41 total=268109926</p>
+<p>memory 和 io 格式如下：</p>
+<p>some avg10=0.30 avg60=0.12 avg300=0.02 total=4170757</p>
+<p>full avg10=0.12 avg60=0.05 avg300=0.01 total=1856503</p>
+<p><strong>avg10、avg60、avg300 分别代表 10s、60s、300s 的时间周期内的阻塞时间百分比</strong>。total 是总累计时间，以毫秒为单位。</p>
+<p><strong>some 这一行，代表至少有一个任务在某个资源上阻塞的时间占比，full 这一行，代表所有的非idle任务同时被阻塞的时间占比，这期间 cpu 被完全浪费，会带来严重的性能问题</strong>。我们以 IO 的 some 和 full 来举例说明，假设在 60 秒的时间段内，系统有两个 task，在 60 秒的周期内的运行情况如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201230105704128.png" alt="image-20201230105704128"></p>
+<p>红色阴影部分表示任务由于等待 IO 资源而进入阻塞状态。Task A 和 Task B 同时阻塞的部分为 full，占比 16.66%；至少有一个任务阻塞（仅 Task B 阻塞的部分也计算入内）的部分为 some，占比 50%。</p>
+<p>some 和 full 都是在某一时间段内阻塞时间占比的总和，阻塞时间不一定连续，如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201230105720099.png" alt="image-20201230105720099"></p>
+<p>IO 和 memory 都有 some 和 full 两个维度，那是因为的确有可能系统中的所有任务都阻塞在 IO 或者 memory 资源，同时 CPU 进入 idle 状态。</p>
+<p>但是 CPU 资源不可能出现这个情况：不可能全部的 runnable 的任务都等待 CPU 资源，至少有一个 runnable 任务会被调度器选中占有 CPU 资源，因此 CPU 资源没有 full 维度的 PSI 信息呈现。</p>
+<p>通过这些阻塞占比数据，我们可以看到短期以及中长期一段时间内各种资源的压力情况，可以较精确的确定时延抖动原因，并制定对应的负载管理策略。</p>
+<h5 id="6-6-2-vmstat"><a href="#6-6-2-vmstat" class="headerlink" title="6.6.2 vmstat"></a>6.6.2 vmstat</h5><p>显示虚拟内存使用情况的工具</p>
+<p>用法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Usage:</span><br><span class="line"> vmstat [options] [delay [count]]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"> -a, --active           active/inactive memory</span><br><span class="line"> -f, --forks            number of forks since boot</span><br><span class="line"> -m, --slabs            slabinfo</span><br><span class="line"> -n, --one-header       do not redisplay header</span><br><span class="line"> -s, --stats            event counter statistics</span><br><span class="line"> -d, --disk             disk statistics</span><br><span class="line"> -D, --disk-sum         summarize disk statistics</span><br><span class="line"> -p, --partition &lt;dev&gt;  partition specific statistics</span><br><span class="line"> -S, --unit &lt;char&gt;      define display unit   #设置显示数值的单位（k,K,m,M)</span><br><span class="line"> -w, --wide             wide output</span><br><span class="line"> -t, --timestamp        show timestamp</span><br><span class="line"></span><br><span class="line"> -h, --help     display this help and exit</span><br><span class="line"> -V, --version  output version information and exit</span><br><span class="line"></span><br><span class="line">For more details see vmstat(8).</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost /]# vmstat -Sm 1 2</span><br><span class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</span><br><span class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</span><br><span class="line"> 3  0   2269  71344    341  56880    0    0    77    48    1    1  4  2 93  1  0</span><br><span class="line"> 3  0   2269  71343    341  56880    0    0     0    24 29804 37752  4  2 94  0  0</span><br></pre></td></tr></table></figure>
+
+<p>默认是KiB为单位，可以通过参数-SM来指定以MB为单位显示。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r</td>
+<td>The number of runnable processes (running or waiting for run time).</td>
+<td>procs</td>
+</tr>
+<tr>
+<td>b</td>
+<td>The number of processes in uninterruptible sleep.</td>
+<td></td>
+</tr>
+<tr>
+<td>swpd</td>
+<td>the amount of virtual memory used.</td>
+<td>memory</td>
+</tr>
+<tr>
+<td>free</td>
+<td>the amount of idle memory.</td>
+<td></td>
+</tr>
+<tr>
+<td>buff</td>
+<td>the amount of memory used as buffers.</td>
+<td></td>
+</tr>
+<tr>
+<td>cache</td>
+<td>the amount of memory used as cache.</td>
+<td></td>
+</tr>
+<tr>
+<td>active</td>
+<td>the amount of active memory.  (-a option)</td>
+<td></td>
+</tr>
+<tr>
+<td>inactive</td>
+<td>the amount of inactive memory.  (-a option)</td>
+<td></td>
+</tr>
+<tr>
+<td>si</td>
+<td>Amount of memory swapped in from disk (/s).</td>
+<td>swap</td>
+</tr>
+<tr>
+<td>so</td>
+<td>Amount of memory swapped to disk (/s).</td>
+<td></td>
+</tr>
+<tr>
+<td>bi</td>
+<td>Blocks received from a block device (blocks/s).</td>
+<td>io</td>
+</tr>
+<tr>
+<td>bo</td>
+<td>Blocks sent to a block device (blocks/s).</td>
+<td></td>
+</tr>
+<tr>
+<td>in</td>
+<td>The number of interrupts per second, including the clock.</td>
+<td>system</td>
+</tr>
+<tr>
+<td>cs</td>
+<td>The number of context switches per second.</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>us</strong></td>
+<td>Time spent running non-kernel code.  (user time, including nice time)</td>
+<td><strong>cpu</strong><br />(以下都是占cpu time的百分比值)</td>
+</tr>
+<tr>
+<td><strong>sy</strong></td>
+<td>Time spent running kernel code.  (system time)</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>id</strong></td>
+<td>Time spent idle.</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>wa</strong></td>
+<td>Time spent waiting for IO.</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>st</strong></td>
+<td>Time stolen from a virtual machine.</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h5 id="6-6-3-mpstat"><a href="#6-6-3-mpstat" class="headerlink" title="6.6.3 mpstat"></a>6.6.3 mpstat</h5><p>查看处理器的活动状态，依赖<code>/proc/stat</code>文件</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201230151900613.png" alt="image-20201230151900613"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">CPU： Processor number. The keyword all indicates that statistics are calculated as averages among all processors.</span><br><span class="line"></span><br><span class="line"><span class="meta">%</span><span class="bash">usr： Show the percentage of CPU utilization that occurred <span class="keyword">while</span> executing at the user level (application).</span></span><br><span class="line"></span><br><span class="line"><span class="meta">%</span><span class="bash">nice： Show the percentage of CPU utilization that occurred <span class="keyword">while</span> executing at the user level with nice priority.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">%</span><span class="bash">sys： Show  the  percentage  of CPU utilization that occurred <span class="keyword">while</span> executing at the system level (kernel). Note that this does not include time spent servicing hardware and software interrupts.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">%</span><span class="bash">iowait： Show the percentage of time that the CPU or CPUs were idle during <span class="built_in">which</span> the system had an outstanding disk I/O request.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">%</span><span class="bash">irq： Show the percentage of time spent by the CPU or CPUs to service hardware interrupts.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">%</span><span class="bash">soft： Show the percentage of time spent by the CPU or CPUs to service software interrupts.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">%</span><span class="bash">steal： Show the percentage of time spent <span class="keyword">in</span> involuntary <span class="built_in">wait</span> by the virtual CPU or CPUs <span class="keyword">while</span> the hypervisor was servicing another virtual processor.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">%</span><span class="bash">guest： Show the percentage of time spent by the CPU or CPUs to run a virtual processor.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">%</span><span class="bash">gnice： Show the percentage of time spent by the CPU or CPUs to run a niced guest.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">%</span><span class="bash">idle： Show the percentage of time that the CPU or CPUs were idle and the system did not have an outstanding disk I/O request.</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="7-内存memory"><a href="#7-内存memory" class="headerlink" title="7. 内存memory"></a>7. 内存memory</h3><h4 id="7-1-术语"><a href="#7-1-术语" class="headerlink" title="7.1 术语"></a>7.1 术语</h4><table>
+<thead>
+<tr>
+<th>术语</th>
+<th>中文</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>main memory</td>
+<td>主存</td>
+<td>物理内存</td>
+</tr>
+<tr>
+<td>virtual memory</td>
+<td>虚拟内存</td>
+<td>抽象的主存概念，虚拟内存不是真实的内存</td>
+</tr>
+<tr>
+<td>resident memory</td>
+<td>常驻内存</td>
+<td>当前处于主存中的内存</td>
+</tr>
+<tr>
+<td>anonymous memory</td>
+<td>匿名内存</td>
+<td>无文件系统位置或者路径名的内存。包括进程地址空间的工作数据，称作堆</td>
+</tr>
+<tr>
+<td>address space</td>
+<td>地址空间</td>
+<td>内存上下文</td>
+</tr>
+<tr>
+<td>segment</td>
+<td>段</td>
+<td>标记为特殊用途的一块内存区域，例如用来存储可执行或者可写的页</td>
+</tr>
+<tr>
+<td>instruction text</td>
+<td>指令文本</td>
+<td>指在内存中的cpu指令，通常在段中</td>
+</tr>
+<tr>
+<td>OOM</td>
+<td>OOM</td>
+<td>out of memory</td>
+</tr>
+<tr>
+<td>page</td>
+<td>页</td>
+<td>操作系统和CPU使用的内存单位。4KB或8KB，现代处理支持多种页大小以支持更大的页面尺寸</td>
+</tr>
+<tr>
+<td>page fault</td>
+<td>缺页</td>
+<td>无效的内存访问</td>
+</tr>
+<tr>
+<td>paging</td>
+<td>换页</td>
+<td>在主存与存储设备间交换页</td>
+</tr>
+<tr>
+<td>swapping</td>
+<td>交换</td>
+<td>指将整个进程从主存转移到交换设备。Linux中交换指页面转移到交换设备（迁移交换页）</td>
+</tr>
+<tr>
+<td>swap</td>
+<td>交换（空间）</td>
+<td>存放换页的匿名数据和交换进程的磁盘空间。它可以是存储设备的一块空间，也称为物理交换设备，或者文件系统，称作交换文件。</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h4 id="7-2-概念"><a href="#7-2-概念" class="headerlink" title="7.2 概念"></a>7.2 概念</h4><p>和内存以及内存性能相关的基础概念。</p>
+<h5 id="7-2-1-虚拟内存virtualmemory"><a href="#7-2-1-虚拟内存virtualmemory" class="headerlink" title="7.2.1 虚拟内存virtualmemory"></a>7.2.1 虚拟内存virtualmemory</h5><p>The process address space is mapped by the virtual memory subsystem to main memory and the physical swap device.</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201230174611584.png" alt="image-20201230174611584"></p>
+<p>swap 分区通常被称为交换分区，这是一块特殊的硬盘空间，即当实际内存不够用的时候，操作系统会从内存中取出一部分暂时不用的数据，放在交换分区中，从而为当前运行的程序腾出足够的内存空间。</p>
+<h5 id="7-2-2-换页paging"><a href="#7-2-2-换页paging" class="headerlink" title="7.2.2 换页paging"></a>7.2.2 换页paging</h5><p>换页是将页面换入和调出主存，它们分别被称为页面换入和页面换出。允许：</p>
+<ul>
+<li>运行部分载入的程序</li>
+<li>运行大于主存的程序</li>
+<li>高效的在主存和存储设备间迁移</li>
+</ul>
+<p>两种：file system paging 、 anonymous paging。</p>
+<table>
+<thead>
+<tr>
+<th>paging</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>file system paging</td>
+<td>文件系统换页</td>
+<td>File system paging is caused by the reading and writing of pages in memory-mapped files. 文件系统换页由读写位于内存中的映射文件页引发。<br />如果一个文件系统页在主存中被修改过（dirty），页面换出page-out则需要将该页write todisk；相反，如果没被修改过（clean），因为磁盘已经存在副本，因此page-out可以仅仅释放这些内存以便重用。</td>
+</tr>
+<tr>
+<td>anonymous paging</td>
+<td>匿名换页</td>
+<td>Anonymous paging involves data that is private to processes: the process heap and stacks.匿名换页牵涉进程私有数据：堆和栈。为何叫匿名换页？因为在OS中它缺乏有名字的地址（如没有文件系统路径）。匿名换页要求迁移数据到物理交换设备或者交换文件，linux用交换（swap）来命令这类型的换页。<br />匿名换页影响性能，当app访问被调出的页时，会被读页的I/O操作阻塞，这就是匿名换页的换入过程，给app带来同步延时。匿名换页的换出到不直接影响性能，因为是由内核异步执行</td>
+</tr>
+</tbody></table>
+<h5 id="7-2-3-按需换页demanding-paging"><a href="#7-2-3-按需换页demanding-paging" class="headerlink" title="7.2.3 按需换页demanding paging"></a>7.2.3 按需换页demanding paging</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201231111547429.png" alt="image-20201231111547429"></p>
+<h5 id="7-2-4-过度提交overcommit"><a href="#7-2-4-过度提交overcommit" class="headerlink" title="7.2.4 过度提交overcommit"></a>7.2.4 过度提交overcommit</h5><p>Linux系统允许过度提交，允许分配超过系统可以存储的内容—-超过物理内存与交换的设备的总和。</p>
+<p>有了overcommit，malloc()会成功，否则失败，开发人员可以慷慨的分配内存并按需稀疏使用，而不是小心得分配。</p>
+<h5 id="7-2-5-交换process-swaping"><a href="#7-2-5-交换process-swaping" class="headerlink" title="7.2.5 交换process swaping"></a>7.2.5 交换process swaping</h5><p>Process swapping is the movement of entire processes between main memory and the physical swap device or swap file.</p>
+<p>在主存和物理交换设备或交换文件之间移动整个进程。</p>
+<h5 id="7-2-6-文件系统缓存占用file-system-cache-usage"><a href="#7-2-6-文件系统缓存占用file-system-cache-usage" class="headerlink" title="7.2.6 文件系统缓存占用file system cache usage"></a>7.2.6 文件系统缓存占用file system cache usage</h5><p>Process swapping is the movement of entire processes between main memory and the physical swap device or swap file</p>
+<h5 id="7-2-7-使用率和饱和度-utilization-and-saturation"><a href="#7-2-7-使用率和饱和度-utilization-and-saturation" class="headerlink" title="7.2.7 使用率和饱和度 utilization and saturation"></a>7.2.7 使用率和饱和度 utilization and saturation</h5><p>Main memory utilization can be calculated as used memory versus total memory.</p>
+<p>文件缓存占用的内存可以当做未使用的，因为它可以被应用程序重用。</p>
+<p>对内存的需求超过了主存的情况被称为主存饱和，这时候OS会使用换页、交换或者在Linux中使用OOM来释放内存。</p>
+<h5 id="7-2-8-分配器-allocators"><a href="#7-2-8-分配器-allocators" class="headerlink" title="7.2.8 分配器 allocators"></a>7.2.8 分配器 allocators</h5><p>当虚拟内存处理多任务物理内存时，在虚拟地址空间实际分配和内存堆放通常有分配器来处理。API接口是malloc()，free()之类。</p>
+<h5 id="7-2-9-共享内存shared-memory"><a href="#7-2-9-共享内存shared-memory" class="headerlink" title="7.2.9 共享内存shared memory"></a>7.2.9 共享内存shared memory</h5><p>进程间共享内存应不应该被统计到一个进程的总内存占用？<em>proportional set size</em> (PPS)解决该问题，包含了私有内存（非共享）和共享内存分开显示。pmap工具。</p>
+<h5 id="7-2-10-工作集大小work-set-size"><a href="#7-2-10-工作集大小work-set-size" class="headerlink" title="7.2.10 工作集大小work set size"></a>7.2.10 工作集大小work set size</h5><h5 id="7-2-11-字长-word-size"><a href="#7-2-11-字长-word-size" class="headerlink" title="7.2.11 字长 word size"></a>7.2.11 字长 word size</h5><h4 id="7-3-架构"><a href="#7-3-架构" class="headerlink" title="7.3 架构"></a>7.3 架构</h4><h5 id="7-3-1-硬件"><a href="#7-3-1-硬件" class="headerlink" title="7.3.1 硬件"></a>7.3.1 硬件</h5><p><strong>主存</strong></p>
+<p><strong>延时</strong></p>
+<p>访问主内存的时间可用CAS延时（column address strobe，列地址控制器）来计量：从发送需要读取的地址（列）给一个内存模块，到数据可以被读取之间的时间。</p>
+<p><strong>主存架构</strong></p>
+<p><strong>UMA</strong></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201231121413484.png" alt="image-20201231121413484"></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201231121425255.png" alt="image-20201231121425255"></p>
+<p>上图中，通过共享总线，每个CPU访问内存都有均匀的访问延时。如果上面运行的是单个操作系统实例并可以在所有处理器上统一运行时，又叫做对称多处理器架构（SMP）。</p>
+<p><strong>NUMA</strong></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201231121601847.png" alt="image-20201231121601847"></p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201231121611226.png" alt="image-20201231121611226"></p>
+<p>CPU1可以通过它的内存总线直接对DRAM A发起I/O操作，这叫本地内存。CPU1通过CPU2以及CPU互联（两跳）对DRAM B发起I/O操作，这是远程内存访问延时更高。</p>
+<p><strong>总线</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>共享总线</td>
+<td>shared system bus</td>
+<td>如UMA</td>
+</tr>
+<tr>
+<td>直连</td>
+<td>direct</td>
+<td>processor直连memory</td>
+</tr>
+<tr>
+<td>互联</td>
+<td>interconnect</td>
+<td>multiprocessor中，每个processor与各自的内存直连，处理器之间通过一个CPU互联连接，如NUMA</td>
+</tr>
+</tbody></table>
+<p><strong>DDR SDRAM</strong></p>
+<p>对于任何架构，内存总线速度常常取决于处理器和主板支持的内存接口标准。</p>
+<p>1996年的<em>double data rate synchronous dynamic random-access memory(DDR SDRAM)</em>(双倍速率同步动态随机访问内存)。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20210104161257361.png" alt="image-20210104161257361"></p>
+<p><strong>多通道multichannel</strong></p>
+<p>多个内存总线并行，提高速率。一般有双通道（dual-），三通道（triple-），四通道（quad-）。比如inter-i7处理器是四通道DDR3-1600，最大内存带宽为51.2Gbytes/s。</p>
+<p><strong>CPU缓存</strong></p>
+<p>L1/L2/L3缓存。</p>
+<p><strong>MMU内存管理单元</strong></p>
+<p>管理虚拟内存到物理内存的地址映射。</p>
+<h3 id="8-文件系统file-systems"><a href="#8-文件系统file-systems" class="headerlink" title="8. 文件系统file systems"></a>8. 文件系统file systems</h3><h4 id="8-2-模型"><a href="#8-2-模型" class="headerlink" title="8.2 模型"></a>8.2 模型</h4><h5 id="8-2-1-文件系统缓存"><a href="#8-2-1-文件系统缓存" class="headerlink" title="8.2.1 文件系统缓存"></a>8.2.1 文件系统缓存</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201231122421669.png" alt="image-20201231122421669"></p>
+<p>缓存命中，从主存中读取；</p>
+<p>缓存未命中，从磁盘读取；</p>
+<h4 id="8-3-概念"><a href="#8-3-概念" class="headerlink" title="8.3 概念"></a>8.3 概念</h4><h5 id="8-3-1-文件系统延时"><a href="#8-3-1-文件系统延时" class="headerlink" title="8.3.1 文件系统延时"></a>8.3.1 文件系统延时</h5><p>File system latency is the primary metric of file system performance, measured as the time from a logical file system request to its completion.<strong>It includes time spent in the file system and disk I/O subsystem, and waiting on disk devices—the physical I/O</strong>.包含：</p>
+<ul>
+<li>花在文件系统本身的时间</li>
+<li>磁盘I/O子系统时间</li>
+<li>磁盘等待物理I/O时间</li>
+</ul>
+<h5 id="8-3-2-缓存caching"><a href="#8-3-2-缓存caching" class="headerlink" title="8.3.2 缓存caching"></a>8.3.2 缓存caching</h5><p>文件系统使用主存（RAM）来做缓存，以提高性能，这样应用程序可以从RAM中进行读写，而不是物理磁盘，减少了logical I/O latency。</p>
+<h5 id="8-3-3-随机与顺序I-O"><a href="#8-3-3-随机与顺序I-O" class="headerlink" title="8.3.3 随机与顺序I/O"></a>8.3.3 随机与顺序I/O</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20210104163926702.png" alt="image-20210104163926702"></p>
+<h5 id="8-3-4-预取prefetch"><a href="#8-3-4-预取prefetch" class="headerlink" title="8.3.4 预取prefetch"></a>8.3.4 预取prefetch</h5><p>大量文件顺序I/O时，可能数据量太大放不进缓存，这样缓存命中率偏低，影响性能。</p>
+<p>预取是检查当前和上一个I/O的文件偏移量，可以检测出当前是否是顺序读负载，并且做出预测，在应用程序请求前向磁盘发出读命令，以填充文件系统缓存。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20210104170334888.png" alt="image-20210104170334888"></p>
+<h5 id="8-3-5-预读read-ahead"><a href="#8-3-5-预读read-ahead" class="headerlink" title="8.3.5 预读read-ahead"></a>8.3.5 预读read-ahead</h5><p>就是prefetch，Linux中新增了系统调用readadhead(2)允许应用显示预热文件系统缓存。</p>
+<h5 id="8-3-6-回写缓存write-back-caching"><a href="#8-3-6-回写缓存write-back-caching" class="headerlink" title="8.3.6 回写缓存write-back caching"></a>8.3.6 回写缓存write-back caching</h5><p>Write-back caching is commonly used by file systems to improve write performance. It works by treating writes as completed after the transfer to main memory, and writing them to disk sometime later, asynchronously.</p>
+<h5 id="8-3-7-同步写"><a href="#8-3-7-同步写" class="headerlink" title="8.3.7 同步写"></a>8.3.7 同步写</h5><p>A synchronous write completes only when fully written to persistent storage (e.g., disk devices), which includes writing any file system metadata changes that are necessary. 同步写比异步写（写回缓存）要慢的多。</p>
+<h5 id="8-3-8-裸I-O和直接I-O（raw-and-direct）"><a href="#8-3-8-裸I-O和直接I-O（raw-and-direct）" class="headerlink" title="8.3.8 裸I/O和直接I/O（raw and direct）"></a>8.3.8 裸I/O和直接I/O（raw and direct）</h5><p><strong>裸I/O</strong>：绕过文件系统，直接发给磁盘地址。比如数据库软件。</p>
+<p><strong>直接I/O</strong>：允许app绕过缓存使用文件系统，有点类似<strong>同步写</strong>（但缺少O_SYNC选项提供的保证）。</p>
+<h5 id="8-3-9-非阻塞I-O"><a href="#8-3-9-非阻塞I-O" class="headerlink" title="8.3.9 非阻塞I/O"></a>8.3.9 非阻塞I/O</h5><p>open()调用时传入O_NONBLOCK或者O_NDELY选项使用非阻塞I/O。</p>
+<h5 id="8-3-10-内存映射文件memory-mapped-files"><a href="#8-3-10-内存映射文件memory-mapped-files" class="headerlink" title="8.3.10 内存映射文件memory-mapped files"></a>8.3.10 内存映射文件memory-mapped files</h5><p>对于某些应用程序和负载，通过吧文件映射到进程地址空间，并直接读取内存地址，可以提高文件系统I/O性能。</p>
+<p>系统调用mmap()创建，munmap()销毁。映射可以用madvise()调整。</p>
+<h4 id="8-4-架构"><a href="#8-4-架构" class="headerlink" title="8.4 架构"></a>8.4 架构</h4><h5 id="8-4-1-I-O栈"><a href="#8-4-1-I-O栈" class="headerlink" title="8.4.1 I/O栈"></a>8.4.1 I/O栈</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20210104172147828.png" alt="image-20210104172147828"></p>
+<h5 id="8-4-2-VFS"><a href="#8-4-2-VFS" class="headerlink" title="8.4.2 VFS"></a>8.4.2 VFS</h5><p>VFS (the virtual file system interface) provides a common interface for different file system types.</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20210104172225343.png" alt="image-20210104172225343"></p>
+<h5 id="8-4-3-文件系统缓存"><a href="#8-4-3-文件系统缓存" class="headerlink" title="8.4.3 文件系统缓存"></a>8.4.3 文件系统缓存</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20210104172410503.png" alt="image-20210104172410503"></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>buffer cache</td>
+<td>缓冲区高速缓存</td>
+<td>Linux used a buffer cache at the block device interface to cache disk device blocks.<br />The size of the buffer cache is dynamic and is observable from /proc.</td>
+</tr>
+<tr>
+<td>page cache</td>
+<td>页缓存</td>
+<td>It cached virtual memory pages, including mapped file system pages, improving the performance of file and directory I/O. It was more efficient for file access than the buffer cache, which required translation from file offset to disk offset for each lookup.</td>
+</tr>
+<tr>
+<td>dentry cache</td>
+<td>目录缓存</td>
+<td>The dentry cache (Dcache) remembers mappings from directory entry (struct dentry) to VFS inode, similar to an earlier Unix directory name lookup cache (DNLC).</td>
+</tr>
+<tr>
+<td>inode cache</td>
+<td>inode缓存</td>
+<td>This cache contains VFS inodes (struct inodes), each describing properties of a file system object, many of which are returned via the stat(2) system call.</td>
+</tr>
+</tbody></table>
+<h5 id="8-4-5-文件系统类型"><a href="#8-4-5-文件系统类型" class="headerlink" title="8.4.5 文件系统类型"></a>8.4.5 文件系统类型</h5><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FFS</td>
+<td>fast file system (FFS)</td>
+</tr>
+<tr>
+<td>ext3</td>
+<td></td>
+</tr>
+<tr>
+<td>ext4</td>
+<td></td>
+</tr>
+<tr>
+<td>XFS</td>
+<td>XFS is supported by most Linux distributions and can be used for the root file system.</td>
+</tr>
+<tr>
+<td>ZFS</td>
+<td>combining the file system with the volume manager and including numerous enterprise features, making it an attractive choice for file servers (filers).</td>
+</tr>
+<tr>
+<td>btrfs</td>
+<td>The B-tree file system (btrfs) is based on copy-on-write B-trees. This is a modern file system and volume manager combined architecture, similar to ZFS, and is expected to eventually offer a similar feature set.</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h5 id="8-4-6-卷和池volumes-and-pools"><a href="#8-4-6-卷和池volumes-and-pools" class="headerlink" title="8.4.6 卷和池volumes and pools"></a>8.4.6 卷和池volumes and pools</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20210104173325040.png" alt="image-20210104173325040"></p>
+<p>文件系统一直以来建立在一块磁盘后者一个磁盘分区上，卷和池可以使文件系统建立在多块磁盘上，并可以使用不同的RAID策略。</p>
+<p>卷把多块磁盘组合成一块虚拟磁盘，在此之上建立文件系统。卷管理软件：Logical volume manager，LVM。</p>
+<h3 id="9-磁盘disks"><a href="#9-磁盘disks" class="headerlink" title="9. 磁盘disks"></a>9. 磁盘disks</h3><h4 id="9-1-术语"><a href="#9-1-术语" class="headerlink" title="9.1 术语"></a>9.1 术语</h4><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>virtual disk</td>
+<td>虚拟磁盘</td>
+<td>An emulation of a storage device</td>
+</tr>
+<tr>
+<td>transport</td>
+<td>传输总线</td>
+<td>The physical bus used for communication, including data transfers (I/O) and other disk commands</td>
+</tr>
+<tr>
+<td>sector</td>
+<td>扇区</td>
+<td>磁盘上的块，通常512Bytes</td>
+</tr>
+<tr>
+<td>I/O</td>
+<td>读写操作</td>
+<td>严格讲，I/O只指磁盘的读和写，不可以代指其他磁盘命令。要描述I/O，至少需要方向（读或写）、磁盘地址（位置）以及大小（字节）</td>
+</tr>
+<tr>
+<td>disk command</td>
+<td>磁盘命令</td>
+<td></td>
+</tr>
+<tr>
+<td>throughput</td>
+<td>吞吐量</td>
+<td>磁盘的吞吐量是指数据传输速率，通常B/s</td>
+</tr>
+<tr>
+<td>bandwidth</td>
+<td>带宽</td>
+<td>由硬件限制，是指最大数据传输速率</td>
+</tr>
+<tr>
+<td>I/O latency</td>
+<td>I/O延时</td>
+<td>一个I/O操作从起始到结束的时间</td>
+</tr>
+<tr>
+<td>latency outliers</td>
+<td>延时离群点</td>
+<td>非同寻常的高延时磁盘I/O</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h4 id="9-2-模型"><a href="#9-2-模型" class="headerlink" title="9.2 模型"></a>9.2 模型</h4><h5 id="9-2-2-caching-disk"><a href="#9-2-2-caching-disk" class="headerlink" title="9.2.2 caching disk"></a>9.2.2 caching disk</h5><p>缓存磁盘</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201231151546886.png" alt="image-20201231151546886"></p>
+<p>命中带来低延时，未命中延时高。</p>
+<h5 id="9-2-3-磁盘控制器"><a href="#9-2-3-磁盘控制器" class="headerlink" title="9.2.3 磁盘控制器"></a>9.2.3 磁盘控制器</h5><p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201231151720455.png" alt="image-20201231151720455"></p>
+<p><strong>Performance may be limited by either of these buses, the disk controller, or the disks</strong></p>
+<h4 id="9-3-概念"><a href="#9-3-概念" class="headerlink" title="9.3 概念"></a>9.3 概念</h4><h5 id="9-3-1-度量时间"><a href="#9-3-1-度量时间" class="headerlink" title="9.3.1 度量时间"></a>9.3.1 度量时间</h5><p>I/O时间组成的示意图：</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20201231151917438.png" alt="image-20201231151917438"></p>
+<h5 id="9-3-2-时间尺度time-scales"><a href="#9-3-2-时间尺度time-scales" class="headerlink" title="9.3.2 时间尺度time scales"></a>9.3.2 时间尺度time scales</h5><p>磁盘I/O的的时间度量级可以从微妙到毫秒到秒甚至更多。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20210104174405827.png" alt="image-20210104174405827"></p>
+<h5 id="9-3-3-缓存"><a href="#9-3-3-缓存" class="headerlink" title="9.3.3 缓存"></a>9.3.3 缓存</h5><p>最好的磁盘I/O就是没有I/O。很多软件栈通过读写缓存来避免磁盘I/O抵达磁盘。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20210104174741504.png" alt="image-20210104174741504"></p>
+<h5 id="9-3-4-随机I-O和顺序I-O"><a href="#9-3-4-随机I-O和顺序I-O" class="headerlink" title="9.3.4 随机I/O和顺序I/O"></a>9.3.4 随机I/O和顺序I/O</h5><p>根据磁盘上的I/O相对位置（磁盘偏移量），分随机I/O和顺序I/O。</p>
+<p><img src="https://raw.githubusercontent.com/junixcn/images/master/image-20210104175013231.png" alt="image-20210104175013231"></p>
+<p>从OS角度看，磁盘偏移量不一定是物理磁盘的偏移量。比如硬件提供的虚拟磁盘可能把一块连续偏移量范围映射到多块磁盘。</p>
+<h5 id="9-3-5-读写比"><a href="#9-3-5-读写比" class="headerlink" title="9.3.5 读写比"></a>9.3.5 读写比</h5><p>I/O的读写比列，与IOPS或者throughput相关。也可以通过一段时间内的比例来表示，比如“系统启动后读的比例占80%”。</p>
+<h5 id="9-3-6-I-O大小"><a href="#9-3-6-I-O大小" class="headerlink" title="9.3.6 I/O大小"></a>9.3.6 I/O大小</h5><p>I/O的平均大小（字节数），或者I/O大小的分布。</p>
+<p>有些磁盘设备，特别是基于闪存的设备，对不同的读写大小有非常不同的行为。比如一个基于闪存的磁盘驱动器可能在4KB读和1MB写时表现的最好。</p>
+<h5 id="9-3-7-IOPS并不平等"><a href="#9-3-7-IOPS并不平等" class="headerlink" title="9.3.7 IOPS并不平等"></a>9.3.7 IOPS并不平等</h5><h5 id="9-3-8-非数据传输磁盘命令"><a href="#9-3-8-非数据传输磁盘命令" class="headerlink" title="9.3.8 非数据传输磁盘命令"></a>9.3.8 非数据传输磁盘命令</h5><p>除了读写I/O，磁盘还可以接受其他命令。</p>
+<h5 id="9-3-9-使用率"><a href="#9-3-9-使用率" class="headerlink" title="9.3.9 使用率"></a>9.3.9 使用率</h5><p>通过某段时间内磁盘运行工作的忙时间的比例计算而得出。</p>
+<h5 id="9-3-10-饱和度"><a href="#9-3-10-饱和度" class="headerlink" title="9.3.10 饱和度"></a>9.3.10 饱和度</h5><p>度量因超出资源服务能力而排队的工作。</p>
+<h5 id="9-3-11-I-O等待"><a href="#9-3-11-I-O等待" class="headerlink" title="9.3.11 I/O等待"></a>9.3.11 I/O等待</h5><p>I/O等待在Linux仍然是个广泛应用的指标。</p>
+<h5 id="9-3-12-同步和非同步"><a href="#9-3-12-同步和非同步" class="headerlink" title="9.3.12 同步和非同步"></a>9.3.12 同步和非同步</h5><p>如果应用程序和磁盘I/O是异步的，磁盘I/O延时可能不直接影响应用程序性能。</p>
+
+    </div>
+</div>
+<style>
+    #noneimg img {
+        display: none;
+        z-index: 109;
+        width: 600px !important;
+        border-radius: 0px;
+        position: fixed;
+        box-shadow: 0 0 0px #c3c3c300 !important;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto !important;
+    }
+
+    @media screen and (max-width:600px) {
+        #noneimg img {
+            width: 88%
+        }
+    }
+</style>
+<script>
+    $(function () { $('#article').click(function (e) { if (e.target.tagName == "IMG") { if ($('#nonediv').length == 0) { let MImg = `<div id='noneimg'><img src='${e.target.currentSrc}'></div>`; let MDiv = "<div id='nonediv' style='cursor: pointer;display: none; position: fixed;left: 0;top: 0; right: 0;bottom: 0;background-color: #333;opacity:0.5;z-index: 108;'></div>"; $('#article').append(MDiv); $('#article').append(MImg); $("#nonediv").fadeIn("slow"); $("#noneimg img").fadeIn("slow") } } else { if ($('#nonediv').length !== 0) { $("#noneimg ").fadeOut("slow"); $("#nonediv").fadeOut("slow"); setTimeout(function () { $('#nonediv').remove(); $('#noneimg').remove() }, 500) } } }); $('.article-content').addClass('content-move') });
+</script>
+<div class="Last-Next">
+    
+
+    
+    <a href="/2020/12/18/perf-options/">
+        <div class="next">
+            <span>下一篇</span>
+            <p>perf的基本用法</p>
+        </div>
+    </a>
+    
+</div>
+		
+<link rel="stylesheet" href="/css/food.css">
+
+<div class="footer">
+	<div class="Copyright">
+		©2021 By Junixcn.   Repository : <a
+			style="text-decoration: none;display: contents; color: #898F9F;"
+			target="_blank" rel="noopener" href="https://github.com/junixcn/junixcn.github.io.git">junixcn</a>
+	</div>
+	<div class="contact">
+		
+		<a target="_blank" rel="noopener" href="https://github.com/junixcn">
+			<img src="/image/github-logo.png" alt="Quiet主题">
+		</a>
+		
+	</div>
+</div>
+
+<script src="/js/jquery.min.js"></script>
+
+
+<script src="/js/gotop.js"></script>
+
+
+<style type="text/css">
+    @media screen and (min-width: 600px) {
+        .goTop>span {
+            display: block;
+            border-radius: 50%;
+            width: 66px;
+            height: 66px;
+            cursor: pointer;
+            opacity: 0.8;
+            background: rgba(18, 24, 58, 0.06);
+            text-align: center;
+            border: 1px solid rgba(18, 24, 58, 0.06);
+
+            transition: border .5s;
+            -moz-transition: border .5s;
+            /* Firefox 4 */
+            -webkit-transition: border .5s;
+            /* Safari 和 Chrome */
+            -o-transition: border .5s;
+            /* Opera */
+        }
+
+        .goTop>span:hover {
+            border: 1px solid #6680B3;
+        }
+
+
+        .goTop {
+            position: fixed;
+            right: 30px;
+            bottom: 80px;
+        }
+
+        .goTop>span>svg {
+            width: 30px;
+            height: 30px;
+            margin-top: 17.5px;
+            opacity: 0.7;
+        }
+
+    }
+
+    @media screen and (max-width: 600px) {
+        .goTop {
+            display: none;
+        }
+    }
+</style>
+<div class="goTop" id="js-go_top">
+    <span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g>
+                <path d="M13 12v8h-2v-8H4l8-8 8 8z"></path>
+            </g>
+        </svg>
+    </span>
+</div>
+<script>
+    $('#js-go_top').gotoTop({ offset: 500, speed: 300, animationShow: { 'transform': 'translate(0,0)', 'transition': 'transform .5s ease-in-out' }, animationHide: { 'transform': 'translate(100px,0)', 'transition': 'transform .5s ease-in-out' } });
+</script>
+<script>
+	console.log('\n %c Hexo-Quiet 主题 %c https://github.com/QiaoBug/hexo-theme-quiet \n', 'color: #fadfa3; background: #030307; padding:5px 0;', 'background: #fadfa3; padding:5px 0;')
+</script>
+
+	</body>
+
+</html>
